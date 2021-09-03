@@ -1,0 +1,37 @@
+@require: color
+@import: code-printer
+
+module CodeTheme :sig
+
+  val basic-light : CodePrinter.theme
+  val basic-dark : CodePrinter.theme
+
+end = struct
+
+  let rgb-256 r g b =
+    RGB(r /. 256.0, g /. 256.0, b /. 256.0)
+
+  let basic-light =
+    CodePrinter.make-theme (|
+      backcolor = Color.gray 0.9;
+      basic = set-text-color Color.black;
+      comment = set-text-color Color.red;
+      string = set-text-color (Color.rgb 0.0 0.6 0.5);
+      keyword = set-text-color Color.orange;
+      identifier = set-text-color Color.blue;
+      others = [];
+    |)
+
+
+  let basic-dark =
+    CodePrinter.make-theme (|
+      backcolor = Color.black;
+      basic = set-text-color Color.white;
+      comment = set-text-color (Color.rgb 1.0 0.3 0.3);
+      string = set-text-color (Color.rgb 0.0 1.0 0.0);
+      keyword = set-text-color Color.orange;
+      identifier = set-text-color (Color.rgb 0.7 0.7 0.0);
+      others = [];
+    |)
+
+end

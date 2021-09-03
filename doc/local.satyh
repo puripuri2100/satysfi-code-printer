@@ -1,0 +1,45 @@
+@require: list
+
+let-block ctx +row ?:space-opt lst =
+  let join i ib1 ib2 =
+    if i <= 0 then
+      ib2
+    else
+      match space-opt with
+      | None -> ib1 ++ ib2
+      | Some(space) -> ib1 ++ inline-skip space ++ ib2
+  in
+  let ib =
+    lst
+    |> List.map (read-inline ctx)
+    |> List.fold-lefti join inline-nil
+  in
+  line-break true true ctx (inline-fil ++ ib ++ inline-fil)
+
+
+let-inline ctx \mini-page fl bt =
+  let text-width = get-text-width ctx in
+  let width = text-width *' fl in
+  embed-block-top ctx width (fun ctx -> read-block ctx bt)
+
+let-inline ctx \mini-page-bottom fl bt =
+  let text-width = get-text-width ctx in
+  let width = text-width *' fl in
+  embed-block-bottom ctx width (fun ctx -> read-block ctx bt)
+
+
+let-block ctx +caption caption bt =
+  let font-size = get-font-size ctx in
+  let main-bb-ctx =
+    ctx |> set-paragraph-margin font-size 5pt
+        |> set-min-gap-of-lines 5pt
+  in
+  let caption-ctx =
+    ctx |> set-paragraph-margin 5pt font-size
+        |> set-min-gap-of-lines 5pt
+  in
+  let main-bb = read-block main-bb-ctx bt in
+  let caption-ib = read-inline caption-ctx caption in
+  let caption-bb = line-break false true caption-ctx (inline-fil ++ caption-ib ++ inline-fil) in
+  main-bb +++ caption-bb
+

@@ -1,0 +1,39 @@
+@import: code-printer
+@require: color
+@require: vdecoset
+@require: gr
+
+module CodeDesign :sig
+
+  %%% 偶数行の時に白色、奇数行の時に灰色になる、行の背景色
+  val line-background-color-gray-and-white : int -> color option
+
+
+  %%% 行番号を表示しないとき用
+  val number-fun-null : context -> int -> inline-boxes
+
+  %%% 行番号のみ表示する
+  val number : context -> int -> inline-boxes
+
+end = struct
+
+
+  %%% 偶数行の時に白色、奇数行の時に灰色になる、行の背景色
+  let line-background-color-gray-and-white i =
+    if i mod 2 == 0 then
+      Some(Color.white)
+    else
+      Some(Color.gray 0.8)
+
+
+
+  let number-fun-null _ _ = inline-nil
+
+  let number ctx i =
+    let ctx = set-text-color Color.black ctx in
+    i
+    |> arabic
+    |> embed-string
+    |> read-inline ctx
+
+end

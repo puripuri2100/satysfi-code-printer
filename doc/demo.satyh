@@ -1,0 +1,8 @@
+@require: base/int
+module Demo : sig
+  val hi:string -> string
+end = struct
+  % 挨拶をする関数
+  let hi name =
+    `Hi, `# ^ name
+end

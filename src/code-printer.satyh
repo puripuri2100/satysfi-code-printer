@@ -1,0 +1,1052 @@
+@require: base/list-ext
+@require: vdecoset
+@require: hdecoset
+@require: color
+@require: base/length
+@require: base/ord
+
+
+module CodePrinter : sig
+
+  type syntax-rule
+  val syntax-rule-block : string -> string -> syntax-rule
+  val syntax-rule-inline : string -> syntax-rule
+  val syntax-rule-fun : (string -> (string * string) option)-> syntax-rule
+
+  type syntax
+  val make-syntax : 'a -> syntax
+    constraint 'a :: (|
+      line-comment : syntax-rule;
+      block-comment : syntax-rule;
+      string : syntax-rule;
+      keywords : string list;
+      identifier : syntax-rule;
+      others : (string * syntax-rule) list;
+    |)
+  val default-syntax : syntax
+
+  type theme
+  val make-theme : 'a -> theme
+    constraint 'a :: (|
+      backcolor : color;
+      basic : context -> context;
+      comment : context -> context;
+      string : context -> context;
+      keyword : context -> context;
+      identifier : context -> context;
+      others : (string * (context -> context)) list;
+    |)
+  val default-theme : theme
+
+
+  %type design
+  %val default-design : unit -> design
+
+  type code-printer-config
+  val make-config : syntax -> theme -> code-printer-config
+
+  % design関連の設定をする関数
+  % themeやsyntaxとは違い、個別に設定できるようにする
+  val set-line-background-color : (int -> color option) -> code-printer-config -> code-printer-config
+  val set-inline-hdeco-set : (color -> deco-set) -> code-printer-config -> code-printer-config
+  val set-block-vdeco-set : (color -> deco-set) -> code-printer-config -> code-printer-config
+  val set-block-paddings : (length * length * length * length) -> code-printer-config -> code-printer-config
+  val set-inline-paddings : (length * length * length * length) -> code-printer-config -> code-printer-config
+  val set-number-fun : (context -> int -> inline-boxes) -> code-printer-config -> code-printer-config
+
+  %%% フォントを変更するだけの関数
+  val set-basic-latin-font : (string * float * float) -> code-printer-config -> code-printer-config
+  val set-basic-cjk-font : (string * float * float) -> code-printer-config -> code-printer-config
+  val set-basic-otherscript-font : (string * float * float) -> code-printer-config -> code-printer-config
+  %%% フォントサイズを変更するだけの関数
+  val set-basic-font-size : length -> code-printer-config -> code-printer-config
+
+  val make-code : context -> code-printer-config -> string -> block-boxes
+  val make-code-inline : context -> code-printer-config -> string -> inline-boxes
+  direct +code-printer : [code-printer-config?; string] block-cmd
+  direct \code-printer : [code-printer-config?; string] inline-cmd
+  direct +file-printer : [code-printer-config?; string] block-cmd
+  direct \file-printer : [code-printer-config?; string] inline-cmd
+  direct \inline-code : [code-printer-config?; string] inline-cmd
+
+end = struct
+
+  type syntax-rule =
+    %%% ブロックのコードを表す
+    %%% begin部分とend部分、どちらも正規表現を与える
+    | SyntaxRuleBlock of string * string
+    %%% 一行で済むコードを表す
+    %%% 正規表現で与える
+    | SyntaxRuleInline of string
+    %%% 正規表現では表せないsyntaxを解析するための関数
+    %%% stringを受け取って、ルールに一致する文字列とそれ以外の文字列を返す関数である
+    %%% ルールに一致しなかった場合はNoneを返すようにする
+    | SyntaxRuleFunction of (string -> (string * string) option)
+
+
+  let syntax-rule-block begin-re end-re = SyntaxRuleBlock (begin-re, end-re)
+  let syntax-rule-inline re = SyntaxRuleInline(re)
+  let syntax-rule-fun f = SyntaxRuleFunction(f)
+
+
+
+  type syntax = (|
+    line-comment : syntax-rule;
+    block-comment : syntax-rule;
+    string : syntax-rule;
+    keywords : string list;
+    identifier : syntax-rule;
+    others : (string * syntax-rule) list;
+  |)
+
+  let make-syntax c = (|
+    line-comment = c#line-comment;
+    block-comment = c#block-comment;
+    string = c#string;
+    keywords = c#keywords;
+    identifier = c#identifier;
+    others = c#others;
+  |)
+
+  let default-syntax = make-syntax (|
+    line-comment = syntax-rule-fun (fun _ -> None);
+    block-comment = syntax-rule-fun (fun _ -> None);
+    string = syntax-rule-fun (fun _ -> None);
+    keywords = [];
+    identifier = syntax-rule-fun (fun _ -> None);
+    others = [];
+  |)
+
+
+  type theme = (|
+    backcolor : color;
+    basic : context -> context;
+    comment : context -> context;
+    string : context -> context;
+    keyword : context -> context;
+    identifier : context -> context;
+    others : (string * (context -> context)) list;
+  |)
+
+  let make-theme c =(|
+    backcolor = c#backcolor;
+    basic = c#basic;
+    comment = c#comment;
+    string = c#string;
+    keyword = c#keyword;
+    identifier = c#identifier;
+    others = c#others;
+  |)
+
+  let default-latin-font = (`fonts-dejavu:DejaVuSansMono`, 1.0, 0.0)
+  let default-cjk-font = (`ipaexg`, 0.9, 0.0)
+  let basic-theme-fun ctx =
+    let font-size = get-font-size ctx in
+    ctx |> set-font Latin default-latin-font
+        |> set-font Kana default-cjk-font
+        |> set-font HanIdeographic default-cjk-font
+        |> set-font OtherScript default-latin-font
+        |> set-leading 0pt
+        |> set-paragraph-margin 0pt 5pt
+        |> set-min-gap-of-lines 5pt
+
+
+  let default-theme =
+    make-theme (|
+      backcolor = Color.gray 0.9;
+      basic = basic-theme-fun;
+      comment = (fun ctx -> ctx);
+      string = (fun ctx -> ctx);
+      keyword = (fun ctx -> ctx);
+      identifier = (fun ctx -> ctx);
+      others = [];
+    |)
+
+
+
+
+  type design = (|
+    %%% 行ごとの背景の色を指定する
+    %%% 行数に応じて変化できるようにしている
+    %%% 色を塗らない場合はNone
+    line-background-color : int -> color option;
+    %%% inline-code用のdeco-set
+    inline-hdeco-set : color -> deco-set;
+    %%% コード全体のdeco-set
+    %%% 背景色の指定を受けて設定する
+    block-vdeco-set : color -> deco-set;
+    %%% ブロック全体の余白を設定する
+    %%% この値を使ってコードと行番号の間のスペースも計算する
+    block-paddings : length * length * length * length;
+    %%% inline-code用の余白
+    inline-paddings : length * length * length * length;
+    %%% 行番号を生成する関数
+    %%% 最初に与えられるcontexはtheme#basicによって生成されるもの
+    number-fun : context -> int -> inline-boxes;
+  |)
+
+
+  let make-design c = (|
+    line-background-color = c#line-background-color;
+    inline-hdeco-set = c#inline-hdeco-set;
+    block-vdeco-set = c#block-vdeco-set;
+    block-paddings = c#block-paddings;
+    inline-paddings = c#inline-paddings;
+    number-fun = c#number-fun;
+  |)
+
+
+
+  let default-number-fun ctx i =
+    let new-ctx = set-text-color Color.black ctx in
+    i |> arabic |> embed-string |> read-inline new-ctx
+
+  let default-design () =
+    make-design (|
+      line-background-color = (fun _ -> None);
+      inline-hdeco-set = (fun c -> HDecoSet.rectangle-round-fill 5pt 5pt c);
+      block-vdeco-set = (fun c -> VDecoSet.simple-frame 1pt Color.black c);
+      block-paddings = (10pt,10pt,10pt,10pt);
+      inline-paddings = (3pt,3pt,3pt,3pt);
+      number-fun = default-number-fun;
+    |)
+
+  type code-printer-config = (|
+    syntax : syntax;
+    theme : theme;
+    design : design;
+  |)
+
+  let make-config syntax theme = (|
+    syntax = syntax;
+    theme = theme;
+    design = default-design ();
+  |)
+
+  let get-syntax config = config#syntax
+  let get-theme config = config#theme
+  let get-design config = config#design
+
+  let default-config () = make-config default-syntax default-theme
+
+
+  %%% designの個別設定用の関数
+  let set-line-background-color f config =
+    let new-design =
+      make-design (|
+        line-background-color = f;
+        inline-hdeco-set = config#design#inline-hdeco-set;
+        block-vdeco-set = config#design#block-vdeco-set;
+        block-paddings = config#design#block-paddings;
+        inline-paddings = config#design#inline-paddings;
+        number-fun = config#design#number-fun;
+      |)
+    in
+    (|
+      syntax = config#syntax;
+      theme = config#theme;
+      design = new-design;
+    |)
+
+  let set-inline-hdeco-set deco-set config =
+    let new-design =
+      make-design (|
+        line-background-color = config#design#line-background-color;
+        inline-hdeco-set = deco-set;
+        block-vdeco-set = config#design#block-vdeco-set;
+        block-paddings = config#design#block-paddings;
+        inline-paddings = config#design#inline-paddings;
+        number-fun = config#design#number-fun;
+      |)
+    in
+    (|
+      syntax = config#syntax;
+      theme = config#theme;
+      design = new-design;
+    |)
+
+  let set-block-vdeco-set f config =
+    let new-design =
+      make-design (|
+        line-background-color = config#design#line-background-color;
+        inline-hdeco-set = config#design#inline-hdeco-set;
+        block-vdeco-set = f;
+        block-paddings = config#design#block-paddings;
+        inline-paddings = config#design#inline-paddings;
+        number-fun = config#design#number-fun;
+      |)
+    in
+    (|
+      syntax = config#syntax;
+      theme = config#theme;
+      design = new-design;
+    |)
+
+  let set-block-paddings pads config =
+    let new-design =
+      make-design (|
+        line-background-color = config#design#line-background-color;
+        inline-hdeco-set = config#design#inline-hdeco-set;
+        block-vdeco-set = config#design#block-vdeco-set;
+        block-paddings = pads;
+        inline-paddings = config#design#inline-paddings;
+        number-fun = config#design#number-fun;
+      |)
+    in
+    (|
+      syntax = config#syntax;
+      theme = config#theme;
+      design = new-design;
+    |)
+
+  let set-inline-paddings pads config =
+    let new-design =
+      make-design (|
+        line-background-color = config#design#line-background-color;
+        inline-hdeco-set = config#design#inline-hdeco-set;
+        block-vdeco-set = config#design#block-vdeco-set;
+        block-paddings = config#design#block-paddings;
+        inline-paddings = pads;
+        number-fun = config#design#number-fun;
+      |)
+    in
+    (|
+      syntax = config#syntax;
+      theme = config#theme;
+      design = new-design;
+    |)
+
+  let set-number-fun f config =
+    let new-design =
+      make-design (|
+        line-background-color = config#design#line-background-color;
+        inline-hdeco-set = config#design#inline-hdeco-set;
+        block-vdeco-set = config#design#block-vdeco-set;
+        block-paddings = config#design#block-paddings;
+        inline-paddings = config#design#inline-paddings;
+        number-fun = f;
+      |)
+    in
+    (|
+      syntax = config#syntax;
+      theme = config#theme;
+      design = new-design;
+    |)
+
+
+
+  let set-basic-latin-font font config =
+    let f ctx =
+      ctx |> set-font Latin font
+          |> config#theme#basic
+    in
+    let new-theme =
+      make-theme (|
+        backcolor = config#theme#backcolor;
+        basic = f;
+        comment = config#theme#comment;
+        string = config#theme#string;
+        keyword = config#theme#keyword;
+        identifier = config#theme#identifier;
+        others = config#theme#others;
+      |)
+    in
+    (|
+      syntax = config#syntax;
+      theme = new-theme;
+      design = config#design;
+    |)
+
+  let set-basic-cjk-font font config =
+    let f ctx =
+      ctx |> set-font Kana font
+          |> set-font HanIdeographic font
+          |> config#theme#basic
+    in
+    let new-theme =
+      make-theme (|
+        backcolor = config#theme#backcolor;
+        basic = f;
+        comment = config#theme#comment;
+        string = config#theme#string;
+        keyword = config#theme#keyword;
+        identifier = config#theme#identifier;
+        others = config#theme#others;
+      |)
+    in
+    (|
+      syntax = config#syntax;
+      theme = new-theme;
+      design = config#design;
+    |)
+
+  let set-basic-otherscript-font font config =
+    let f ctx =
+      ctx |> set-font OtherScript font
+          |> config#theme#basic
+    in
+    let new-theme =
+      make-theme (|
+        backcolor = config#theme#backcolor;
+        basic = f;
+        comment = config#theme#comment;
+        string = config#theme#string;
+        keyword = config#theme#keyword;
+        identifier = config#theme#identifier;
+        others = config#theme#others;
+      |)
+    in
+    (|
+      syntax = config#syntax;
+      theme = new-theme;
+      design = config#design;
+    |)
+
+
+  let set-basic-font-size size config =
+    let f ctx =
+      ctx |> set-font-size size
+          |> config#theme#basic
+    in
+    let new-theme =
+      make-theme (|
+        backcolor = config#theme#backcolor;
+        basic = f;
+        comment = config#theme#comment;
+        string = config#theme#string;
+        keyword = config#theme#keyword;
+        identifier = config#theme#identifier;
+        others = config#theme#others;
+      |)
+    in
+    (|
+      syntax = config#syntax;
+      theme = new-theme;
+      design = config#design;
+    |)
+
+
+  type token =
+    | Basic of string
+    | Comment of string
+    | String of string
+    | KeyWord of string
+    | Identifier of string
+    | Other of string * string % keyとcode
+    | Space
+    | Tab
+    | CR
+    | LF
+    | CRLF
+
+
+  let is-LF t =
+    match t with
+    | LF -> true
+    | _ -> false
+  let is-CR t =
+    match t with
+    | CR -> true
+    | _ -> false
+  let is-break-token t =
+    match t with
+    | LF -> true
+    | CR -> true
+    | CRLF -> true
+    | _ -> false
+  let is-Space t =
+    match t with
+    | Space -> true
+    | _ -> false
+  let is-Tab t =
+    match t with
+    | Tab -> true
+    | _ -> false
+
+
+  let null-string = ` `
+  let space-string = string-unexplode [0x20]
+  let tab-string = string-unexplode [0x09]
+  let cr-string = string-unexplode [0x0D]
+  let lf-string = string-unexplode [0x0A]
+
+
+  let string-to-list str =
+    let str-len = string-length str in
+    let-rec sub lst n =
+      if n <= 0 then
+        lst
+      else
+        let s = string-sub str (n - 1) 1 in
+        sub (s::lst) (n - 1)
+    in
+  sub [] str-len
+
+  %%% string list内の単語を表す正規表現データを生成する
+  let strlst-to-syntax-rule strlst =
+    let escape str =
+      str |> string-to-list
+          |> List.map (fun c -> (
+            match c with
+            | `$` -> `\$`
+            | `^` -> `\^`
+            | `.` -> `\.`
+            | `*` -> `\*`
+            | `+` -> `\+`
+            | `\` -> `\\`
+            | `?` -> `\?`
+            | `[` -> `\[`
+            | `]` -> `\]`
+            | _ -> c
+          ))
+          |> List.fold-left (^) null-string
+    in
+    let join i s1 s2 =
+      if i <= 0 then
+        s2
+      else
+        s1^`\|`^s2
+    in
+  if List.length strlst == 0  then
+    syntax-rule-fun (fun _ -> None)
+  else
+    strlst
+      |> List.map escape
+      |> List.fold-lefti join null-string
+      |> syntax-rule-inline
+
+  %%% 終了タグの正規表現がマッチするまで文字を探索し続ける関数
+  %%% 終了タグにマッチする前に文字が無くなったらNoneを返す
+  %%% 終了タグにマッチしたら、終了タグを含むそれまでの文字列と
+  %%% 残った文字列をペアにしてSomeで返す
+  let-rec block-rule-match-end end-re code other-code =
+    if string-length other-code == 0 then
+      None
+    else
+      match string-scan end-re other-code with
+      | None -> (
+        let head-str = string-sub other-code 0 1 in
+        let tail-str = string-sub other-code 1 ((string-length other-code) - 1) in
+        block-rule-match-end end-re (code^head-str) tail-str
+      )
+      | Some(end-code, other-code) -> Some(code^end-code, other-code)
+
+
+  %%% syntax-ruleを「stringを受け取って、ルールに一致する文字列とそれ以外の文字列を返す関数」に変換する関数である
+  let syntax-to-lex-fun syntax-rule =
+    match syntax-rule with
+    | SyntaxRuleFunction(f) -> f
+    | SyntaxRuleBlock(begin-re-s, end-re-s) -> (fun code -> (
+      let begin-re = regexp-of-string begin-re-s in
+      match string-scan begin-re code with
+      | None -> None
+      | Some(begin-code, other-code) -> (
+        let end-re = regexp-of-string end-re-s in
+        match block-rule-match-end end-re null-string other-code with
+          | None -> None
+          | Some(tail-code, other-code) -> Some(begin-code^tail-code, other-code)
+      )
+    ))
+    | SyntaxRuleInline(re-s) -> (fun code -> (
+      let re = regexp-of-string re-s in
+      string-scan re code
+    ))
+
+
+
+  %%% keyと解析関数のペアのリストと、文字列を受け取り、
+  %%% 先頭から当てはめていき、合致する解析関数があれば、
+  %%% keyと一緒に解析結果を返す関数
+  %%% (string * (string -> (string * string) option)) list -> string
+  %%%   -> (string * (string * string)) option
+  let-rec serch-lex-fun lst code =
+    match lst with
+    | [] -> None
+    | (key,f)::fs -> (
+      match f code with
+      | None -> serch-lex-fun fs code
+      | Some(result) -> Some(key, result)
+    )
+
+
+
+  %%% トークンの中身の改行に合わせてトークンを分割し、LFとSpaceを入れる
+  %%% 後でreverse-appendを使う関係から、逆順にしまっていく
+  let-rec split-token-of-line-sub f token-lst slst =
+    match slst with
+    | [] -> token-lst
+    | (i,s)::[] -> (
+      let spaces = List.repeat i Space in
+      (f s)::(List.reverse-append spaces token-lst)
+    )
+    | (i,s)::xs -> (
+      let spaces = List.repeat i Space in
+      let new-token-lst = LF::(f s)::(List.reverse-append spaces token-lst) in
+      split-token-of-line-sub f new-token-lst xs
+    )
+
+  let split-token-of-line token =
+    match token with
+    | Comment(s) -> (
+      let slst = split-into-lines s in
+      split-token-of-line-sub (fun s -> Comment(s)) [] slst
+    )
+    | String(s) -> (
+      let slst = split-into-lines s in
+      split-token-of-line-sub (fun s -> String(s)) [] slst
+    )
+    | KeyWord(s) -> (
+      let slst = split-into-lines s in
+      split-token-of-line-sub (fun s -> KeyWord(s)) [] slst
+    )
+    | Identifier(s) -> (
+      let slst = split-into-lines s in
+      split-token-of-line-sub (fun s -> Identifier(s)) [] slst
+    )
+    | Other(key,s) -> (
+      let slst = split-into-lines s in
+      split-token-of-line-sub (fun s -> Other(key,s)) [] slst
+    )
+    | _ -> [token]
+
+
+  let lexer syntax code =
+    let is-keyword s = List.any (fun keyword -> string-same keyword s) syntax#keywords in
+    let keywords-fun = syntax-to-lex-fun (strlst-to-syntax-rule syntax#keywords) in
+    let string-fun = syntax-to-lex-fun syntax#string in
+    let identifier-fun = syntax-to-lex-fun syntax#identifier in
+    let line-comment-fun = syntax-to-lex-fun syntax#line-comment in
+    let block-comment-fun = syntax-to-lex-fun syntax#block-comment in
+    let other-fun-lst =
+      syntax#others |> List.map (fun (key, rule) -> (key, syntax-to-lex-fun rule))
+    in
+    %%% とりあえずトークン化する関数
+    let-rec lexer-sub token-lst code =
+      if string-length code == 0 then
+        token-lst
+      else
+        %%% 実処理部分
+        %%% 優先順序は
+        %%%   1. string
+        %%%   2. identifier
+        %%%   3. line-comment
+        %%%   4. block-comment
+        %%%   5. othersのリストの先頭から
+        %%%   6. keywords
+        %%% で行い、1から5について
+        %%% keywords内に合致する文字があるかを判定し、
+        %%% space・tab・改行文字をtokenにし、
+        %%% さらに残った場合は先頭の1文字だけをBasicに入れる
+        match string-fun code with
+        | Some(code, other-code) -> (
+          if is-keyword code then
+            lexer-sub (KeyWord(code)::token-lst) other-code
+          else
+            lexer-sub (String(code)::token-lst) other-code
+        )
+        | None -> (
+          match identifier-fun code with
+          | Some(code, other-code) -> (
+            if is-keyword code then
+              lexer-sub (KeyWord(code)::token-lst) other-code
+            else
+              lexer-sub (Identifier(code)::token-lst) other-code
+          )
+          | None -> (
+            match line-comment-fun code with
+            | Some(code, other-code) -> (
+              if is-keyword code then
+                lexer-sub (KeyWord(code)::token-lst) other-code
+              else
+                lexer-sub (Comment(code)::token-lst) other-code
+            )
+            | None -> (
+              match block-comment-fun code with
+              | Some(code, other-code) -> (
+                if is-keyword code then
+                  lexer-sub (KeyWord(code)::token-lst) other-code
+                else
+                  lexer-sub (Comment(code)::token-lst) other-code
+              )
+              | None -> (
+                match serch-lex-fun other-fun-lst code with
+                | Some(key, (code, other-code)) -> (
+                  if is-keyword code then
+                    lexer-sub (KeyWord(code)::token-lst) other-code
+                  else
+                    lexer-sub (Other(key,code)::token-lst) other-code
+                )
+                | None -> (
+                  match keywords-fun code with
+                  | Some(code, other-code) -> (
+                      lexer-sub (KeyWord(code)::token-lst) other-code
+                  )
+                  | None -> (
+                    let head-str = string-sub code 0 1 in
+                    let tail-code = string-sub code 1 ((string-length code) - 1) in
+                    if string-same head-str space-string then
+                      lexer-sub (Space::token-lst) tail-code
+                    else if string-same head-str tab-string then
+                      lexer-sub (Tab::token-lst) tail-code
+                    else if string-same head-str cr-string then
+                      lexer-sub (CR::token-lst) tail-code
+                    else if string-same head-str lf-string then
+                      lexer-sub (LF::token-lst) tail-code
+                    else lexer-sub (Basic(head-str)::token-lst) tail-code
+                  )
+                )
+              )
+            )
+          )
+        )
+    in
+    %%% 逆順になったトークンリストを読んでいき、反転させつつ、以下の処理をする
+    %%%   * 連続したBasicをまとめる
+    %%%   * LFとCRが連続したところをCRLFにする
+    %%%   * split-into-lineで全ての文字列を分解し、代わりにLFを挿入する
+    %%% token-lstは整理後のトークンのリストのこと
+    %%% reverse-lstはlexer-subによって生成された、整理前の反転した状態のリスト
+    %%% is-basicはBasicを整理するモードかどうかのフラグ
+    %%% is-basicがtrueのとき、次のトークンもBasicならばbasic-strに結合させる
+    %%% basic-strはBasicに置いてあった文字をためる場所である
+    %%% 次のトークンがBasicでなくなったときに文字を放出してBasicトークンとして
+    %%% 登録し、basic-strはから文字列にする
+    let-rec organize token-lst is-basic basic-str reverse-lst =
+      match reverse-lst with
+      | [] -> token-lst
+      | [Basic(s)] -> (Basic(s^basic-str))::token-lst
+      | [x] -> (
+        let xs = split-token-of-line x in
+        if is-basic then
+          List.reverse-append xs ((Basic(basic-str))::token-lst)
+        else
+          List.reverse-append xs token-lst
+      )
+      | x::y::zs when (is-LF x && is-CR y) -> organize (CRLF::token-lst) false null-string zs
+      | x::ys -> (
+          match x with
+          | Basic(s) -> organize token-lst true (s^basic-str) ys
+          | _ -> (
+            %%% トークンを分割
+            let xs = split-token-of-line x in
+            if is-basic then
+              organize (List.reverse-append xs ((Basic(basic-str))::token-lst)) false null-string ys
+            else
+              organize (List.reverse-append xs token-lst) false null-string ys
+          )
+      )
+    in
+  code
+    |> lexer-sub []
+    |> organize [] false null-string
+
+
+
+  %%% themeに合わせて組み上げて行ごとにinline-boxes型にし、リストで返す
+  let printer basic-ctx default-width theme token-lst is-block-code =
+    let comment-ctx = theme#comment basic-ctx in
+    let string-ctx = theme#string basic-ctx in
+    let keyword-ctx = theme#keyword basic-ctx in
+    let identifier-ctx = theme#identifier basic-ctx in
+    let other-ctx-lst =
+      theme#others
+      |> List.map (fun (key,f) -> (key, f basic-ctx))
+    in
+    %%%%%!!!!!!!!! `⤷`みたいなマークをグラフィックで出したいよね
+    let line-break-mark-arrow = `→` |> embed-string |> read-inline basic-ctx in
+    let line-break-mark = (inline-skip (default-width *' 3.0)) ++ line-break-mark-arrow in
+    let line-break-point =
+      if is-block-code then
+        discretionary 100 inline-nil inline-nil line-break-mark
+      else
+        discretionary 100 inline-nil inline-nil inline-nil
+    in
+    %%% ib-lst：既に組みあがった行を表すib
+    %%% token-lst：これから消費していくトークン
+    %%% stack：今組んでいる最中の行
+    let-rec printer-sub ib-lst token-lst stack =
+      match token-lst with
+      | [] -> (
+        if List.length stack == 0 then
+          ib-lst
+        else
+          let ib =
+            stack
+            |> List.reverse
+            |> List.fold-left (++) inline-nil
+          in
+          ib::ib-lst
+      )
+      | x::xs -> (
+        match x with
+        | Basic(s) -> (
+          let ib =
+            s
+            |> embed-string
+            |> read-inline basic-ctx
+          in
+          printer-sub ib-lst xs (ib::line-break-point::stack)
+        )
+        | Comment(s) -> (
+          let ib =
+            s
+            |> embed-string
+            |> read-inline comment-ctx
+          in
+          printer-sub ib-lst xs (ib::line-break-point::stack)
+        )
+        | String(s) -> (
+          let ib =
+            s
+            |> embed-string
+            |> read-inline string-ctx
+          in
+          printer-sub ib-lst xs (ib::line-break-point::stack)
+        )
+        | KeyWord(s) -> (
+          let ib =
+            s
+            |> embed-string
+            |> read-inline keyword-ctx
+          in
+          printer-sub ib-lst xs (ib::line-break-point::stack)
+        )
+        | Identifier(s) -> (
+          let ib =
+            s
+            |> embed-string
+            |> read-inline identifier-ctx
+          in
+          printer-sub ib-lst xs (ib::line-break-point::stack)
+        )
+        | Other(key, s) -> (
+          match List.find (fun (lkey,_) -> string-same key lkey) other-ctx-lst with
+          | None -> (
+            let ib =
+              s
+              |> embed-string
+              |> read-inline basic-ctx
+            in
+            printer-sub ib-lst xs (ib::line-break-point::stack)
+          )
+          | Some(_,ctx-f) -> (
+            let ib =
+              s
+              |> embed-string
+              |> read-inline ctx-f
+            in
+            printer-sub ib-lst xs (ib::line-break-point::stack)
+          )
+        )
+        | Space -> (
+          let ib = inline-skip default-width in
+          printer-sub ib-lst xs (ib::stack)
+        )
+        | Tab -> (
+          %%%%%!!!!!!  この`defult-width *' 2.0`のところは要可変
+          let ib = inline-skip (default-width *' 2.0) in
+          printer-sub ib-lst xs (ib::stack)
+        )
+        | _ -> (
+          let ib =
+            stack
+            |> List.reverse
+            |> List.fold-left (++) inline-nil
+          in
+          printer-sub (ib::ib-lst) xs []
+        )
+      )
+    in
+  List.reverse (printer-sub [] token-lst [])
+
+  let minus-float = float (-1)
+
+
+
+  %%% 色があったら塗る・色が無かったら塗らない
+  let line-vdeco-set background-color-opt =
+    let deco (x, y) w h d =
+      match background-color-opt with
+      | None -> []
+      | Some(c) -> [fill c (Gr.rectangle (x, y -' d) (x +' w, y +' h))]
+    in
+    (deco, deco, deco, deco)
+
+  let make-set-basic-ctx config ctx =
+    let basic-ctx=
+      ctx |> basic-theme-fun
+          |> config#theme#basic
+          |> set-hyphen-penalty 100000
+    in
+    let default-width =
+      {0}
+      |> read-inline basic-ctx
+      |> get-natural-width
+    in
+    let font-size = get-font-size basic-ctx in
+    let basic-ctx=
+      basic-ctx
+        |> set-space-ratio (default-width /' font-size) 0.0 0.0
+        |> set-space-ratio-between-scripts 0.0 0.0 0.0 Latin Latin
+        |> set-space-ratio-between-scripts 0.0 0.0 0.0 Latin Kana
+        |> set-space-ratio-between-scripts 0.0 0.0 0.0 Latin HanIdeographic
+        |> set-space-ratio-between-scripts 0.0 0.0 0.0 Latin OtherScript
+        |> set-space-ratio-between-scripts 0.0 0.0 0.0 Kana Latin
+        |> set-space-ratio-between-scripts 0.0 0.0 0.0 Kana Kana
+        |> set-space-ratio-between-scripts 0.0 0.0 0.0 Kana HanIdeographic
+        |> set-space-ratio-between-scripts 0.0 0.0 0.0 Kana OtherScript
+        |> set-space-ratio-between-scripts 0.0 0.0 0.0 HanIdeographic Latin
+        |> set-space-ratio-between-scripts 0.0 0.0 0.0 HanIdeographic Kana
+        |> set-space-ratio-between-scripts 0.0 0.0 0.0 HanIdeographic HanIdeographic
+        |> set-space-ratio-between-scripts 0.0 0.0 0.0 HanIdeographic OtherScript
+        |> set-space-ratio-between-scripts 0.0 0.0 0.0 OtherScript Latin
+        |> set-space-ratio-between-scripts 0.0 0.0 0.0 OtherScript Kana
+        |> set-space-ratio-between-scripts 0.0 0.0 0.0 OtherScript HanIdeographic
+        |> set-space-ratio-between-scripts 0.0 0.0 0.0 OtherScript OtherScript
+    in
+    basic-ctx
+
+
+  let make-code ctx config code-str =
+    let syntax = get-syntax config in
+    let theme = get-theme config in
+    let backcolor = theme#backcolor in
+    let design = get-design config in
+    let set-basic-ctx ctx = make-set-basic-ctx config ctx in
+    let default-width =
+      {0}
+      |> read-inline (set-basic-ctx ctx)
+      |> get-natural-width
+    in
+    let token-lst = lexer syntax code-str in
+    let num-after-margin = 6pt in
+    let (left-space,_,_,_) = design#block-paddings in
+    let ib-lst = printer (set-basic-ctx ctx) default-width theme token-lst true in
+    let num-ib-max-width =
+      let len = List.length ib-lst in
+      let f i =
+        i
+        |> design#number-fun (set-basic-ctx ctx)
+        |> get-natural-width
+      in
+      let ord = (Ord.make (fun i j -> Length.(if i == j then Eq else if i < j then Lt else Gt))) in
+      let opt =
+        List.iterate len (fun i -> i + 1) 1 % 1スタートでlenの長さの整数のリスト
+          |> List.map f
+          |> List.max ord
+      in
+      match opt with
+      | None -> 0pt
+      | Some(len) -> len
+    in
+    let make-main-bb ctx =
+      let basic-ctx = set-basic-ctx ctx in
+      let make-main-ib num-ib left-space ib =
+        let num-ib-width = get-natural-width num-ib in
+        let ib-width-gap = num-ib-max-width -' num-ib-width in
+        inline-skip (num-ib-max-width *' minus-float -' left-space -' num-after-margin) ++ inline-skip ib-width-gap ++ num-ib ++ inline-skip (left-space *' 2.0) ++ ib ++ inline-fil
+      in
+      let make-line-bb i ib =
+        let i = i + 1 in
+        let background-color-opt = design#line-background-color i in
+        let num-ib = design#number-fun basic-ctx i in
+        let pads = (0pt,0pt,0pt,0pt) in
+        block-frame-breakable basic-ctx pads (line-vdeco-set background-color-opt)
+          (fun ctx -> (
+            let main-bb = line-break true true ctx (make-main-ib num-ib left-space ib) in
+            let bb-height = get-natural-length main-bb in
+            let font-size = get-font-size ctx in
+            %%% block-boxesの高さがfont-sizeよりも小さかったら、その分高さを追加する
+            if font-size >' bb-height then
+              block-skip (font-size -' bb-height) +++ main-bb
+            else
+              main-bb
+          ))
+      in
+      ib-lst
+      |> List.mapi make-line-bb
+      |> List.fold-left (+++) block-nil
+    in
+    let block-vdeco-set = design#block-vdeco-set backcolor in
+    let f ctx =
+      block-frame-breakable ctx design#block-paddings block-vdeco-set make-main-bb
+    in
+    %%% num-ib-max-widthと6pt分だけ横に飛び出ているので調節する
+    block-frame-breakable ctx (num-ib-max-width +' num-after-margin,0pt,0pt,0pt) VDecoSet.empty f
+
+
+  let make-code-inline ctx config code-str =
+    let syntax = get-syntax config in
+    let theme = get-theme config in
+    let backcolor = theme#backcolor in
+    let design = get-design config in
+    let set-basic-ctx ctx = make-set-basic-ctx config ctx in
+    let default-width =
+      {0}
+      |> read-inline (set-basic-ctx ctx)
+      |> get-natural-width
+    in
+    let token-lst = lexer syntax code-str in
+    let ib-lst = printer (set-basic-ctx ctx) default-width theme token-lst false in
+    let inline-hdeco-set = design#inline-hdeco-set backcolor in
+    match ib-lst with
+    | [] -> inline-nil
+    | code::_ -> inline-frame-breakable design#inline-paddings inline-hdeco-set code
+
+
+
+  let-block ctx +code-printer ?:config-opt code-str =
+    let config =
+      match config-opt with
+      | None -> default-config ()
+      | Some(c) -> c
+    in
+    make-code ctx config code-str
+
+
+  let-inline ctx \code-printer ?:config-opt code-str =
+    let config =
+      match config-opt with
+      | None -> default-config ()
+      | Some(c) -> c
+    in
+    inline-fil ++ embed-block-breakable ctx (read-block ctx '<+code-printer ?:(config)(code-str);>)
+
+
+  let-block ctx +file-printer ?:config-opt filepath =
+    let config =
+      match config-opt with
+      | None -> default-config ()
+      | Some(c) -> c
+    in
+    let join i s1 s2 =
+      if i <= 0 then
+        s2
+      else
+        s1 ^ lf-string ^ s2
+    in
+    let str-list = read-file filepath in
+    let code-str =
+      List.fold-lefti join null-string str-list
+    in
+    make-code ctx config code-str
+
+
+  let-inline ctx \file-printer ?:config-opt filepath =
+    let config =
+      match config-opt with
+      | None -> default-config ()
+      | Some(c) -> c
+    in
+    inline-fil ++ embed-block-breakable ctx (read-block ctx '<+file-printer ?:(config)(filepath);>)
+
+
+  let-inline ctx \inline-code ?:config-opt code-str =
+    let config =
+      match config-opt with
+      | None -> default-config ()
+      | Some(c) -> c
+    in
+    make-code-inline ctx config code-str
+
+end
