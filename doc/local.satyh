@@ -46,7 +46,7 @@ let-block ctx +caption caption bt =
 
 
 
-let-block ctx +code-demo-lst lst =
+let-block ctx +code-syntax-demo-lst lst =
   let f (syntax, syntax-name, file-path) = {
     \mini-page (0.5) <
       +caption {\inline-code(`CodeSyntax.`^syntax-name);} <
@@ -73,3 +73,29 @@ let-block ctx +code-demo-lst lst =
   |> line-break true true ctx
 
 
+
+let-block ctx +code-theme-demo-lst lst =
+  let f (theme, theme-name) = {
+    \mini-page (0.5) <
+      +caption {\inline-code(`CodeTheme.`^theme-name);} <
+        +file-printer ?:(
+          CodePrinter.make-config CodeSyntax.rust theme
+          |> CodePrinter.set-number-fun CodeDesign.number-fun-null
+        )(`demo.rs`);
+      >
+    >
+  }
+  in
+  let break-point =
+    discretionary 100 inline-nil inline-fil inline-fil
+  in
+  let join i ib1 ib2 =
+    if i <= 0 then
+      inline-fil ++ ib2
+    else
+      ib1 ++ break-point ++ ib2
+  in
+  lst
+  |> List.map (fun data -> data |> f |> read-inline ctx)
+  |> List.fold-lefti join inline-nil
+  |> line-break true true ctx
