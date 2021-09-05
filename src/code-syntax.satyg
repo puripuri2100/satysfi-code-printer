@@ -9,6 +9,7 @@ module CodeSyntax :sig
   val fortran : CodePrinter.syntax
   val haskell : CodePrinter.syntax
   val java : CodePrinter.syntax
+  val javascript : CodePrinter.syntax
 
 end = struct
 
@@ -89,6 +90,17 @@ end = struct
     identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9_]*\|[0-9\.]+`;
     others = [];
   |)
+
+  % ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Lexical_grammar#keywords
+  let javascript = CodePrinter.make-syntax (|
+    line-comment = CodePrinter.syntax-rule-block `//` `$`;
+    block-comment = CodePrinter.syntax-rule-block `/\*` `\*/`;
+    string = CodePrinter.syntax-rule-inline (` "[^"]*"\|'[^']*' `);
+    keywords = [`break`; `case`; `catch`; `class`; `const`; `continue`; `debugger`; `default`; `delete`; `do`; `else`; `export`; `extends`; `finally`; `for`; `function`; `if`; `import`; `instanceof`; `in`; `new`; `return`; `super`; `switch`; `this`; `throw`; `try`; `typeof`; `var`; `let`; `const`; `void`; `while`; `with`; `yield`;];
+    identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9_]*\|[0-9\.]+`;
+    others = [];
+  |)
+
 
 end
 
