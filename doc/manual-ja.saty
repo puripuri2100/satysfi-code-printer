@@ -98,6 +98,15 @@ document (|
             )(`demo.rs`);
           >
         >
+      |
+        \mini-page (0.5) <
+          +caption {\inline-code(`CodeSyntax.fsharp`);} <
+            +file-printer ?:(
+              CodePrinter.make-config CodeSyntax.fsharp CodeTheme.basic-light
+              |> CodePrinter.set-number-fun CodeDesign.number-fun-null
+            )(`demo.fs`);
+          >
+        >
       |}
     +p{現在提供している解析用の設定値は以上になります。}
     +p{次はテーマ用の設定値の紹介です。}
