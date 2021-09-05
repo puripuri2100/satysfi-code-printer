@@ -47,6 +47,9 @@ let-block ctx +caption caption bt =
 
 
 let-block ctx +code-syntax-demo-lst lst =
+  let ctx =
+    ctx |> set-min-gap-of-lines 20pt
+  in
   let f (syntax, syntax-name, file-path) = {
     \mini-page (0.5) <
       +caption {\inline-code(`CodeSyntax.`^syntax-name);} <
@@ -75,6 +78,9 @@ let-block ctx +code-syntax-demo-lst lst =
 
 
 let-block ctx +code-theme-demo-lst lst =
+  let ctx =
+    ctx |> set-min-gap-of-lines 20pt
+  in
   let f (theme, theme-name) = {
     \mini-page (0.5) <
       +caption {\inline-code(`CodeTheme.`^theme-name);} <
