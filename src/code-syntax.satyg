@@ -55,7 +55,7 @@ end = struct
   % ref: http://fortranwiki.org/fortran/show/Keywords
   let fortran = CodePrinter.make-syntax (|
     line-comment = CodePrinter.syntax-rule-block `^!` `$`;
-    block-comment = CodePrinter.syntax-rule-block `^!` `$)`;
+    block-comment = CodePrinter.syntax-rule-block `^!` `$`;
     string = CodePrinter.syntax-rule-inline (` "[^"]*"\|'[^']*' `);
     keywords = [`assign`; `backspace`; `block data`; `call`; `close`; `common`; `continue`; `data`; `dimension`; `do`; `else`; `else if`; `end`; `endfile`; `endif`; `entry`; `equivalence`; `external`; `format`; `function`; `goto`; `if`; `implicit`; `inquire`; `intrinsic`; `open`; `parameter`; `pause`; `print`; `program`; `read`; `return`; `rewind`; `rewrite`; `save`; `stop`; `subroutine`; `then`; `write`;
     `allocatable`; `allocate`; `case`; `contains`; `cycle`; `deallocate`; `elsewhere`; `exit?`; `include`; `interface`; `intent`; `module`; `namelist`; `nullify`; `only`; `operator`; `optional`; `pointer`; `private`; `procedure`; `public`; `recursive`; `result`; `select`; `sequence`; `target`; `use`; `while`; `where`;
