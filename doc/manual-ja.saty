@@ -77,6 +77,7 @@ document (|
       (CodeSyntax.fsharp, `fsharp`, `demo.fs`);
       (CodeSyntax.fortran, `fortran`, `demo.f90`);
       (CodeSyntax.haskell, `haskell`, `demo.hs`);
+      (CodeSyntax.java, `java`, `demo.java`);
     ];
     +p{現在提供している解析用の設定値は以上になります。}
     +p{次はテーマ用の設定値の紹介です。}
