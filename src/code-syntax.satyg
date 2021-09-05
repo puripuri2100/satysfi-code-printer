@@ -7,6 +7,7 @@ module CodeSyntax :sig
   val ocaml : CodePrinter.syntax
   val fsharp : CodePrinter.syntax
   val fortran : CodePrinter.syntax
+  val haskell : CodePrinter.syntax
 
 end = struct
 
@@ -66,6 +67,16 @@ end = struct
     others = [];
   |)
 
+
+  % ref: https://wiki.haskell.org/Keywords
+  let haskell = CodePrinter.make-syntax (|
+    line-comment = CodePrinter.syntax-rule-block `--` `$`;
+    block-comment = CodePrinter.syntax-rule-block `{-` `-}`;
+    string = CodePrinter.syntax-rule-inline (` "[^"]*"\|'[^']*' `);
+    keywords = [`as`; `case`; `of`; `class`; `data`; `family`; `instance`; `default`; `deriving`; `do`; `forall`; `foreign`; `hiding`; `if`; `then`; `else`; `import`; `infixl`; `infixr`; `infix`; `let`; `in`; `mdo`; `module`; `newtype`; `proc`; `qualified`; `rec`; `type`; `where`];
+    identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9_]*\|[0-9\.]+`;
+    others = [];
+  |)
 
 end
 
