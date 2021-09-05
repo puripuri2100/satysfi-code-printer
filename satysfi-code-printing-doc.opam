@@ -1,8 +1,10 @@
 opam-version: "2.0"
 name: "satysfi-code-printer-doc"
 version: "0.1.0"
-synopsis: ""
+synopsis: "Document of satysfi-code-printer"
 description: """
+Document of satysfi-code-printer.
+satysfi-code-printer: https://github.com/puripuri2100/satysfi-code-printer
 """
 maintainer: "Naoki Kaneko <puripuri2100@gmail.com>"
 authors: "Naoki Kaneko <puripuri2100@gmail.com>"

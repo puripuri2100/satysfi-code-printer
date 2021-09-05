@@ -1,8 +1,9 @@
 opam-version: "2.0"
 name: "satysfi-code-printer"
 version: "0.1.0"
-synopsis: ""
+synopsis: "Typeset source code with SATySFi"
 description: """
+Typeset source code with SATySFi.
 """
 maintainer: "Naoki Kaneko <puripuri2100@gmail.com>"
 authors: "Naoki Kaneko <puripuri2100@gmail.com>"
