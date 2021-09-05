@@ -70,7 +70,7 @@ let-block ctx +code-syntax-demo-lst lst =
   lst
   |> List.map (fun data -> data |> f |> read-inline ctx)
   |> List.fold-lefti join inline-nil
-  |> line-break true true ctx
+  |> (fun ib -> line-break true true ctx (ib ++ inline-fil))
 
 
 
@@ -98,4 +98,4 @@ let-block ctx +code-theme-demo-lst lst =
   lst
   |> List.map (fun data -> data |> f |> read-inline ctx)
   |> List.fold-lefti join inline-nil
-  |> line-break true true ctx
+  |> (fun ib -> line-break true true ctx (ib ++ inline-fil))
