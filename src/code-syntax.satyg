@@ -10,6 +10,7 @@ module CodeSyntax :sig
   val haskell : CodePrinter.syntax
   val java : CodePrinter.syntax
   val javascript : CodePrinter.syntax
+  val julia : CodePrinter.syntax
 
 end = struct
 
@@ -101,6 +102,15 @@ end = struct
     others = [];
   |)
 
+
+  let julia = CodePrinter.make-syntax (|
+    line-comment = CodePrinter.syntax-rule-block `#` `$`;
+    block-comment = CodePrinter.syntax-rule-block `#=` `=#`;
+    string = CodePrinter.syntax-rule-inline (` "[^"]*" `);
+    keywords = [`break`; `case`; `catch`; `class`; `const`; `continue`; `debugger`; `default`; `delete`; `do`; `else`; `export`; `extends`; `finally`; `for`; `function`; `if`; `import`; `instanceof`; `in`; `new`; `return`; `super`; `switch`; `this`; `throw`; `try`; `typeof`; `var`; `let`; `const`; `void`; `while`; `with`; `yield`;];
+    identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9_]*\|[0-9\.]+`;
+    others = [];
+  |)
 
 end
 
