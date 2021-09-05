@@ -12,6 +12,7 @@ module CodeSyntax :sig
   val javascript : CodePrinter.syntax
   val julia : CodePrinter.syntax
   val kotlin : CodePrinter.syntax
+  val lua : CodePrinter.syntax
 
 end = struct
 
@@ -121,6 +122,17 @@ end = struct
     block-comment = CodePrinter.syntax-rule-block `#=` `=#`;
     string = CodePrinter.syntax-rule-inline (` "[^"]*" `);
     keywords = [`as?`; `as`; `break`; `class`; `continue`; `do`; `else`; `false`; `for`; `fun`; `if`; `init`; `inner`; `internal`; `in`; `!in`; `interface`; `is`; `!is`; `null`; `object`; `package`; `return`; `super`; `this`; `throw`; `true`; `try`; `typealias`; `typeof`; `value`; `val`; `var`; `when`; `while`; `by`; `catch`; `constructor`; `delegate`; `dynamic`; `field`; `file`; `finally`; `get`; `import`; `param`; `property`; `receiver`; `setparam`; `set`; `where`; `actual`; `abstract`; `annotation`; `companion`; `const`; `crossinline`; `data`; `enum`; `expect`; `external`; `final`; `lateinit`; `noinline`; `open`; `operator`; `out`; `override`; `private`; `protected`; `public`; `reified`; `sealed`; `suspend`; `tailrec`; `vararg`; `it`];
+    identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
+    others = [];
+  |)
+
+
+  % ref: https://www.lua.org/manual/5.1/manual.html
+  let lua = CodePrinter.make-syntax (|
+    line-comment = CodePrinter.syntax-rule-block `--` `$`;
+    block-comment = CodePrinter.syntax-rule-block `--\[\[` `\]\]`;
+    string = CodePrinter.syntax-rule-inline (` "[^"]*" `);
+    keywords = [`and`; `break`; `do`; `else`; `elseif`; `end`; `false`; `for`; `function`; `if`; `in`; `local`; `nil`; `not`; `or`; `repeat`; `return`; `then`; `true`; `until`; `while`];
     identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
     others = [];
   |)
