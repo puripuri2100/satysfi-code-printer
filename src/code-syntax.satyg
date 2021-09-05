@@ -118,8 +118,8 @@ end = struct
 
   % ref: https://kotlinlang.org/docs/keyword-reference.html
   let kotlin = CodePrinter.make-syntax (|
-    line-comment = CodePrinter.syntax-rule-block `#` `$`;
-    block-comment = CodePrinter.syntax-rule-block `#=` `=#`;
+    line-comment = CodePrinter.syntax-rule-block `//` `$`;
+    block-comment = CodePrinter.syntax-rule-block `/\*` `\*/`;
     string = CodePrinter.syntax-rule-inline (` "[^"]*" `);
     keywords = [`as?`; `as`; `break`; `class`; `continue`; `do`; `else`; `false`; `for`; `fun`; `if`; `init`; `inner`; `internal`; `in`; `!in`; `interface`; `is`; `!is`; `null`; `object`; `package`; `return`; `super`; `this`; `throw`; `true`; `try`; `typealias`; `typeof`; `value`; `val`; `var`; `when`; `while`; `by`; `catch`; `constructor`; `delegate`; `dynamic`; `field`; `file`; `finally`; `get`; `import`; `param`; `property`; `receiver`; `setparam`; `set`; `where`; `actual`; `abstract`; `annotation`; `companion`; `const`; `crossinline`; `data`; `enum`; `expect`; `external`; `final`; `lateinit`; `noinline`; `open`; `operator`; `out`; `override`; `private`; `protected`; `public`; `reified`; `sealed`; `suspend`; `tailrec`; `vararg`; `it`];
     identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
