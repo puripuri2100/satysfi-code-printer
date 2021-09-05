@@ -80,6 +80,7 @@ document (|
       (CodeSyntax.java, `java`, `demo.java`);
       (CodeSyntax.javascript, `javascript`, `demo.js`);
       (CodeSyntax.julia, `julia`, `demo.jl`);
+      (CodeSyntax.kotlin, `kotlin`, `demo.kt`);
     ];
     +p{現在提供している解析用の設定値は以上になります。}
     +p{次はテーマ用の設定値の紹介です。}
