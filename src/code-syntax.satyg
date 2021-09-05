@@ -5,6 +5,7 @@ module CodeSyntax :sig
   val satysfi : CodePrinter.syntax
   val rust : CodePrinter.syntax
   val ocaml : CodePrinter.syntax
+  val fsharp : CodePrinter.syntax
 
 end = struct
 
@@ -37,6 +38,16 @@ end = struct
     others = [];
   |)
 
+
+% ref: https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference/keyword-reference
+  let fsharp = CodePrinter.make-syntax (|
+    line-comment = CodePrinter.syntax-rule-block `//` `$`;
+    block-comment = CodePrinter.syntax-rule-block `(\*` `\*)`;
+    string = CodePrinter.syntax-rule-inline (` "[^"]*" `);
+    keywords = [`abstract`; `and`; `as`; `assert`; `base`; `begin`; `class`; `default`; `delegate`; `done`; `downcast`; `downto`; `do`; `elif`; `else`; `end`; `exception`; `extern`; `false`; `finally`; `fixed`; `for`; `fun`; `function`; `global`; `if`; `inherit`; `inline`; `interface`; `in`; `lazy`; `let!`; `let`; `match!`; `match`; `member`; `module`; `mutable`; `namespace`; `new`; `not`; `null`; `of`; `open`; `or`; `override`; `private`; `public`; `rec`; `return!`; `return`; `select`; `static`; `struct`; `then`; `to`; `true`; `try`; `type`; `upcast`; `use!`; `use`; `val`; `void`; `when`; `while`; `with`; `yield!`; `yield`; `const`; `asr`; `land`; `lor`; `lsl`; `lsr`; `lxor`; `mod`; `sig`];
+    identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
+    others = [];
+  |)
 
 end
 
