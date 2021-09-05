@@ -4,7 +4,7 @@ Typeset source code with SATySFi.
 
 # Install
 
-You can install `ruby` package with [Satyrographos](https://github.com/na4zagin3/satyrographos).
+You can install `code-printer` package with [Satyrographos](https://github.com/na4zagin3/satyrographos).
 
 ```sh
 opam pin add "git+https://github.com/puripuri2100/satysfi-code-printer.git"
