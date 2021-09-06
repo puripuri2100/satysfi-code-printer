@@ -66,6 +66,7 @@ When typesetting code with syntax-highlight, write the code like this:
 - `CodeSyntax.ocaml`
 - `CodeSyntax.satysfi`
 - `CodeSyntax.c`
+- `CodeSyntax.cpp`
 - `CodeSyntax.fsharp`
 - `CodeSyntax.fortran`
 - `CodeSyntax.haskell`
