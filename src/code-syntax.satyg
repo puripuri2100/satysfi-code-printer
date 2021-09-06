@@ -16,6 +16,7 @@ module CodeSyntax :sig
   val julia : CodePrinter.syntax
   val kotlin : CodePrinter.syntax
   val lua : CodePrinter.syntax
+  val lisp : CodePrinter.syntax
   val nim : CodePrinter.syntax
   val perl : CodePrinter.syntax
   val python : CodePrinter.syntax
@@ -178,6 +179,16 @@ end = struct
     block-comment = CodePrinter.syntax-rule-block `--\[\[` `\]\]`;
     string = CodePrinter.syntax-rule-inline (` "[^"]*" `);
     keywords = [`and`; `break`; `do`; `else`; `elseif`; `end`; `false`; `for`; `function`; `if`; `in`; `local`; `nil`; `not`; `or`; `repeat`; `return`; `then`; `true`; `until`; `while`];
+    identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
+    others = [];
+  |)
+
+
+  let lisp = CodePrinter.make-syntax (|
+    line-comment = CodePrinter.syntax-rule-block `;` `$`;
+    block-comment = CodePrinter.syntax-rule-block `#|` `|#`;
+    string = CodePrinter.syntax-rule-inline (` "[^"]*" `);
+    keywords = [];
     identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
     others = [];
   |)
