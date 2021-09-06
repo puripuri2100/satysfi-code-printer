@@ -78,6 +78,7 @@ When typesetting code with syntax-highlight, write the code like this:
 - `CodeSyntax.python`
 - `CodeSyntax.r`
 - `CodeSyntax.ruby`
+- `CodeSyntax.scala`
 </details>
 
 <details>

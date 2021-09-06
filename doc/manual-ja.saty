@@ -86,7 +86,8 @@ document (|
       (CodeSyntax.perl, `perl`, `demo.pl`);
       (CodeSyntax.python, `python`, `demo.py`);
       (CodeSyntax.r, `r`, `demo.R`);
-      (CodeSyntax.r, `ruby`, `demo.rb`);
+      (CodeSyntax.ruby, `ruby`, `demo.rb`);
+      (CodeSyntax.scala, `scala`, `demo.scala`);
     ];
     +p{現在提供している解析用の設定値は以上になります。}
     +p{次はテーマ用の設定値の紹介です。}
