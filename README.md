@@ -81,6 +81,7 @@ When typesetting code with syntax-highlight, write the code like this:
 - `CodeSyntax.scala`
 - `CodeSyntax.swift`
 - `CodeSyntax.typescript`
+- `CodeSyntax.visualbasic`
 </details>
 
 <details>

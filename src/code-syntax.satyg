@@ -21,6 +21,7 @@ module CodeSyntax :sig
   val scala : CodePrinter.syntax
   val swift : CodePrinter.syntax
   val typescript : CodePrinter.syntax
+  val visualbasic : CodePrinter.syntax
 
 end = struct
 
@@ -228,12 +229,22 @@ end = struct
   |)
 
 
-  % ref: 
   let typescript = CodePrinter.make-syntax (|
     line-comment = CodePrinter.syntax-rule-block `//` `$`;
     block-comment = CodePrinter.syntax-rule-block `/\*` `\*/`;
     string = CodePrinter.syntax-rule-inline (` "[^"]*" `);
     keywords = [`break`; `case`; `class`; `clone`; `continue`; `const`; `default`; `delegate`; `delete`; `else`; `enum`; `extends`; `foreach`; `for`; `function`; `if`; `in`; `local`; `throw`; `try`; `typeof`; `while`; `parent`; `yield`; `constructor`; `vargc`; `vargv`; `instanceof`; `true`; `false`; `static`];
+    identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
+    others = [];
+  |)
+
+
+  % ref: https://docs.microsoft.com/en-us/dotnet/visual-basic/language-reference/keywords/
+  let visualbasic = CodePrinter.make-syntax (|
+    line-comment = CodePrinter.syntax-rule-block `'` `$`;
+    block-comment = CodePrinter.syntax-rule-block `'` `$`;
+    string = CodePrinter.syntax-rule-inline (` "[^"]*" `);
+    keywords = [`AddHandler`; `AddressOf`; `Alias`; `AndAlso`; `And`; `As`; `Boolean`; `ByRef`; `Byte`; `ByVal`; `Call`; `Case`; `Catch`; `CBool`; `CByte`; `CChar`; `CDate`; `CDbl`; `CDec`; `Char`; `CInt`; `Class Constraint`; `Class Statement`; `CLng`; `CObj`; `Const`; `Continue`; `CSByte`; `CShort`; `CSng`; `CStr`; `CType`; `CUInt`; `CULng`; `CUShort`; `Date`; `Decimal`; `Declare`; `Default`; `Delegate`; `Dim`; `DirectCast`; `Do`; `Double`; `Each`; `Else`; `ElseIf`; `End Statement`; `EndIf`; `Enum`; `Erase`; `Error`; `Event`; `Exit`; `End`; `False`; `Finally`; `For`; `Friend`; `Function`; `GetType`; `GetXMLNamespace`; `Get`; `Global`; `GoSub`; `GoTo`; `Handles`; `If`; `Implements`; ` Statement`; `Imports`; `Inherits`; `Integer`; `Interface`; `In`; `IsNot`; `Is`; `Let`; `Lib`; `Like`; `Long`; `Loop`; `Me`; `Module`; `Mod`; `MustInherit`; `MustOverride`; `MyBase`; `MyClass`; `NameOf`; `Namespace`; `Narrowing`; `New Constraint`; `New Operator`; `Next`; `Nothing`; `NotInheritable`; `NotOverridable`; `Not`; `Object`; `Of`; `On`; `Operator`; `Optional`; `Option`; `OrElse`; `Or`; `Out`; `Overloads`; `Overridable`; `Overrides`; `ParamArray`; `Partial`; `Private`; `Property`; `Protected`; `Public`; `RaiseEvent`; `ReadOnly`; `ReDim`; `REM`; `RemoveHandler`; `Resume`; `Return`; `SByte`; `Select`; `Set`; `Shadows`; `Shared`; `Short`; `Single`; `Static`; `Step`; `Stop`; `String`; `Structure`; `Sub`; `SyncLock`; `Then`; `Throw`; `To`; `True`; `TryCast`; `Try`; `TypeOf`; `UInteger`; `ULong`; `UShort`; `Using`; `Variant`; `Wend`; `When`; `While`; `Widening`; `WithEvents`; `With`; `WriteOnly`; `Xor`; `#Const`; `#Else`; `#ElseIf`; `#End`; `#If`;];
     identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
     others = [];
   |)

@@ -90,6 +90,7 @@ document (|
       (CodeSyntax.scala, `scala`, `demo.scala`);
       (CodeSyntax.swift, `swift`, `demo.swift`);
       (CodeSyntax.typescript, `typescript`, `demo.ts`);
+      (CodeSyntax.visualbasic, `visualbasic`, `demo.vb`);
     ];
     +p{現在提供している解析用の設定値は以上になります。}
     +p{次はテーマ用の設定値の紹介です。}
