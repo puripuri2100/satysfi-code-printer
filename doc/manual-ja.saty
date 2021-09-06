@@ -102,6 +102,11 @@ document (|
     +code-theme-demo-lst [
       (CodeTheme.basic-light, `basic-light`);
       (CodeTheme.basic-dark, `basic-dark`);
+      (CodeTheme.gruvbox-light, `gruvbox-light`);
+      (CodeTheme.gruvbox-dark, `gruvbox-dark`);
+      (CodeTheme.dracula, `dracula`);
+      (CodeTheme.iceberg-light, `iceberg-light`);
+      (CodeTheme.iceberg-dark, `iceberg-dark`);
     ];
     +p{現在提供しているテーマ用の設定値は以上になります。}
   >
