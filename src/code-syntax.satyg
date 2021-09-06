@@ -20,6 +20,7 @@ module CodeSyntax :sig
   val ruby : CodePrinter.syntax
   val scala : CodePrinter.syntax
   val swift : CodePrinter.syntax
+  val typescript : CodePrinter.syntax
 
 end = struct
 
@@ -222,6 +223,17 @@ end = struct
     `break`; `case`; `continue`; `default`; `defer`; `do`; `else`; `fallthrough`; `for`; `guard`; `if`; `in`; `repeat`; `return`; `switch`; `where`; `while`;
     `#available`; `#colorLiteral`; `#column`; `#else`; `#elseif`; `#endif`; `#error`; `#file`; `#fileID`; `#fileLiteral`; `#filePath`; `#function`; `#if`; `#imageLiteral`; `#line`; `#selector`; `#sourceLocation`; `#warning`;
     `_`;];
+    identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
+    others = [];
+  |)
+
+
+  % ref: 
+  let typescript = CodePrinter.make-syntax (|
+    line-comment = CodePrinter.syntax-rule-block `//` `$`;
+    block-comment = CodePrinter.syntax-rule-block `/\*` `\*/`;
+    string = CodePrinter.syntax-rule-inline (` "[^"]*" `);
+    keywords = [`break`; `case`; `class`; `clone`; `continue`; `const`; `default`; `delegate`; `delete`; `else`; `enum`; `extends`; `foreach`; `for`; `function`; `if`; `in`; `local`; `throw`; `try`; `typeof`; `while`; `parent`; `yield`; `constructor`; `vargc`; `vargv`; `instanceof`; `true`; `false`; `static`];
     identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
     others = [];
   |)
