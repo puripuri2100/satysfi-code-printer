@@ -13,6 +13,7 @@ module CodeSyntax :sig
   val julia : CodePrinter.syntax
   val kotlin : CodePrinter.syntax
   val lua : CodePrinter.syntax
+  val nim : CodePrinter.syntax
 
 end = struct
 
@@ -133,6 +134,17 @@ end = struct
     block-comment = CodePrinter.syntax-rule-block `--\[\[` `\]\]`;
     string = CodePrinter.syntax-rule-inline (` "[^"]*" `);
     keywords = [`and`; `break`; `do`; `else`; `elseif`; `end`; `false`; `for`; `function`; `if`; `in`; `local`; `nil`; `not`; `or`; `repeat`; `return`; `then`; `true`; `until`; `while`];
+    identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
+    others = [];
+  |)
+
+
+  % ref: https://nim-lang.org/docs/manual.html#lexical-analysis-identifiers-amp-keywords
+  let nim = CodePrinter.make-syntax (|
+    line-comment = CodePrinter.syntax-rule-block `#` `$`;
+    block-comment = CodePrinter.syntax-rule-block `#\[` `\]#`;
+    string = CodePrinter.syntax-rule-inline (` "[^"]*" `);
+    keywords = [`addr`; `and`; `as`; `asm`; `bind`; `block`; `break`; `case`; `cast`; `concept`; `const`; `continue`; `converter`; `defer`; `discard`; `distinct`; `div`; `do`; `elif`; `else`; `end`; `enum`; `except`; `export`; `finally`; `for`; `from`; `func`; `if`; `import`; `include`; `interface`; `in`; `isnot`; `is`; `iterator`; `let`; `macro`; `method`; `mixin`; `mod`; `nil`; `not`; `notin`; `object`; `of`; `or`; `out`; `proc`; `ptr`; `raise`; `ref`; `return`; `shl`; `shr`; `static`; `template`; `try`; `tuple`; `type`; `using`; `var`; `when`; `while`; `xor`; `yield`;];
     identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
     others = [];
   |)

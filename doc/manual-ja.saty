@@ -82,6 +82,7 @@ document (|
       (CodeSyntax.julia, `julia`, `demo.jl`);
       (CodeSyntax.kotlin, `kotlin`, `demo.kt`);
       (CodeSyntax.lua, `lua`, `demo.lua`);
+      (CodeSyntax.nim, `nim`, `demo.nim`);
     ];
     +p{現在提供している解析用の設定値は以上になります。}
     +p{次はテーマ用の設定値の紹介です。}

@@ -73,6 +73,7 @@ When typesetting code with syntax-highlight, write the code like this:
 - `CodeSyntax.julia`
 - `CodeSyntax.kotlin`
 - `CodeSyntax.lua`
+- `CodeSyntax.nim`
 </details>
 
 <details>
