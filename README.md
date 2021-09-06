@@ -74,6 +74,7 @@ When typesetting code with syntax-highlight, write the code like this:
 - `CodeSyntax.kotlin`
 - `CodeSyntax.lua`
 - `CodeSyntax.nim`
+- `CodeSyntax.perl`
 </details>
 
 <details>
