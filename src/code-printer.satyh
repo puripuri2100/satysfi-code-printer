@@ -53,6 +53,8 @@ module CodePrinter : sig
   val set-block-paddings : (length * length * length * length) -> code-printer-config -> code-printer-config
   val set-inline-paddings : (length * length * length * length) -> code-printer-config -> code-printer-config
   val set-number-fun : (context -> int -> inline-boxes) -> code-printer-config -> code-printer-config
+  val set-line-break-mark : (context -> length -> (inline-boxes * inline-boxes)) -> code-printer-config -> code-printer-config
+  val set-tab-size : float -> code-printer-config -> code-printer-config
 
   %%% フォントを変更するだけの関数
   val set-basic-latin-font : (string * float * float) -> code-printer-config -> code-printer-config
@@ -183,6 +185,14 @@ end = struct
     %%% 行番号を生成する関数
     %%% 最初に与えられるcontexはtheme#basicによって生成されるもの
     number-fun : context -> int -> inline-boxes;
+    %%% 行分割された箇所に挿入するinline-boxesを作成する関数
+    %%% contextと文字の横幅を受け取り、
+    %%% 「行分割箇所の直前の行末に入る内容」
+    %%% 「行分割箇所の直後の行頭に入る内容」
+    %%% のペアを作成する
+    line-break-mark : context -> length -> (inline-boxes * inline-boxes);
+    %%% tabのサイズがspaceの何倍であるかを表す
+    tab-size : float;
   |)
 
 
@@ -193,6 +203,8 @@ end = struct
     block-paddings = c#block-paddings;
     inline-paddings = c#inline-paddings;
     number-fun = c#number-fun;
+    line-break-mark = c#line-break-mark;
+    tab-size = c#tab-size;
   |)
 
 
@@ -200,6 +212,14 @@ end = struct
   let default-number-fun ctx i =
     let new-ctx = set-text-color Color.black ctx in
     i |> arabic |> embed-string |> read-inline new-ctx
+
+  let default-line-break-mark ctx default-width =
+    %%%%%!!!!!!!!! `⤷`みたいなマークをグラフィックで出したいよね
+    let line-break-mark-arrow = `→` |> embed-string |> read-inline ctx in
+    let line-break-mark =
+      (inline-skip (default-width *' 0.5)) ++ line-break-mark-arrow ++ (inline-skip (default-width *' 0.5))
+    in
+    (inline-nil, line-break-mark)
 
   let default-design () =
     make-design (|
@@ -209,6 +229,8 @@ end = struct
       block-paddings = (10pt,10pt,10pt,10pt);
       inline-paddings = (3pt,3pt,3pt,3pt);
       number-fun = default-number-fun;
+      line-break-mark = default-line-break-mark;
+      tab-size = 2.0;
     |)
 
   type code-printer-config = (|
@@ -240,6 +262,8 @@ end = struct
         block-paddings = config#design#block-paddings;
         inline-paddings = config#design#inline-paddings;
         number-fun = config#design#number-fun;
+        line-break-mark = config#design#line-break-mark;
+        tab-size = config#design#tab-size;
       |)
     in
     (|
@@ -257,6 +281,8 @@ end = struct
         block-paddings = config#design#block-paddings;
         inline-paddings = config#design#inline-paddings;
         number-fun = config#design#number-fun;
+        line-break-mark = config#design#line-break-mark;
+        tab-size = config#design#tab-size;
       |)
     in
     (|
@@ -274,6 +300,8 @@ end = struct
         block-paddings = config#design#block-paddings;
         inline-paddings = config#design#inline-paddings;
         number-fun = config#design#number-fun;
+        line-break-mark = config#design#line-break-mark;
+        tab-size = config#design#tab-size;
       |)
     in
     (|
@@ -291,6 +319,8 @@ end = struct
         block-paddings = pads;
         inline-paddings = config#design#inline-paddings;
         number-fun = config#design#number-fun;
+        line-break-mark = config#design#line-break-mark;
+        tab-size = config#design#tab-size;
       |)
     in
     (|
@@ -308,6 +338,8 @@ end = struct
         block-paddings = config#design#block-paddings;
         inline-paddings = pads;
         number-fun = config#design#number-fun;
+        line-break-mark = config#design#line-break-mark;
+        tab-size = config#design#tab-size;
       |)
     in
     (|
@@ -325,6 +357,46 @@ end = struct
         block-paddings = config#design#block-paddings;
         inline-paddings = config#design#inline-paddings;
         number-fun = f;
+        line-break-mark = config#design#line-break-mark;
+        tab-size = config#design#tab-size;
+      |)
+    in
+    (|
+      syntax = config#syntax;
+      theme = config#theme;
+      design = new-design;
+    |)
+
+  let set-line-break-mark f config =
+    let new-design =
+      make-design (|
+        line-background-color = config#design#line-background-color;
+        inline-hdeco-set = config#design#inline-hdeco-set;
+        block-vdeco-set = config#design#block-vdeco-set;
+        block-paddings = config#design#block-paddings;
+        inline-paddings = config#design#inline-paddings;
+        number-fun = config#design#number-fun;
+        line-break-mark = f;
+        tab-size = config#design#tab-size;
+      |)
+    in
+    (|
+      syntax = config#syntax;
+      theme = config#theme;
+      design = new-design;
+    |)
+
+  let set-tab-size fl config =
+    let new-design =
+      make-design (|
+        line-background-color = config#design#line-background-color;
+        inline-hdeco-set = config#design#inline-hdeco-set;
+        block-vdeco-set = config#design#block-vdeco-set;
+        block-paddings = config#design#block-paddings;
+        inline-paddings = config#design#inline-paddings;
+        number-fun = config#design#number-fun;
+        line-break-mark = config#design#line-break-mark;
+        tab-size = fl;
       |)
     in
     (|
@@ -740,31 +812,72 @@ end = struct
     |> lexer-sub []
     |> organize [] false null-string
 
+let-mutable indent-ref <- inline-nil
 
 
   %%% themeに合わせて組み上げて行ごとにinline-boxes型にし、リストで返す
-  let printer basic-ctx default-width theme token-lst is-block-code =
-    let comment-ctx = theme#comment basic-ctx in
-    let string-ctx = theme#string basic-ctx in
-    let keyword-ctx = theme#keyword basic-ctx in
-    let identifier-ctx = theme#identifier basic-ctx in
-    let other-ctx-lst =
-      theme#others
-      |> List.map (fun (key,f) -> (key, f basic-ctx))
-    in
-    %%%%%!!!!!!!!! `⤷`みたいなマークをグラフィックで出したいよね
-    let line-break-mark-arrow = `→` |> embed-string |> read-inline basic-ctx in
-    let line-break-mark = (inline-skip (default-width *' 3.0)) ++ line-break-mark-arrow in
-    let line-break-point =
+  let printer basic-ctx default-width theme design token-lst is-block-code =
+    let () = indent-ref <- inline-nil in
+    %%% 改行部分に入れるinline-boxesの設定をしている
+    let (ib-before, ib-after) = design#line-break-mark basic-ctx default-width in
+    let set-basic-ctx () =
       if is-block-code then
-        discretionary 100 inline-nil inline-nil line-break-mark
+        basic-ctx |> set-every-word-break ib-before (!indent-ref ++ ib-after)
       else
-        discretionary 100 inline-nil inline-nil inline-nil
+        basic-ctx
+    in
+    let set-comment-ctx () =
+      if is-block-code then
+        basic-ctx |> theme#comment
+                  |> set-every-word-break ib-before (!indent-ref ++ ib-after)
+      else
+        theme#comment basic-ctx
+    in
+    let set-string-ctx () =
+      if is-block-code then
+        basic-ctx |> theme#string
+                  |> set-every-word-break ib-before (!indent-ref ++ ib-after)
+      else
+        theme#string basic-ctx
+    in
+    let set-keyword-ctx () =
+      if is-block-code then
+        basic-ctx |> theme#keyword
+                  |> set-every-word-break ib-before (!indent-ref ++ ib-after)
+      else
+        theme#keyword basic-ctx
+    in
+    let set-identifier-ctx () =
+      if is-block-code then
+        basic-ctx |> theme#identifier
+                  |> set-every-word-break ib-before (!indent-ref ++ ib-after)
+      else
+        theme#identifier basic-ctx
+    in
+    let set-other-ctx-lst () =
+      theme#others
+      |> List.map (fun (key,f) -> (
+      let ctx =
+        if is-block-code then
+          basic-ctx |> f
+                    |> set-every-word-break ib-before (!indent-ref ++ ib-after)
+        else
+          f basic-ctx
+      in
+        (key, ctx)
+      ))
+    in
+    let line-break-point () =
+      if is-block-code then
+        discretionary 500 inline-nil ib-before (!indent-ref ++ ib-after)
+      else
+        discretionary 500 inline-nil inline-nil inline-nil
     in
     %%% ib-lst：既に組みあがった行を表すib
     %%% token-lst：これから消費していくトークン
     %%% stack：今組んでいる最中の行
-    let-rec printer-sub ib-lst token-lst stack =
+    %%% is-new-line：新しい行かどうか
+    let-rec printer-sub ib-lst token-lst stack is-new-line =
       match token-lst with
       | [] -> (
         if List.length stack == 0 then
@@ -783,51 +896,51 @@ end = struct
           let ib =
             s
             |> embed-string
-            |> read-inline basic-ctx
+            |> read-inline (set-basic-ctx ())
           in
-          printer-sub ib-lst xs (ib::line-break-point::stack)
+          printer-sub ib-lst xs (ib::(line-break-point ())::stack) false
         )
         | Comment(s) -> (
           let ib =
             s
             |> embed-string
-            |> read-inline comment-ctx
+            |> read-inline (set-comment-ctx ())
           in
-          printer-sub ib-lst xs (ib::line-break-point::stack)
+          printer-sub ib-lst xs (ib::(line-break-point ())::stack) false
         )
         | String(s) -> (
           let ib =
             s
             |> embed-string
-            |> read-inline string-ctx
+            |> read-inline (set-string-ctx ())
           in
-          printer-sub ib-lst xs (ib::line-break-point::stack)
+          printer-sub ib-lst xs (ib::(line-break-point ())::stack) false
         )
         | KeyWord(s) -> (
           let ib =
             s
             |> embed-string
-            |> read-inline keyword-ctx
+            |> read-inline (set-keyword-ctx ())
           in
-          printer-sub ib-lst xs (ib::line-break-point::stack)
+          printer-sub ib-lst xs (ib::(line-break-point ())::stack) false
         )
         | Identifier(s) -> (
           let ib =
             s
             |> embed-string
-            |> read-inline identifier-ctx
+            |> read-inline (set-identifier-ctx ())
           in
-          printer-sub ib-lst xs (ib::line-break-point::stack)
+          printer-sub ib-lst xs (ib::(line-break-point ())::stack) false
         )
         | Other(key, s) -> (
-          match List.find (fun (lkey,_) -> string-same key lkey) other-ctx-lst with
+          match List.find (fun (lkey,_) -> string-same key lkey) (set-other-ctx-lst ()) with
           | None -> (
             let ib =
               s
               |> embed-string
-              |> read-inline basic-ctx
+              |> read-inline (set-basic-ctx ())
             in
-            printer-sub ib-lst xs (ib::line-break-point::stack)
+            printer-sub ib-lst xs (ib::(line-break-point ())::stack) false
           )
           | Some(_,ctx-f) -> (
             let ib =
@@ -835,29 +948,37 @@ end = struct
               |> embed-string
               |> read-inline ctx-f
             in
-            printer-sub ib-lst xs (ib::line-break-point::stack)
+            printer-sub ib-lst xs (ib::(line-break-point ())::stack) false
           )
         )
         | Space -> (
           let ib = inline-skip default-width in
-          printer-sub ib-lst xs (ib::stack)
+          if is-new-line then
+            let () = indent-ref <- !indent-ref ++ ib in
+            printer-sub ib-lst xs (ib::(line-break-point ())::stack) true
+          else
+            printer-sub ib-lst xs (ib::(line-break-point ())::stack) false
         )
         | Tab -> (
-          %%%%%!!!!!!  この`defult-width *' 2.0`のところは要可変
-          let ib = inline-skip (default-width *' 2.0) in
-          printer-sub ib-lst xs (ib::stack)
+          let ib = inline-skip (default-width *' design#tab-size) in
+          if is-new-line then
+            let () = indent-ref <- !indent-ref ++ ib in
+            printer-sub ib-lst xs (ib::(line-break-point ())::stack) true
+          else
+            printer-sub ib-lst xs (ib::(line-break-point ())::stack) false
         )
-        | _ -> (
+        | _ -> (%%% LF, CR, CRLF
+          let () = indent-ref <- inline-nil in
           let ib =
             stack
             |> List.reverse
             |> List.fold-left (++) inline-nil
           in
-          printer-sub (ib::ib-lst) xs []
+          printer-sub (ib::ib-lst) xs [] true
         )
       )
     in
-  List.reverse (printer-sub [] token-lst [])
+  List.reverse (printer-sub [] token-lst [] true)
 
   let minus-float = float (-1)
 
@@ -921,7 +1042,7 @@ end = struct
     let token-lst = lexer syntax code-str in
     let num-after-margin = 6pt in
     let (left-space,_,_,_) = design#block-paddings in
-    let ib-lst = printer (set-basic-ctx ctx) default-width theme token-lst true in
+    let ib-lst = printer (set-basic-ctx ctx) default-width theme design token-lst true in
     let num-ib-max-width =
       let len = List.length ib-lst in
       let f i =
@@ -944,7 +1065,7 @@ end = struct
       let make-main-ib num-ib left-space ib =
         let num-ib-width = get-natural-width num-ib in
         let ib-width-gap = num-ib-max-width -' num-ib-width in
-        inline-skip (num-ib-max-width *' minus-float -' left-space -' num-after-margin) ++ inline-skip ib-width-gap ++ num-ib ++ inline-skip (left-space *' 2.0) ++ ib ++ inline-fil
+        inline-skip (num-ib-max-width *' minus-float -' left-space -' num-after-margin) ++ inline-skip ib-width-gap ++ num-ib ++ inline-skip (left-space +' num-after-margin) ++ ib ++ inline-fil
       in
       let make-line-bb i ib =
         let i = i + 1 in
@@ -987,7 +1108,7 @@ end = struct
       |> get-natural-width
     in
     let token-lst = lexer syntax code-str in
-    let ib-lst = printer (set-basic-ctx ctx) default-width theme token-lst false in
+    let ib-lst = printer (set-basic-ctx ctx) default-width theme design token-lst false in
     let inline-hdeco-set = design#inline-hdeco-set backcolor in
     match ib-lst with
     | [] -> inline-nil
