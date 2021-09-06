@@ -76,6 +76,7 @@ document (|
       (CodeSyntax.rust, `rust`, `demo.rs`);
       (CodeSyntax.c, `c`, `demo.c`);
       (CodeSyntax.cpp, `cpp`, `demo.cpp`);
+      (CodeSyntax.csharp, `csharp`, `demo.cs`);
       (CodeSyntax.fsharp, `fsharp`, `demo.fs`);
       (CodeSyntax.fortran, `fortran`, `demo.f90`);
       (CodeSyntax.haskell, `haskell`, `demo.hs`);
