@@ -79,6 +79,7 @@ document (|
       (CodeSyntax.csharp, `csharp`, `demo.cs`);
       (CodeSyntax.fsharp, `fsharp`, `demo.fs`);
       (CodeSyntax.fortran, `fortran`, `demo.f90`);
+      (CodeSyntax.go, `go`, `demo.go`);
       (CodeSyntax.haskell, `haskell`, `demo.hs`);
       (CodeSyntax.java, `java`, `demo.java`);
       (CodeSyntax.javascript, `javascript`, `demo.js`);

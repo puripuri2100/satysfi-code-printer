@@ -70,6 +70,7 @@ When typesetting code with syntax-highlight, write the code like this:
 - `CodeSyntax.csharp`
 - `CodeSyntax.fsharp`
 - `CodeSyntax.fortran`
+- `CodeSyntax.go`
 - `CodeSyntax.haskell`
 - `CodeSyntax.java`
 - `CodeSyntax.javascript`

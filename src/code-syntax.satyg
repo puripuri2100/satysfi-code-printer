@@ -10,6 +10,7 @@ module CodeSyntax :sig
   val csharp : CodePrinter.syntax
   val fsharp : CodePrinter.syntax
   val fortran : CodePrinter.syntax
+  val go : CodePrinter.syntax
   val haskell : CodePrinter.syntax
   val java : CodePrinter.syntax
   val javascript : CodePrinter.syntax
@@ -117,6 +118,19 @@ end = struct
     identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9]*\|[0-9]+`;
     others = [];
   |)
+
+
+
+  % ref: https://golang.org/ref/spec#Keywords
+  let go = CodePrinter.make-syntax (|
+    line-comment = CodePrinter.syntax-rule-block `//` `$`;
+    block-comment = CodePrinter.syntax-rule-block `/\*` `\*/`;
+    string = CodePrinter.syntax-rule-inline (` "[^"]*" `);
+    keywords = [`break`; `case`; `chan`; `const`; `continue`; `default`; `defer`; `else`; `fallthrough`; `for`; `func`; `goto`; `go`; `if`; `import`; `interface`; `map`; `package`; `range`; `return`; `select`; `struct`; `switch`; `type`; `var`];
+    identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9]*\|[0-9]+`;
+    others = [];
+  |)
+
 
 
   % ref: https://wiki.haskell.org/Keywords
