@@ -19,6 +19,7 @@ module CodeSyntax :sig
   val r : CodePrinter.syntax
   val ruby : CodePrinter.syntax
   val scala : CodePrinter.syntax
+  val swift : CodePrinter.syntax
 
 end = struct
 
@@ -205,6 +206,22 @@ end = struct
     block-comment = CodePrinter.syntax-rule-block `/\*` `\*/`;
     string = CodePrinter.syntax-rule-inline (` "[^"]*" `);
     keywords = [`abstract`; `case`; `catch`; `class`; `def`; `do`; `else`; `extends`; `false`; `finally`; `final`; `forSome`; `for`; `if`; `implicit`; `import`; `lazy`; `macro`; `match`; `new`; `null`; `object`; `override`; `package`; `private`; `protected`; `return`; `sealed`; `super`; `this`; `throw`; `trait`; `try`; `true`; `type`; `val`; `var`; `while`; `with`; `yield`];
+    identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
+    others = [];
+  |)
+
+
+  % ref: https://docs.swift.org/swift-book/ReferenceManual/LexicalStructure.html
+  let swift = CodePrinter.make-syntax (|
+    line-comment = CodePrinter.syntax-rule-block `//` `$`;
+    block-comment = CodePrinter.syntax-rule-block `/\*` `\*/`;
+    string = CodePrinter.syntax-rule-inline (` "[^"]*" `);
+    keywords = [`associatedtype`; `class`; `deinit`; `enum`; `extension`; `fileprivate`; `func`; `import`; `init`; `inout`; `internal`; `let`; `open`; `operator`; `private`; `protocol`; `public`; `rethrows`; `static`; `struct`; `subscript`; `typealias`; `var`;
+    `associativity`; `convenience`; `dynamic`; `didSet`; `final`; `get`; `infix`; `indirect`; `lazy`; `left`; `mutating`; `none`; `nonmutating`; `optional`; `override`; `postfix`; `precedence`; `prefix`; `Protocol`; `required`; `right`; `set`; `Type`; `unowned`; `weak`; `willSet`;
+    `as`; `Any`; `catch`; `false`; `is`; `nil`; `super`; `self`; `Self`; `throw`; `throws`; `true`; `try`;
+    `break`; `case`; `continue`; `default`; `defer`; `do`; `else`; `fallthrough`; `for`; `guard`; `if`; `in`; `repeat`; `return`; `switch`; `where`; `while`;
+    `#available`; `#colorLiteral`; `#column`; `#else`; `#elseif`; `#endif`; `#error`; `#file`; `#fileID`; `#fileLiteral`; `#filePath`; `#function`; `#if`; `#imageLiteral`; `#line`; `#selector`; `#sourceLocation`; `#warning`;
+    `_`;];
     identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
     others = [];
   |)
