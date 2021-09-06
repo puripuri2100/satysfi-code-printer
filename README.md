@@ -65,7 +65,28 @@ When typesetting code with syntax-highlight, write the code like this:
 - `CodeSyntax.rust`
 - `CodeSyntax.ocaml`
 - `CodeSyntax.satysfi`
+- `CodeSyntax.c`
+- `CodeSyntax.cpp`
+- `CodeSyntax.csharp`
 - `CodeSyntax.fsharp`
+- `CodeSyntax.fortran`
+- `CodeSyntax.go`
+- `CodeSyntax.haskell`
+- `CodeSyntax.java`
+- `CodeSyntax.javascript`
+- `CodeSyntax.julia`
+- `CodeSyntax.kotlin`
+- `CodeSyntax.lua`
+- `CodeSyntax.lisp`
+- `CodeSyntax.nim`
+- `CodeSyntax.perl`
+- `CodeSyntax.python`
+- `CodeSyntax.r`
+- `CodeSyntax.ruby`
+- `CodeSyntax.scala`
+- `CodeSyntax.swift`
+- `CodeSyntax.typescript`
+- `CodeSyntax.visualbasic`
 </details>
 
 <details>

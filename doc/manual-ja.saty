@@ -70,65 +70,39 @@ document (|
     +p{プログラミング言語ごとに纏められた解析用の設定は、code-syntax.satygファイルによって提供されています。\inline-code(`@require: code-printer/code-syntax`);によって読み込んでください。モジュール名は\inline-code(`CodeSyntax`);です。}
     +p{テーマ用の設定値はcode-theme.satyhファイルによって提供されています。ファイルの先頭に\inline-code(`@require: code-printer/code-theme`);と書いて読み込んでください。モジュール名は\inline-code(`CodeTheme`);です。}
     +p{まずは解析用の設定値の紹介です。その設定値を使って解析した結果のシンタックスハイライトと一緒に載せています。}
-      +row {|
-        \mini-page (0.5) <
-          +caption {\inline-code(`CodeSyntax.satysfi`);} <
-            +file-printer ?:(
-              CodePrinter.make-config CodeSyntax.satysfi CodeTheme.basic-light
-              |> CodePrinter.set-number-fun CodeDesign.number-fun-null
-            )(`demo.satyh`);
-          >
-        >
-      |
-        \mini-page (0.5) <
-          +caption {\inline-code(`CodeSyntax.ocaml`);} <
-            +file-printer ?:(
-              CodePrinter.make-config CodeSyntax.ocaml CodeTheme.basic-light
-              |> CodePrinter.set-number-fun CodeDesign.number-fun-null
-            )(`demo.ml`);
-          >
-        >
-      |}
-      +row {|
-        \mini-page (0.5) <
-          +caption {\inline-code(`CodeSyntax.rust`);} <
-            +file-printer ?:(
-              CodePrinter.make-config CodeSyntax.rust CodeTheme.basic-light
-              |> CodePrinter.set-number-fun CodeDesign.number-fun-null
-            )(`demo.rs`);
-          >
-        >
-      |
-        \mini-page (0.5) <
-          +caption {\inline-code(`CodeSyntax.fsharp`);} <
-            +file-printer ?:(
-              CodePrinter.make-config CodeSyntax.fsharp CodeTheme.basic-light
-              |> CodePrinter.set-number-fun CodeDesign.number-fun-null
-            )(`demo.fs`);
-          >
-        >
-      |}
+    +code-syntax-demo-lst [
+      (CodeSyntax.satysfi, `satysfi`, `demo.satyh`);
+      (CodeSyntax.ocaml, `ocaml`, `demo.ml`);
+      (CodeSyntax.rust, `rust`, `demo.rs`);
+      (CodeSyntax.c, `c`, `demo.c`);
+      (CodeSyntax.cpp, `cpp`, `demo.cpp`);
+      (CodeSyntax.csharp, `csharp`, `demo.cs`);
+      (CodeSyntax.fsharp, `fsharp`, `demo.fs`);
+      (CodeSyntax.fortran, `fortran`, `demo.f90`);
+      (CodeSyntax.go, `go`, `demo.go`);
+      (CodeSyntax.haskell, `haskell`, `demo.hs`);
+      (CodeSyntax.java, `java`, `demo.java`);
+      (CodeSyntax.javascript, `javascript`, `demo.js`);
+      (CodeSyntax.julia, `julia`, `demo.jl`);
+      (CodeSyntax.kotlin, `kotlin`, `demo.kt`);
+      (CodeSyntax.lua, `lua`, `demo.lua`);
+      (CodeSyntax.lisp, `lisp`, `demo.lisp`);
+      (CodeSyntax.nim, `nim`, `demo.nim`);
+      (CodeSyntax.perl, `perl`, `demo.pl`);
+      (CodeSyntax.python, `python`, `demo.py`);
+      (CodeSyntax.r, `r`, `demo.R`);
+      (CodeSyntax.ruby, `ruby`, `demo.rb`);
+      (CodeSyntax.scala, `scala`, `demo.scala`);
+      (CodeSyntax.swift, `swift`, `demo.swift`);
+      (CodeSyntax.typescript, `typescript`, `demo.ts`);
+      (CodeSyntax.visualbasic, `visualbasic`, `demo.vb`);
+    ];
     +p{現在提供している解析用の設定値は以上になります。}
     +p{次はテーマ用の設定値の紹介です。}
-      +row {|
-        \mini-page (0.5) <
-          +caption {\inline-code(`CodeTheme.basic-light`);} <
-            +file-printer ?:(
-              CodePrinter.make-config CodeSyntax.rust CodeTheme.basic-light
-              |> CodePrinter.set-number-fun CodeDesign.number-fun-null
-            )(`demo.rs`);
-          >
-        >
-      |
-        \mini-page (0.5) <
-          +caption {\inline-code(`CodeTheme.basic-dark`);} <
-            +file-printer ?:(
-              CodePrinter.make-config CodeSyntax.rust CodeTheme.basic-dark
-              |> CodePrinter.set-number-fun CodeDesign.number-fun-null
-            )(`demo.rs`);
-          >
-        >
-      |}
+    +code-theme-demo-lst [
+      (CodeTheme.basic-light, `basic-light`);
+      (CodeTheme.basic-dark, `basic-dark`);
+    ];
     +p{現在提供しているテーマ用の設定値は以上になります。}
   >
   +section {デザインを弄る} <

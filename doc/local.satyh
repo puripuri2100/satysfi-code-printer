@@ -1,4 +1,5 @@
 @require: list
+@import: ../src/code-printer
 
 let-block ctx +row ?:space-opt lst =
   let join i ib1 ib2 =
@@ -43,3 +44,64 @@ let-block ctx +caption caption bt =
   let caption-bb = line-break false true caption-ctx (inline-fil ++ caption-ib ++ inline-fil) in
   main-bb +++ caption-bb
 
+
+
+let-block ctx +code-syntax-demo-lst lst =
+  let ctx =
+    ctx |> set-min-gap-of-lines 20pt
+  in
+  let f (syntax, syntax-name, file-path) = {
+    \mini-page (0.5) <
+      +caption {\inline-code(`CodeSyntax.`^syntax-name);} <
+        +file-printer ?:(
+          CodePrinter.make-config syntax CodeTheme.basic-light
+          |> CodePrinter.set-number-fun CodeDesign.number-fun-null
+        )(file-path);
+      >
+    >
+  }
+  in
+  let break-point =
+    discretionary 100 inline-nil inline-fil inline-fil
+  in
+  let join i ib1 ib2 =
+    if i <= 0 then
+      inline-fil ++ ib2
+    else
+      ib1 ++ break-point ++ ib2
+  in
+  lst
+  |> List.map (fun data -> data |> f |> read-inline ctx)
+  |> List.fold-lefti join inline-nil
+  |> (fun ib -> line-break true true ctx (ib ++ inline-fil))
+
+
+
+let-block ctx +code-theme-demo-lst lst =
+  let ctx =
+    ctx |> set-min-gap-of-lines 20pt
+  in
+  let f (theme, theme-name) = {
+    \mini-page (0.5) <
+      +caption {\inline-code(`CodeTheme.`^theme-name);} <
+        +file-printer ?:(
+          CodePrinter.make-config CodeSyntax.rust theme
+          |> CodePrinter.set-number-fun CodeDesign.number-fun-null
+        )(`demo.rs`);
+      >
+    >
+  }
+  in
+  let break-point =
+    discretionary 100 inline-nil inline-fil inline-fil
+  in
+  let join i ib1 ib2 =
+    if i <= 0 then
+      inline-fil ++ ib2
+    else
+      ib1 ++ break-point ++ ib2
+  in
+  lst
+  |> List.map (fun data -> data |> f |> read-inline ctx)
+  |> List.fold-lefti join inline-nil
+  |> (fun ib -> line-break true true ctx (ib ++ inline-fil))
