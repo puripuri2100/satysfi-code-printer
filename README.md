@@ -77,6 +77,7 @@ When typesetting code with syntax-highlight, write the code like this:
 - `CodeSyntax.perl`
 - `CodeSyntax.python`
 - `CodeSyntax.r`
+- `CodeSyntax.ruby`
 </details>
 
 <details>
