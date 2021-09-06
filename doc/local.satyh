@@ -87,7 +87,7 @@ let-block ctx +code-theme-demo-lst lst =
         +file-printer ?:(
           CodePrinter.make-config CodeSyntax.rust theme
           |> CodePrinter.set-number-fun CodeDesign.number-fun-null
-        )(`demo.rs`);
+        )(`demo/demo.rs`);
       >
     >
   }
