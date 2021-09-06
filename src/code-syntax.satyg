@@ -15,6 +15,7 @@ module CodeSyntax :sig
   val lua : CodePrinter.syntax
   val nim : CodePrinter.syntax
   val perl : CodePrinter.syntax
+  val python : CodePrinter.syntax
 
 end = struct
 
@@ -158,6 +159,17 @@ end = struct
     string = CodePrinter.syntax-rule-inline (` "[^"]*"\|'[^']*' `);
     keywords = [`_DATA_`; `_END_`; `_FILE_`; `_LINE_`; `_PACKAGE_`; `and`; `cmp`; `continue`; `CORE`; `do`; `else`; `elsif`; `eq`; `exp`; `for`; `foreach`; `ge`; `gt`; `if`; `le`; `lock`; `lt`; `m`; `ne`; `no`; `or`; `package`; `qq`; `qr`; `qw`; `qx`; `q`; `sub`; `s`; `tr`; `unless`; `until`; `while`; `xor`; `y`];
     identifier = CodePrinter.syntax-rule-inline `\$[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+\|[a-zA-Z_][a-zA-Z0-9_]+`;
+    others = [];
+  |)
+
+
+  % ref: https://docs.python.org/3/reference/lexical_analysis.html#keywords
+  let python = CodePrinter.make-syntax (|
+    line-comment = CodePrinter.syntax-rule-block `#` `$`;
+    block-comment = CodePrinter.syntax-rule-block `#` `$`;
+    string = CodePrinter.syntax-rule-inline (` "[^"]*"\|'[^']*' `);
+    keywords = [`False`; `None`; `True`; `and`; `assert`; `async`; `as`; `await`; `break`; `class`; `continue`; `def`; `del`; `elif`; `else`; `except`; `finally`; `for`; `from`; `global`; `if`; `import`; `in`; `is`; `lambda`; `nonlocal`; `not`; `or`; `pass`; `raise`; `return`; `try`; `while`; `with`; `yield`;];
+    identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+\|[a-zA-Z_][a-zA-Z0-9_]+`;
     others = [];
   |)
 

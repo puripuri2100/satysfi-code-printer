@@ -75,6 +75,7 @@ When typesetting code with syntax-highlight, write the code like this:
 - `CodeSyntax.lua`
 - `CodeSyntax.nim`
 - `CodeSyntax.perl`
+- `CodeSyntax.python`
 </details>
 
 <details>
