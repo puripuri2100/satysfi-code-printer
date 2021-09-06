@@ -76,6 +76,7 @@ When typesetting code with syntax-highlight, write the code like this:
 - `CodeSyntax.nim`
 - `CodeSyntax.perl`
 - `CodeSyntax.python`
+- `CodeSyntax.r`
 </details>
 
 <details>
