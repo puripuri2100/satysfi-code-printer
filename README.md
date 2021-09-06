@@ -66,6 +66,13 @@ When typesetting code with syntax-highlight, write the code like this:
 - `CodeSyntax.ocaml`
 - `CodeSyntax.satysfi`
 - `CodeSyntax.fsharp`
+- `CodeSyntax.fortran`
+- `CodeSyntax.haskell`
+- `CodeSyntax.java`
+- `CodeSyntax.javascript`
+- `CodeSyntax.julia`
+- `CodeSyntax.kotlin`
+- `CodeSyntax.lua`
 </details>
 
 <details>
