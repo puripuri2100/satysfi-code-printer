@@ -820,58 +820,65 @@ let-mutable indent-ref <- inline-nil
     let () = indent-ref <- inline-nil in
     %%% 改行部分に入れるinline-boxesの設定をしている
     let (ib-before, ib-after) = design#line-break-mark basic-ctx default-width in
-    let set-basic-ctx () =
-      if is-block-code then
-        basic-ctx |> set-every-word-break ib-before (!indent-ref ++ ib-after)
-      else
-        basic-ctx
-    in
-    let set-comment-ctx () =
-      if is-block-code then
-        basic-ctx |> theme#comment
-                  |> set-every-word-break ib-before (!indent-ref ++ ib-after)
-      else
-        theme#comment basic-ctx
-    in
-    let set-string-ctx () =
-      if is-block-code then
-        basic-ctx |> theme#string
-                  |> set-every-word-break ib-before (!indent-ref ++ ib-after)
-      else
-        theme#string basic-ctx
-    in
-    let set-keyword-ctx () =
-      if is-block-code then
-        basic-ctx |> theme#keyword
-                  |> set-every-word-break ib-before (!indent-ref ++ ib-after)
-      else
-        theme#keyword basic-ctx
-    in
-    let set-identifier-ctx () =
-      if is-block-code then
-        basic-ctx |> theme#identifier
-                  |> set-every-word-break ib-before (!indent-ref ++ ib-after)
-      else
-        theme#identifier basic-ctx
-    in
-    let set-other-ctx-lst () =
+    let basic-ctx = basic-ctx in
+    let comment-ctx = basic-ctx |> theme#comment in
+    let string-ctx = basic-ctx |> theme#string in
+    let keyword-ctx = basic-ctx |> theme#keyword in
+    let identifier-ctx = basic-ctx |> theme#identifier in
+    let other-ctx-lst =
       theme#others
-      |> List.map (fun (key,f) -> (
-      let ctx =
-        if is-block-code then
-          basic-ctx |> f
-                    |> set-every-word-break ib-before (!indent-ref ++ ib-after)
-        else
-          f basic-ctx
-      in
-        (key, ctx)
-      ))
+      |> List.map (fun (key,f) -> (key, f basic-ctx))
     in
-    let line-break-point () =
+    let line-break-point is-space =
       if is-block-code then
-        discretionary 500 inline-nil ib-before (!indent-ref ++ ib-after)
+        if is-space then
+          %%% スペースの前後はよりペナルティを大きくする
+          discretionary 10000 inline-nil ib-before (!indent-ref ++ ib-after)
+        else
+          discretionary 100 inline-nil ib-before (!indent-ref ++ ib-after)
       else
-        discretionary 500 inline-nil inline-nil inline-nil
+        discretionary 100 inline-nil inline-nil inline-nil
+    in
+    let str-to-ib ctx str =
+      let str-len = string-length str in
+      let-rec sub lst n =
+        if n == str-len then
+          lst
+        else
+          let s = string-sub str n 1 in
+          sub (s::lst) (n + 1)
+      in
+      let str-lst = sub [] 0 in
+      let-rec sub2 lst ibs =
+        match lst with
+        | [] -> ibs
+        | [s] -> (
+          if string-same s space-string then
+            let ib = inline-skip default-width in
+            ib ++ ibs
+          else if string-same s tab-string then
+            let ib = inline-skip (default-width *' design#tab-size) in
+            ib ++ ibs
+          else
+            let ib = s |> embed-string |> read-inline ctx in
+            ib ++ ibs
+        )
+        | x::y::zs -> (
+          if string-same x space-string then
+            let ib = inline-skip default-width in
+            sub2 (y::zs) (ib ++ (line-break-point true) ++ ibs)
+          else if string-same x tab-string then
+            let ib = inline-skip (default-width *' design#tab-size) in
+            sub2 (y::zs) (ib ++ (line-break-point true) ++ ibs)
+          else
+            let ib = x |> embed-string |> read-inline ctx in
+            if string-same y space-string || string-same y tab-string then
+              sub2 (y::zs) (ib ++ (line-break-point true) ++ ibs)
+            else
+              sub2 (y::zs) (ib ++ (line-break-point false) ++ ibs)
+        )
+      in
+      sub2 str-lst inline-nil
     in
     %%% ib-lst：既に組みあがった行を表すib
     %%% token-lst：これから消費していくトークン
@@ -893,79 +900,51 @@ let-mutable indent-ref <- inline-nil
       | x::xs -> (
         match x with
         | Basic(s) -> (
-          let ib =
-            s
-            |> embed-string
-            |> read-inline (set-basic-ctx ())
-          in
-          printer-sub ib-lst xs (ib::(line-break-point ())::stack) false
+          let ib = str-to-ib basic-ctx s in
+          printer-sub ib-lst xs (ib::(line-break-point true)::stack) false
         )
         | Comment(s) -> (
-          let ib =
-            s
-            |> embed-string
-            |> read-inline (set-comment-ctx ())
-          in
-          printer-sub ib-lst xs (ib::(line-break-point ())::stack) false
+          let ib = str-to-ib comment-ctx s in
+          printer-sub ib-lst xs (ib::(line-break-point true)::stack) false
         )
         | String(s) -> (
-          let ib =
-            s
-            |> embed-string
-            |> read-inline (set-string-ctx ())
-          in
-          printer-sub ib-lst xs (ib::(line-break-point ())::stack) false
+          let ib = str-to-ib string-ctx s in
+          printer-sub ib-lst xs (ib::(line-break-point true)::stack) false
         )
         | KeyWord(s) -> (
-          let ib =
-            s
-            |> embed-string
-            |> read-inline (set-keyword-ctx ())
-          in
-          printer-sub ib-lst xs (ib::(line-break-point ())::stack) false
+          let ib = str-to-ib keyword-ctx s in
+          printer-sub ib-lst xs (ib::(line-break-point true)::stack) false
         )
         | Identifier(s) -> (
-          let ib =
-            s
-            |> embed-string
-            |> read-inline (set-identifier-ctx ())
-          in
-          printer-sub ib-lst xs (ib::(line-break-point ())::stack) false
+          let ib = str-to-ib identifier-ctx s in
+          printer-sub ib-lst xs (ib::(line-break-point true)::stack) false
         )
         | Other(key, s) -> (
-          match List.find (fun (lkey,_) -> string-same key lkey) (set-other-ctx-lst ()) with
+          match List.find (fun (lkey,_) -> string-same key lkey) other-ctx-lst with
           | None -> (
-            let ib =
-              s
-              |> embed-string
-              |> read-inline (set-basic-ctx ())
-            in
-            printer-sub ib-lst xs (ib::(line-break-point ())::stack) false
+            let ib = str-to-ib basic-ctx s in
+            printer-sub ib-lst xs (ib::(line-break-point true)::stack) false
           )
           | Some(_,ctx-f) -> (
-            let ib =
-              s
-              |> embed-string
-              |> read-inline ctx-f
-            in
-            printer-sub ib-lst xs (ib::(line-break-point ())::stack) false
+            let ib = str-to-ib ctx-f s in
+            printer-sub ib-lst xs (ib::(line-break-point true)::stack) false
           )
         )
         | Space -> (
           let ib = inline-skip default-width in
           if is-new-line then
             let () = indent-ref <- !indent-ref ++ ib in
-            printer-sub ib-lst xs (ib::(line-break-point ())::stack) true
+            printer-sub ib-lst xs (ib::(line-break-point true)::stack) true
           else
-            printer-sub ib-lst xs (ib::(line-break-point ())::stack) false
+            printer-sub ib-lst xs (ib::(line-break-point true)::stack) false
         )
         | Tab -> (
           let ib = inline-skip (default-width *' design#tab-size) in
           if is-new-line then
             let () = indent-ref <- !indent-ref ++ ib in
-            printer-sub ib-lst xs (ib::(line-break-point ())::stack) true
+            printer-sub ib-lst xs (ib::(line-break-point true)::stack) true
           else
-            printer-sub ib-lst xs (ib::(line-break-point ())::stack) false
+            printer-sub ib-lst xs (ib::(line-break-point true)::stack) false
         )
         | _ -> (%%% LF, CR, CRLF
           let () = indent-ref <- inline-nil in
