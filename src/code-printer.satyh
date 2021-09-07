@@ -1,4 +1,5 @@
 @require: base/list-ext
+@require: gr
 @require: vdecoset
 @require: hdecoset
 @require: color
@@ -214,12 +215,74 @@ end = struct
     i |> arabic |> embed-string |> read-inline new-ctx
 
   let default-line-break-mark ctx default-width =
-    %%%%%!!!!!!!!! `⤷`みたいなマークをグラフィックで出したいよね
-    let line-break-mark-arrow = `→` |> embed-string |> read-inline ctx in
-    let line-break-mark =
-      (inline-skip (default-width *' 0.5)) ++ line-break-mark-arrow ++ (inline-skip (default-width *' 0.5))
+    let font-size = get-font-size ctx in
+    let text-color = get-text-color ctx in
+    let rate = font-size /' 12pt in
+    let r = 0.55228 in % 円弧をベジェ曲線で書くためのマジックナンバー
+    let before-arrow =
+      inline-graphics (12pt *' rate) (12pt *' rate) 0pt (fun (x,y) -> ([
+        %%% フォントサイズが12ptである前提で作り、その後拡大する
+        (
+          start-path (x +' 8pt, y +' 8pt)
+          |> line-to (x +' 8pt, y +' 5pt)
+            %%% 円弧の半径は2ptにしてみる
+          |> bezier-to
+            (x +' 8pt, y +' 5pt -' (2pt *' r))
+            (x +' 6pt +' (2pt *'r), y +' 3pt)
+            (x +' 6pt, y +' 3pt)
+          |> line-to (x +' 2pt, y +' 3pt)
+          |> terminate-path
+          |> stroke 1.5pt text-color
+          |> Gr.scale-graphics (x,y) rate rate
+        );
+        (
+          Gr.polygon
+            (x +' 1pt, y +' 3pt) % 三角形の頂点
+            [
+              (x +' 4pt, y +' 6pt);
+              (x +' 4pt, y +' 0pt);
+            ]
+          |> fill text-color
+          |> Gr.scale-graphics (x,y) rate rate
+        );
+      ]))
     in
-    (inline-nil, line-break-mark)
+    let break-before =
+      (inline-skip (default-width *' 0.5)) ++ before-arrow
+    in
+    %%% `⤷`みたいなマークをグラフィックで出したい
+    let after-arrow =
+      inline-graphics (12pt *' rate) (12pt *' rate) 0pt (fun (x,y) -> ([
+        %%% フォントサイズが12ptである前提で作り、その後拡大する
+        (
+          start-path (x +' 4pt, y +' 7pt)
+          |> line-to (x +' 4pt, y +' 5pt)
+            %%% 円弧の半径は2ptにしてみる
+          |> bezier-to
+            (x +' 4pt, y +' 5pt -' (2pt *' r))
+            (x +' 6pt -' (2pt *'r), y +' 3pt)
+            (x +' 6pt, y +' 3pt)
+          |> line-to (x +' 10pt, y +' 3pt)
+          |> terminate-path
+          |> stroke 1.5pt text-color
+          |> Gr.scale-graphics (x,y) rate rate
+        );
+        (
+          Gr.polygon
+            (x +' 11pt, y +' 3pt) % 三角形の頂点
+            [
+              (x +' 8pt, y +' 6pt);
+              (x +' 8pt, y +' 0pt);
+            ]
+          |> fill text-color
+          |> Gr.scale-graphics (x,y) rate rate
+        );
+      ]))
+    in
+    let break-after =
+      (inline-skip (default-width *' 0.5)) ++ after-arrow ++ (inline-skip (default-width *' 0.5))
+    in
+    (break-before, break-after)
 
   let default-design () =
     make-design (|
