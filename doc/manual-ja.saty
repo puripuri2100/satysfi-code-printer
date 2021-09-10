@@ -89,6 +89,7 @@ document (|
       (CodeSyntax.lua, `lua`, `demo/demo.lua`);
       (CodeSyntax.lisp, `lisp`, `demo/demo.lisp`);
       (CodeSyntax.nim, `nim`, `demo/demo.nim`);
+      (CodeSyntax.nim, `shell`, `demo/demo.sh`);
       (CodeSyntax.perl, `perl`, `demo/demo.pl`);
       (CodeSyntax.python, `python`, `demo/demo.py`);
       (CodeSyntax.r, `r`, `demo/demo.R`);

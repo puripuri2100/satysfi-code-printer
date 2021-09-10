@@ -80,6 +80,7 @@ When typesetting code with syntax-highlight, write the code like this:
 - `CodeSyntax.lua`
 - `CodeSyntax.lisp`
 - `CodeSyntax.nim`
+- `CodeSyntax.shell`
 - `CodeSyntax.perl`
 - `CodeSyntax.python`
 - `CodeSyntax.r`
