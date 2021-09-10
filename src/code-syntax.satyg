@@ -9,6 +9,7 @@ module CodeSyntax :sig
   val c : CodePrinter.syntax
   val cpp : CodePrinter.syntax
   val csharp : CodePrinter.syntax
+  val d : CodePrinter.syntax
   val fsharp : CodePrinter.syntax
   val fortran : CodePrinter.syntax
   val go : CodePrinter.syntax
@@ -102,6 +103,17 @@ end = struct
     string = CodePrinter.syntax-rule-inline (` "[^"]*" `);
     keywords = [`abstract`; `as`; `base`; `bool`; `break`; `byte`; `case`; `catch`; `char`; `checked`; `class`; `const`; `continue`; `decimal`; `default`; `delegate`; `double`; `do`; `else`; `enum`; `event`; `explicit`; `extern`; `false`; `finally`; `fixed`; `float`; `foreach`; `for`; `goto`; `if`; `implicit`; `interface`; `internal`; `int`; `in`; `is`; `lock`; `long`; `namespace`; `new`; `null`; `object`; `operator`; `out`; `override`; `params`; `private`; `protected`; `public`; `readonly`; `ref`; `return`; `sbyte`; `sealed`; `short`; `sizeof`; `stackalloc`; `static`; `string`; `struct`; `switch`; `this`; `throw`; `true`; `try`; `typeof`; `uint`; `ulong`; `unchecked`; `unsafe`; `ushort`; `using`; `virtual`; `void`; `volatile`; `while`;];
     identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
+    others = [];
+  |)
+
+
+% ref: https://dlang.org/spec/lex.html#Keyword
+  let d = CodePrinter.make-syntax (|
+    line-comment = CodePrinter.syntax-rule-block `//` `$`;
+    block-comment = CodePrinter.syntax-rule-block `/\*` `\*/`;
+    string = CodePrinter.syntax-rule-inline (` "[^"]*" `);
+    keywords = [`abstract`; `alias`; `align`; `asm`; `assert`; `auto`; `body`; `bool`; `break`; `byte`; `case`; `cast`; `catch`; `cdouble`; `cent`; `cfloat`; `char`; `class`; `const`; `continue`; `creal`; `dchar`; `debug`; `default`; `delegate`; `delete`; `deprecated`; `double`; `do`; `else`; `enum`; `export`; `extern`; `false`; `final`; `finally`; `float`; `foreach_reverse`; `foreach`; `for`; `function`; `goto`; `idouble`; `ifloat`; `if`; `immutable`; `import`; `inout`; `int`; `interface`; `invariant`; `in`; `ireal`; `is`; `lazy`; `long`; `macro`; `mixin`; `module`; `new`; `nothrow`; `null`; `out`; `override`; `package`; `pragma`; `private`; `protected`; `public`; `pure`; `real`; `ref`; `return`; `scope`; `shared`; `short`; `static`; `struct`; `super`; `switch`; `synchronized`; `template`; `this`; `throw`; `true`; `try`; `typeid`; `typeof`; `ubyte`; `ucent`; `uint`; `ulong`; `union`; `unittest`; `ushort`; `version`; `void`; `wchar`; `while`; `with`; `__FILE_FULL_PATH__`; `__FILE__`; `__MODULE__`; `__LINE__`; `__FUNCTION__`; `__PRETTY_FUNCTION__`; `__gshared`; `__traits`; `__vector`; `__parameters`];
+    identifier = CodePrinter.syntax-rule-inline `[_a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
     others = [];
   |)
 

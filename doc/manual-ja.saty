@@ -78,6 +78,7 @@ document (|
       (CodeSyntax.c, `c`, `demo/demo.c`);
       (CodeSyntax.cpp, `cpp`, `demo/demo.cpp`);
       (CodeSyntax.csharp, `csharp`, `demo/demo.cs`);
+      (CodeSyntax.d, `d`, `demo/demo.d`);
       (CodeSyntax.fsharp, `fsharp`, `demo/demo.fs`);
       (CodeSyntax.fortran, `fortran`, `demo/demo.f90`);
       (CodeSyntax.go, `go`, `demo/demo.go`);
