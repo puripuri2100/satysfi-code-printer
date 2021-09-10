@@ -74,7 +74,7 @@ document (|
       (CodeSyntax.satysfi, `satysfi`, `demo/demo.satyh`);
       (CodeSyntax.ocaml, `ocaml`, `demo/demo.ml`);
       (CodeSyntax.rust, `rust`, `demo/demo.rs`);
-      (CodeSyntax.c, `cobol`, `demo/demo.cbl`);
+      (CodeSyntax.cobol, `cobol`, `demo/demo.cbl`);
       (CodeSyntax.c, `c`, `demo/demo.c`);
       (CodeSyntax.cpp, `cpp`, `demo/demo.cpp`);
       (CodeSyntax.csharp, `csharp`, `demo/demo.cs`);
@@ -90,7 +90,7 @@ document (|
       (CodeSyntax.lua, `lua`, `demo/demo.lua`);
       (CodeSyntax.lisp, `lisp`, `demo/demo.lisp`);
       (CodeSyntax.nim, `nim`, `demo/demo.nim`);
-      (CodeSyntax.nim, `shell`, `demo/demo.sh`);
+      (CodeSyntax.shell, `shell`, `demo/demo.sh`);
       (CodeSyntax.perl, `perl`, `demo/demo.pl`);
       (CodeSyntax.python, `python`, `demo/demo.py`);
       (CodeSyntax.r, `r`, `demo/demo.R`);
