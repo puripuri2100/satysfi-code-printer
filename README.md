@@ -94,6 +94,12 @@ When typesetting code with syntax-highlight, write the code like this:
 
 - `CodeTheme.basic-light`
 - `CodeTheme.basic-dark`
+- `CodeTheme.gruvbox-light`
+- `CodeTheme.gruvbox-dark`
+- `CodeTheme.dracula`
+- `CodeTheme.iceberg-dark`
+- `CodeTheme.iceberg-light`
+
 </details>
 
 # License
