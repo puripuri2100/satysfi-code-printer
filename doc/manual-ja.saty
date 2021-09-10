@@ -74,6 +74,7 @@ document (|
       (CodeSyntax.satysfi, `satysfi`, `demo/demo.satyh`);
       (CodeSyntax.ocaml, `ocaml`, `demo/demo.ml`);
       (CodeSyntax.rust, `rust`, `demo/demo.rs`);
+      (CodeSyntax.c, `cobol`, `demo/demo.cbl`);
       (CodeSyntax.c, `c`, `demo/demo.c`);
       (CodeSyntax.cpp, `cpp`, `demo/demo.cpp`);
       (CodeSyntax.csharp, `csharp`, `demo/demo.cs`);
