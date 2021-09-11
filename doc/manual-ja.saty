@@ -130,6 +130,9 @@ document (|
       (CodeTheme.spacegray-ocean-light, `spacegray-ocean-light`);
       (CodeTheme.night-owl, `night-owl`);
       (CodeTheme.light-owl, `light-owl`);
+      (CodeTheme.winteriscoming-dark-blue, `winteriscoming-dark-blue`);
+      (CodeTheme.winteriscoming-dark-black, `winteriscoming-dark-black`);
+      (CodeTheme.winteriscoming-light, `winteriscoming-light`);
     ];
     +p{現在提供しているテーマ用の設定値は以上になります。}
   >

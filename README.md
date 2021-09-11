@@ -121,6 +121,9 @@ When typesetting code with syntax-highlight, write the code like this:
 - `CodeTheme.spacegray-ocean-light`
 - `CodeTheme.night-owl`
 - `CodeTheme.light-owl`
+- `CodeTheme.winteriscoming-dark-blue`
+- `CodeTheme.winteriscoming-dark-black`
+- `CodeTheme.winteriscoming-light`
 
 </details>
 

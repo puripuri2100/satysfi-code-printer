@@ -23,6 +23,9 @@ module CodeTheme :sig
   val spacegray-ocean-light : CodePrinter.theme
   val night-owl : CodePrinter.theme
   val light-owl : CodePrinter.theme
+  val winteriscoming-dark-blue : CodePrinter.theme
+  val winteriscoming-dark-black : CodePrinter.theme
+  val winteriscoming-light : CodePrinter.theme
 
 end = struct
 
@@ -375,6 +378,54 @@ end = struct
       string = set-string-color (from-hex 0x4876D6);
       keyword = set-keyword-color (from-hex 0x994CC3);
       identifier = set-identifier-color (from-hex 0x4876D6);
+      others = [];
+    |)
+
+
+  % Winter is Comming Dark Blue colorscheme
+  % MIT License
+  % Copyright (c) 2015-2017 JohnPapa.net, LLC
+  % https://github.com/johnpapa/vscode-winteriscoming
+  let winteriscoming-dark-blue =
+    CodePrinter.make-theme (|
+      backcolor = from-hex 0x011627;
+      basic = set-basic-color (from-hex 0xA7DBF7);
+      comment = set-comment-color (from-hex 0x999999);
+      string = set-string-color (from-hex 0xBCF0C0);
+      keyword = set-keyword-color (from-hex 0x00BFF9);
+      identifier = set-identifier-color (from-hex 0xA170C6);
+      others = [];
+    |)
+
+
+  % Winter is Comming Dark Black colorscheme
+  % MIT License
+  % Copyright (c) 2015-2017 JohnPapa.net, LLC
+  % https://github.com/johnpapa/vscode-winteriscoming
+  let winteriscoming-dark-black =
+    CodePrinter.make-theme (|
+      backcolor = from-hex 0x282822;
+      basic = set-basic-color (from-hex 0xA7DBF7);
+      comment = set-comment-color (from-hex 0x999999);
+      string = set-string-color (from-hex 0xBCF0C0);
+      keyword = set-keyword-color (from-hex 0x00BFF9);
+      identifier = set-identifier-color (from-hex 0xA170C6);
+      others = [];
+    |)
+
+
+  % Winter is Comming Light colorscheme
+  % MIT License
+  % Copyright (c) 2015-2017 JohnPapa.net, LLC
+  % https://github.com/johnpapa/vscode-winteriscoming
+  let winteriscoming-light =
+    CodePrinter.make-theme (|
+      backcolor = from-hex 0xFFFFFF;
+      basic = set-basic-color (from-hex 0x236EBF);
+      comment = set-comment-color (from-hex 0x357B42);
+      string = set-string-color (from-hex 0xA44185);
+      keyword = set-keyword-color (from-hex 0x7B30D0);
+      identifier = set-identifier-color (from-hex 0x174781);
       others = [];
     |)
 
