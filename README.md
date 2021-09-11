@@ -109,6 +109,12 @@ When typesetting code with syntax-highlight, write the code like this:
 - `CodeTheme.dracula`
 - `CodeTheme.iceberg-dark`
 - `CodeTheme.iceberg-light`
+- `CodeTheme.tyokyo-night`
+- `CodeTheme.tyokyo-night-strom`
+- `CodeTheme.tyokyo-night-light`
+- `CodeTheme.ayu-dark`
+- `CodeTheme.ayu-mirage`
+- `CodeTheme.ayu-light`
 
 </details>
 
