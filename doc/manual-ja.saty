@@ -112,6 +112,7 @@ document (|
     +code-theme-demo-lst [
       (CodeTheme.basic-light, `basic-light`);
       (CodeTheme.basic-dark, `basic-dark`);
+      (CodeTheme.basic-font, `basic-font`);
       (CodeTheme.gruvbox-light, `gruvbox-light`);
       (CodeTheme.gruvbox-dark, `gruvbox-dark`);
       (CodeTheme.dracula, `dracula`);
