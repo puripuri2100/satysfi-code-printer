@@ -17,6 +17,10 @@ module CodeTheme :sig
   val ayu-dark : CodePrinter.theme
   val ayu-mirage : CodePrinter.theme
   val ayu-light : CodePrinter.theme
+  val spacegray-eighties : CodePrinter.theme
+  val spacegray-mocha : CodePrinter.theme
+  val spacegray-ocean-dark : CodePrinter.theme
+  val spacegray-ocean-light : CodePrinter.theme
 
 end = struct
 
@@ -276,4 +280,67 @@ end = struct
       others = [];
     |)
 
+
+  % Spacegray Eighties colorscheme
+  % MIT License
+  % Copyright (c) 2016 Mihai Ionut Vilcu
+  % https://github.com/ionutvmi/spacegray-vscode
+  let spacegray-eighties =
+    CodePrinter.make-theme (|
+      backcolor = from-hex 0x2D2D2D;
+      basic = set-basic-color (from-hex 0xD3D0C8);
+      comment = set-comment-color (from-hex 0x747369);
+      string = set-string-color (from-hex 0x99CC99);
+      keyword = set-keyword-color (from-hex 0xCC99CC);
+      identifier = set-identifier-color (from-hex 0xF99157);
+      others = [];
+    |)
+
+
+  % Spacegray Mocha colorscheme
+  % MIT License
+  % Copyright (c) 2016 Mihai Ionut Vilcu
+  % https://github.com/ionutvmi/spacegray-vscode
+  let spacegray-mocha =
+    CodePrinter.make-theme (|
+      backcolor = from-hex 0x3B3228;
+      basic = set-basic-color (from-hex 0xD0C8C6);
+      comment = set-comment-color (from-hex 0x7E705A);
+      string = set-string-color (from-hex 0xBEB55B);
+      keyword = set-keyword-color (from-hex 0xA89BB9);
+      identifier = set-identifier-color (from-hex 0xD28B71);
+      others = [];
+    |)
+
+
+  % Spacegray Ocean Dark colorscheme
+  % MIT License
+  % Copyright (c) 2016 Mihai Ionut Vilcu
+  % https://github.com/ionutvmi/spacegray-vscode
+  let spacegray-ocean-dark =
+    CodePrinter.make-theme (|
+      backcolor = from-hex 0x2B303B;
+      basic = set-basic-color (from-hex 0xC0C5CE);
+      comment = set-comment-color (from-hex 0x65737E);
+      string = set-string-color (from-hex 0xA3BE8C);
+      keyword = set-keyword-color (from-hex 0xB48EAD);
+      identifier = set-identifier-color (from-hex 0xD08770);
+      others = [];
+    |)
+
+
+  % Spacegray Ocean Light colorscheme
+  % MIT License
+  % Copyright (c) 2016 Mihai Ionut Vilcu
+  % https://github.com/ionutvmi/spacegray-vscode
+  let spacegray-ocean-light =
+    CodePrinter.make-theme (|
+      backcolor = from-hex 0xEFF1F5;
+      basic = set-basic-color (from-hex 0x4F5B66);
+      comment = set-comment-color (from-hex 0xA7ADBA);
+      string = set-string-color (from-hex 0xA3BE8C);
+      keyword = set-keyword-color (from-hex 0xB48EAD);
+      identifier = set-identifier-color (from-hex 0xD08770);
+      others = [];
+    |)
 end
