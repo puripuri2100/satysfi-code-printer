@@ -115,6 +115,8 @@ When typesetting code with syntax-highlight, write the code like this:
 - `CodeTheme.ayu-dark`
 - `CodeTheme.ayu-mirage`
 - `CodeTheme.ayu-light`
+- `CodeTheme.night-owl`
+- `CodeTheme.light-owl`
 
 </details>
 

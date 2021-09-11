@@ -128,6 +128,8 @@ document (|
       (CodeTheme.spacegray-mocha, `spacegray-mocha`);
       (CodeTheme.spacegray-ocean-dark, `spacegray-ocean-dark`);
       (CodeTheme.spacegray-ocean-light, `spacegray-ocean-light`);
+      (CodeTheme.night-owl, `night-owl`);
+      (CodeTheme.light-owl, `light-owl`);
     ];
     +p{現在提供しているテーマ用の設定値は以上になります。}
   >

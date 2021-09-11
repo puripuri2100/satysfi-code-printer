@@ -21,6 +21,8 @@ module CodeTheme :sig
   val spacegray-mocha : CodePrinter.theme
   val spacegray-ocean-dark : CodePrinter.theme
   val spacegray-ocean-light : CodePrinter.theme
+  val night-owl : CodePrinter.theme
+  val light-owl : CodePrinter.theme
 
 end = struct
 
@@ -343,4 +345,38 @@ end = struct
       identifier = set-identifier-color (from-hex 0xD08770);
       others = [];
     |)
+
+
+  % Night Owl colorscheme
+  % MIT License
+  % Copyright (c) 2018 Sarah Drasner
+  % https://github.com/sdras/night-owl-vscode-theme
+  let night-owl =
+    CodePrinter.make-theme (|
+      backcolor = from-hex 0x011627;
+      basic = set-basic-color (from-hex 0xD6DEEB);
+      comment = set-comment-color (from-hex 0x637777);
+      string = set-string-color (from-hex 0xECC48D);
+      keyword = set-keyword-color (from-hex 0xC792EA);
+      identifier = set-identifier-color (from-hex 0x82AAFF);
+      others = [];
+    |)
+
+
+  % Light Owl colorscheme
+  % MIT License
+  % Copyright (c) 2018 Sarah Drasner
+  % https://github.com/sdras/night-owl-vscode-theme
+  let light-owl =
+    CodePrinter.make-theme (|
+      backcolor = from-hex 0xFBFBFB;
+      basic = set-basic-color (from-hex 0x403F53);
+      comment = set-comment-color (from-hex 0x989FB1);
+      string = set-string-color (from-hex 0x4876D6);
+      keyword = set-keyword-color (from-hex 0x994CC3);
+      identifier = set-identifier-color (from-hex 0x4876D6);
+      others = [];
+    |)
+
+
 end
