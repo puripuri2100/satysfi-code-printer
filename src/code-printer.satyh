@@ -57,10 +57,6 @@ module CodePrinter : sig
   val set-line-break-mark : (context -> length -> (inline-boxes * inline-boxes)) -> code-printer-config -> code-printer-config
   val set-tab-size : float -> code-printer-config -> code-printer-config
 
-  %%% フォントを変更するだけの関数
-  val set-basic-latin-font : (string * float * float) -> code-printer-config -> code-printer-config
-  val set-basic-cjk-font : (string * float * float) -> code-printer-config -> code-printer-config
-  val set-basic-otherscript-font : (string * float * float) -> code-printer-config -> code-printer-config
   %%% フォントサイズを変更するだけの関数
   val set-basic-font-size : length -> code-printer-config -> code-printer-config
 
@@ -466,75 +462,6 @@ end = struct
       syntax = config#syntax;
       theme = config#theme;
       design = new-design;
-    |)
-
-
-
-  let set-basic-latin-font font config =
-    let f ctx =
-      ctx |> set-font Latin font
-          |> config#theme#basic
-    in
-    let new-theme =
-      make-theme (|
-        backcolor = config#theme#backcolor;
-        basic = f;
-        comment = config#theme#comment;
-        string = config#theme#string;
-        keyword = config#theme#keyword;
-        identifier = config#theme#identifier;
-        others = config#theme#others;
-      |)
-    in
-    (|
-      syntax = config#syntax;
-      theme = new-theme;
-      design = config#design;
-    |)
-
-  let set-basic-cjk-font font config =
-    let f ctx =
-      ctx |> set-font Kana font
-          |> set-font HanIdeographic font
-          |> config#theme#basic
-    in
-    let new-theme =
-      make-theme (|
-        backcolor = config#theme#backcolor;
-        basic = f;
-        comment = config#theme#comment;
-        string = config#theme#string;
-        keyword = config#theme#keyword;
-        identifier = config#theme#identifier;
-        others = config#theme#others;
-      |)
-    in
-    (|
-      syntax = config#syntax;
-      theme = new-theme;
-      design = config#design;
-    |)
-
-  let set-basic-otherscript-font font config =
-    let f ctx =
-      ctx |> set-font OtherScript font
-          |> config#theme#basic
-    in
-    let new-theme =
-      make-theme (|
-        backcolor = config#theme#backcolor;
-        basic = f;
-        comment = config#theme#comment;
-        string = config#theme#string;
-        keyword = config#theme#keyword;
-        identifier = config#theme#identifier;
-        others = config#theme#others;
-      |)
-    in
-    (|
-      syntax = config#syntax;
-      theme = new-theme;
-      design = config#design;
     |)
 
 

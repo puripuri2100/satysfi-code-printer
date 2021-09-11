@@ -125,7 +125,6 @@ document (|
     +p{\inline-code(`CodePrinter`);モジュールでは、コードブロックのデザインを変更する機能を提供しています。}
     +p{変更できる項目は以下のようになっています。
     \listing{
-      * フォントの指定（フォントを変更するテーマを使用した場合は上書きされます）
       * フォントサイズの指定（フォントサイズを変更するテーマを使用した場合は上書きされます）
       * 行番号の出力結果の指定
       * 行ごとに色を変えるかどうかの選択と、変更先の色の指定
@@ -136,22 +135,19 @@ document (|
       * コードブロックの装飾
       * コードブロック周囲の余白
     }}
-    +p{フォントの指定は「ラテン文字用」・「漢字・かな用」・「その他の文字用」の3種類行うことができます。}
-    +p{ラテン文字用のフォントの変更は\inline-code(`set-basic-latin-font`);という関数で行います。この関数は一つ目の引数に\inline-code(`string * float * float`);を取ります。それぞれ「フォントの名前」・「文字の拡大率」・「文字の上下の調整値」です。この3つの値のタプルを与えた後に二つ目の引数として\inline-code(`code-printer-config`);を与えると、新しくフォントを設定しなおした\inline-code(`code-printer-config`);が生成されます。以下のように\inline-code(`make-config`);関数で生成した\inline-code(`code-printer-config`);に対してパイプライン演算子で関数をつなげていくことで設定を変更していくことを想定しています。}
+    +p{フォントサイズの指定は\inline-code(`set-basic-font-size`);という関数で行います。一つ目の引数の値がフォントサイズを表す\inline-code(`length`);型です。}
     +code-printer ?:(
       CodePrinter.make-config CodeSyntax.satysfi CodeTheme.basic-light
       |> CodePrinter.set-number-fun CodeDesign.number-fun-null
     )
 (```+code-printer ?:(
   CodePrinter.make-config syntax theme
-  |> CodePrinter.set-basic-latin-font (`lmmono`,1.0,0.0);
+  |> CodePrinter.set-basic-font-size 10pt;
 ) (`code`);
 ```);
-  >
-    +p{「漢字・かな用」のフォント設定関数は\inline-code(`set-basic-cjk-font`);で、「その他の文字用」のフォント設定関数は\inline-code(`set-basic-otherscript-font`);です。使い方はラテン文字用の設定関数と全く同じです。}
-    +p{フォントサイズの指定は\inline-code(`set-basic-font-size`);という関数で行います。これも一つ目の引数の値がフォントサイズを表す\inline-code(`length`);型であることを除けば、フォント設定用の関数達と使い方は同じです。}
+    +p{のようにして使います。}
 
-    +p{行番号の出力結果の変更は\inline-code(`set-number-fun`);という関数で行います。この関数は一つ目の引数が「コードを組むときに使うcontextデータと、行数を表す整数値を受け取って、行番号を表すinline-boxes型のデータを返す関数」となっています。ですので、一つ目の引数の型は\inline-code(`context -> int -> inline-boxes`);となっています。そのこと除けばをフォント設定用の関数達と使い方は同じです。例えば、}
+    +p{行番号の出力結果の変更は\inline-code(`set-number-fun`);という関数で行います。この関数は一つ目の引数が「コードを組むときに使うcontextデータと、行数を表す整数値を受け取って、行番号を表すinline-boxes型のデータを返す関数」となっています。ですので、一つ目の引数の型は\inline-code(`context -> int -> inline-boxes`);となっています。そのこと除けばをフォントサイズ設定用の関数と使い方は同じです。例えば、}
     +code-printer ?:(
       CodePrinter.make-config CodeSyntax.satysfi CodeTheme.basic-light
       |> CodePrinter.set-number-fun CodeDesign.number-fun-null
@@ -185,7 +181,7 @@ x * 2`);
     }の2つです。}
 
     +p{このライブラリでは「行ごとに色を変えるかどうかの選択と、変更先の色の指定」ができるようになっています。この指定は\inline-code(`set-line-background-color`);という関数で行います。「特定の行数を目立たせたい」・「偶奇で背景色を変えたい」という時に役に立ちます。}
-    +p{\inline-code(`set-line-background-color`);関数の一つ目の引数には「行番号を表す整数値を受け取って\inline-code(`color option`);を返す関数」を渡します。この関数の方は\inline-code(`int -> color option`);です。色を変更したい行番号が来た時には\inline-code(`Some(Color.red)`);のように、値を返します。このとき指定した色によって自動的にその行の背景色が変更されます。また、「色を変更しない」という指定をするときには\inline-code(`None`);を返します。これを返すと背景色は変更されません。\inline-code(`set-line-background-color`);の使い方はフォント設定用の関数達と同じです。}
+    +p{\inline-code(`set-line-background-color`);関数の一つ目の引数には「行番号を表す整数値を受け取って\inline-code(`color option`);を返す関数」を渡します。この関数の方は\inline-code(`int -> color option`);です。色を変更したい行番号が来た時には\inline-code(`Some(Color.red)`);のように、値を返します。このとき指定した色によって自動的にその行の背景色が変更されます。また、「色を変更しない」という指定をするときには\inline-code(`None`);を返します。これを返すと背景色は変更されません。\inline-code(`set-line-background-color`);の使い方はフォントサイズ設定用の関数と同じです。}
     +p{デフォルトでは「行番号に関わらず\inline-code(`None`);が指定され、背景色は変更されない」という状態になっています。}
     +p{例えば、特定の関数の使用部分を強調したいときに、以下の様にコードを書くと、}
     +code-printer ?:(
@@ -280,7 +276,7 @@ fn main() {
 
     +p{「タブ文字をどの大きさで表すかの指定」は、\inline-code(`set-tab-size`);関数で行います。型は\inline-code(`float -> code-printer-config -> code-printer-config`);です。一つ目の引数で「タブ文字が一文字の横幅の何倍で出力されるか」を指定します。デフォルトでは\inline-code(`2.0`);です。}
 
-    +p{「\inline-code(`inline-code`);コマンドの出力結果の装飾」は\inline-code(`set-inline-hdeco-set`);という関数で行います。これは、一つ目の引数に「背景色の\inline-code(`color`);型のデータを受け取って装飾を表すdeco-setデータを返す」関数です。「\inline-code(`inline-code`);コマンドの出力結果の周囲の余白」の設定は\inline-code(`set-inline-paddings`);関数で行います。この関数は一つ目の引数に\inline-code(`length`);4つのタプルを受け取ります。どちらも\inline-code(`inline-frame-breakable`);プリミティブに渡す値です。また、これも使い方はフォント設定用の関数達と変わりません。}
+    +p{「\inline-code(`inline-code`);コマンドの出力結果の装飾」は\inline-code(`set-inline-hdeco-set`);という関数で行います。これは、一つ目の引数に「背景色の\inline-code(`color`);型のデータを受け取って装飾を表すdeco-setデータを返す」関数です。「\inline-code(`inline-code`);コマンドの出力結果の周囲の余白」の設定は\inline-code(`set-inline-paddings`);関数で行います。この関数は一つ目の引数に\inline-code(`length`);4つのタプルを受け取ります。どちらも\inline-code(`inline-frame-breakable`);プリミティブに渡す値です。また、これも使い方はフォントサイズ設定用の関数と変わりません。}
     +p{例えば、現在はインラインコードの背景は角が丸みを帯びていますが、これを無くして完全な長方形にし、余白を無くそうと考えたら、この設定関数を使います。}
     +p{以下の様にコードを書くと、}
     +code-printer ?:(
@@ -377,4 +373,5 @@ fn main() {
   println!("{:?}", lst);
 }`);
     +p{意図した通り、「背景色塗るだけで余白無し」担っていますね。}
+  >
 >
