@@ -86,6 +86,8 @@ When typesetting code with syntax-highlight, write the code like this:
 - `CodeSyntax.makefile`
 - `CodeSyntax.shell`
 - `CodeSyntax.perl`
+- `CodeSyntax.prolog`
+- `CodeSyntax.php`
 - `CodeSyntax.python`
 - `CodeSyntax.r`
 - `CodeSyntax.ruby`
