@@ -40,7 +40,7 @@ end = struct
         |> set-font OtherScript font
 
 
-  let set-font-andtext-color font color ctx =
+  let set-font-and-text-color font color ctx =
     ctx |> set-font-code font
         |> set-text-color color
 
@@ -48,11 +48,11 @@ end = struct
   let basic-light =
     CodePrinter.make-theme (|
       backcolor = Color.gray 0.9;
-      basic = set-font-andtext-color font-sans-mono-dejavu Color.black;
-      comment = set-font-andtext-color font-sans-italic-dejavu (Color.gray 0.4);
-      string = set-font-andtext-color font-sans-bold-dejavu (Color.rgb 0.0 0.6 0.3);
-      keyword = set-font-andtext-color font-sans-mono-dejavu Color.orange;
-      identifier = set-font-andtext-color font-sans-mono-dejavu Color.blue;
+      basic = set-font-and-text-color font-sans-mono-dejavu Color.black;
+      comment = set-font-and-text-color font-sans-italic-dejavu (Color.gray 0.4);
+      string = set-font-and-text-color font-sans-bold-dejavu (Color.rgb 0.0 0.6 0.3);
+      keyword = set-font-and-text-color font-sans-mono-dejavu Color.orange;
+      identifier = set-font-and-text-color font-sans-mono-dejavu Color.blue;
       others = [];
     |)
 
@@ -60,11 +60,11 @@ end = struct
   let basic-dark =
     CodePrinter.make-theme (|
       backcolor = Color.black;
-      basic = set-font-andtext-color font-sans-mono-dejavu Color.white;
-      comment = set-font-andtext-color font-sans-italic-dejavu (Color.gray 0.6);
-      string = set-font-andtext-color font-sans-bold-dejavu (Color.rgb 0.0 1.0 0.3);
-      keyword = set-font-andtext-color font-sans-mono-dejavu Color.red;
-      identifier = set-font-andtext-color font-sans-mono-dejavu (Color.rgb 0.2 0.5 0.8);
+      basic = set-font-and-text-color font-sans-mono-dejavu Color.white;
+      comment = set-font-and-text-color font-sans-italic-dejavu (Color.gray 0.6);
+      string = set-font-and-text-color font-sans-bold-dejavu (Color.rgb 0.0 1.0 0.3);
+      keyword = set-font-and-text-color font-sans-mono-dejavu Color.red;
+      identifier = set-font-and-text-color font-sans-mono-dejavu (Color.rgb 0.2 0.5 0.8);
       others = [];
     |)
 
@@ -72,11 +72,11 @@ end = struct
   let basic-dark =
     CodePrinter.make-theme (|
       backcolor = Color.black;
-      basic = set-font-andtext-color font-sans-mono-dejavu Color.white;
-      comment = set-font-andtext-color font-sans-italic-dejavu (Color.gray 0.6);
-      string = set-font-andtext-color font-sans-bold-dejavu (Color.rgb 0.0 1.0 0.3);
-      keyword = set-font-andtext-color font-sans-mono-dejavu (Color.rgb 0.8 0.5 0.5);
-      identifier = set-font-andtext-color font-sans-mono-dejavu (Color.rgb 0.2 0.5 0.8);
+      basic = set-font-and-text-color font-sans-mono-dejavu Color.white;
+      comment = set-font-and-text-color font-sans-italic-dejavu (Color.gray 0.6);
+      string = set-font-and-text-color font-sans-bold-dejavu (Color.rgb 0.0 1.0 0.3);
+      keyword = set-font-and-text-color font-sans-mono-dejavu (Color.rgb 0.8 0.5 0.5);
+      identifier = set-font-and-text-color font-sans-mono-dejavu (Color.rgb 0.2 0.5 0.8);
       others = [];
     |)
 
