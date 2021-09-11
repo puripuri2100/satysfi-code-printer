@@ -10,6 +10,7 @@ module CodeSyntax :sig
   val cpp : CodePrinter.syntax
   val csharp : CodePrinter.syntax
   val d : CodePrinter.syntax
+  val erlang : CodePrinter.syntax
   val fsharp : CodePrinter.syntax
   val fortran : CodePrinter.syntax
   val go : CodePrinter.syntax
@@ -113,6 +114,17 @@ end = struct
     block-comment = CodePrinter.syntax-rule-block `/\*` `\*/`;
     string = CodePrinter.syntax-rule-inline (` "[^"]*" `);
     keywords = [`abstract`; `alias`; `align`; `asm`; `assert`; `auto`; `body`; `bool`; `break`; `byte`; `case`; `cast`; `catch`; `cdouble`; `cent`; `cfloat`; `char`; `class`; `const`; `continue`; `creal`; `dchar`; `debug`; `default`; `delegate`; `delete`; `deprecated`; `double`; `do`; `else`; `enum`; `export`; `extern`; `false`; `final`; `finally`; `float`; `foreach_reverse`; `foreach`; `for`; `function`; `goto`; `idouble`; `ifloat`; `if`; `immutable`; `import`; `inout`; `int`; `interface`; `invariant`; `in`; `ireal`; `is`; `lazy`; `long`; `macro`; `mixin`; `module`; `new`; `nothrow`; `null`; `out`; `override`; `package`; `pragma`; `private`; `protected`; `public`; `pure`; `real`; `ref`; `return`; `scope`; `shared`; `short`; `static`; `struct`; `super`; `switch`; `synchronized`; `template`; `this`; `throw`; `true`; `try`; `typeid`; `typeof`; `ubyte`; `ucent`; `uint`; `ulong`; `union`; `unittest`; `ushort`; `version`; `void`; `wchar`; `while`; `with`; `__FILE_FULL_PATH__`; `__FILE__`; `__MODULE__`; `__LINE__`; `__FUNCTION__`; `__PRETTY_FUNCTION__`; `__gshared`; `__traits`; `__vector`; `__parameters`];
+    identifier = CodePrinter.syntax-rule-inline `[_a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
+    others = [];
+  |)
+
+
+% ref: https://erlang.org/doc/reference_manual/introduction.html#reserved-words
+  let erlang = CodePrinter.make-syntax (|
+    line-comment = CodePrinter.syntax-rule-block `%` `$`;
+    block-comment = CodePrinter.syntax-rule-block `%` `$`;
+    string = CodePrinter.syntax-rule-inline (` "[^"]*" `);
+    keywords = [`after`; `andalso`; `and`; `band`; `begin`; `bnot`; `bor`; `bsl`; `bsr`; `bxor`; `case`; `catch`; `cond`; `div`; `end`; `fun`; `if`; `let`; `not`; `of`; `orelse`; `or`; `receive`; `rem`; `try`; `when`; `xor`];
     identifier = CodePrinter.syntax-rule-inline `[_a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
     others = [];
   |)

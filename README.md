@@ -70,6 +70,7 @@ When typesetting code with syntax-highlight, write the code like this:
 - `CodeSyntax.cpp`
 - `CodeSyntax.csharp`
 - `CodeSyntax.d`
+- `CodeSyntax.erlang`
 - `CodeSyntax.fsharp`
 - `CodeSyntax.fortran`
 - `CodeSyntax.go`
