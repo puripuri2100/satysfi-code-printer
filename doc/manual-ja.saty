@@ -133,6 +133,7 @@ document (|
       (CodeTheme.winteriscoming-dark-blue, `winteriscoming-dark-blue`);
       (CodeTheme.winteriscoming-dark-black, `winteriscoming-dark-black`);
       (CodeTheme.winteriscoming-light, `winteriscoming-light`);
+      (CodeTheme.one-light, `one-light`);
     ];
     +p{現在提供しているテーマ用の設定値は以上になります。}
   >

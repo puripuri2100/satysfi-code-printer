@@ -26,6 +26,7 @@ module CodeTheme :sig
   val winteriscoming-dark-blue : CodePrinter.theme
   val winteriscoming-dark-black : CodePrinter.theme
   val winteriscoming-light : CodePrinter.theme
+  val one-light : CodePrinter.theme
 
 end = struct
 
@@ -426,6 +427,22 @@ end = struct
       string = set-string-color (from-hex 0xA44185);
       keyword = set-keyword-color (from-hex 0x7B30D0);
       identifier = set-identifier-color (from-hex 0x174781);
+      others = [];
+    |)
+
+
+  % One Light colorscheme
+  % MIT License
+  % Copyright (c) 2015 Mahmoud Ali
+  % https://github.com/akamud/vscode-theme-onelight
+  let one-light =
+    CodePrinter.make-theme (|
+      backcolor = from-hex 0xFAFAFA;
+      basic = set-basic-color (from-hex 0x383A42);
+      comment = set-comment-color (from-hex 0xA0A1A7);
+      string = set-string-color (from-hex 0x50A14F);
+      keyword = set-keyword-color (from-hex 0xA626A4);
+      identifier = set-identifier-color (from-hex 0x986801);
       others = [];
     |)
 
