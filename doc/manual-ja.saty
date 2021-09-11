@@ -92,6 +92,7 @@ document (|
       (CodeSyntax.lua, `lua`, `demo/demo.lua`);
       (CodeSyntax.lisp, `lisp`, `demo/demo.lisp`);
       (CodeSyntax.nim, `nim`, `demo/demo.nim`);
+      (CodeSyntax.makefile, `makefile`, `demo/demo.make`);
       (CodeSyntax.shell, `shell`, `demo/demo.sh`);
       (CodeSyntax.perl, `perl`, `demo/demo.prl`);
       (CodeSyntax.prolog, `prolog`, `demo/demo.pl`);
