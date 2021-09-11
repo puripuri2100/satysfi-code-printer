@@ -118,6 +118,9 @@ document (|
       (CodeTheme.dracula, `dracula`);
       (CodeTheme.iceberg-light, `iceberg-light`);
       (CodeTheme.iceberg-dark, `iceberg-dark`);
+      (CodeTheme.tokyo-night, `tokyo-night`);
+      (CodeTheme.tokyo-night-strom, `tokyo-night-strom`);
+      (CodeTheme.tokyo-night-light, `tokyo-night-light`);
     ];
     +p{現在提供しているテーマ用の設定値は以上になります。}
   >

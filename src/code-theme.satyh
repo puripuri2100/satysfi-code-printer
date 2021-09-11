@@ -11,6 +11,9 @@ module CodeTheme :sig
   val dracula : CodePrinter.theme
   val iceberg-dark : CodePrinter.theme
   val iceberg-light : CodePrinter.theme
+  val tokyo-night : CodePrinter.theme
+  val tokyo-night-strom : CodePrinter.theme
+  val tokyo-night-light : CodePrinter.theme
 
 end = struct
 
@@ -155,6 +158,54 @@ end = struct
       string = set-font-and-text-color font-sans-bold-dejavu (from-hex 0x3F83A6);
       keyword = set-font-and-text-color font-sans-bold-italic-dejavu (from-hex 0x2D539E);
       identifier = set-font-and-text-color font-sans-mono-dejavu (from-hex 0x7759B4);
+      others = [];
+    |)
+
+
+  % Tokyo Night colorscheme
+  % MIT License
+  % Copyright (c) 2018-present Enkia
+  % https://github.com/enkia/tokyo-night-vscode-theme
+  let tokyo-night =
+    CodePrinter.make-theme (|
+      backcolor = from-hex 0x1A1B26;
+      basic = set-font-and-text-color font-sans-mono-dejavu (from-hex 0xA9B1D6);
+      comment = set-font-and-text-color font-sans-italic-dejavu (from-hex 0x565F89);
+      string = set-font-and-text-color font-sans-bold-dejavu (from-hex 0x9ECE6A);
+      keyword = set-font-and-text-color font-sans-bold-italic-dejavu (from-hex 0xF7768E);
+      identifier = set-font-and-text-color font-sans-mono-dejavu (from-hex 0x7AA2FA);
+      others = [];
+    |)
+
+
+  % Tokyo Night Storm colorscheme
+  % MIT License
+  % Copyright (c) 2018-present Enkia
+  % https://github.com/enkia/tokyo-night-vscode-theme
+  let tokyo-night-strom =
+    CodePrinter.make-theme (|
+      backcolor = from-hex 0x24283B;
+      basic = set-font-and-text-color font-sans-mono-dejavu (from-hex 0xA9B1D6);
+      comment = set-font-and-text-color font-sans-italic-dejavu (from-hex 0x565F89);
+      string = set-font-and-text-color font-sans-bold-dejavu (from-hex 0x9ECE6A);
+      keyword = set-font-and-text-color font-sans-bold-italic-dejavu (from-hex 0xF7768E);
+      identifier = set-font-and-text-color font-sans-mono-dejavu (from-hex 0x7AA2FA);
+      others = [];
+    |)
+
+
+  % Tokyo Night Light colorscheme
+  % MIT License
+  % Copyright (c) 2018-present Enkia
+  % https://github.com/enkia/tokyo-night-vscode-theme
+  let tokyo-night-light =
+    CodePrinter.make-theme (|
+      backcolor = from-hex 0xD5D6DB;
+      basic = set-font-and-text-color font-sans-mono-dejavu (from-hex 0x343B58);
+      comment = set-font-and-text-color font-sans-italic-dejavu (from-hex 0x9699A3);
+      string = set-font-and-text-color font-sans-bold-dejavu (from-hex 0x485E30);
+      keyword = set-font-and-text-color font-sans-bold-italic-dejavu (from-hex 0x8C4351);
+      identifier = set-font-and-text-color font-sans-mono-dejavu (from-hex 0x34548A);
       others = [];
     |)
 
