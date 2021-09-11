@@ -30,6 +30,7 @@ module CodeSyntax :sig
   val ruby : CodePrinter.syntax
   val scala : CodePrinter.syntax
   val swift : CodePrinter.syntax
+  val tex : CodePrinter.syntax
   val typescript : CodePrinter.syntax
   val visualbasic : CodePrinter.syntax
   val xml : CodePrinter.syntax
@@ -345,6 +346,16 @@ end = struct
     `#available`; `#colorLiteral`; `#column`; `#else`; `#elseif`; `#endif`; `#error`; `#file`; `#fileID`; `#fileLiteral`; `#filePath`; `#function`; `#if`; `#imageLiteral`; `#line`; `#selector`; `#sourceLocation`; `#warning`;
     `_`;];
     identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
+    others = [];
+  |)
+
+
+  let tex = CodePrinter.make-syntax (|
+    line-comment = CodePrinter.syntax-rule-block `%` `$`;
+    block-comment = CodePrinter.syntax-rule-block `%` `$`;
+    string = CodePrinter.syntax-rule-fun (fun _ -> None);
+    keywords = [`\documentclass`; `\usepackage`; `\begin`; `\end`];
+    identifier = CodePrinter.syntax-rule-inline `\\[a-zA-Z]+`;
     others = [];
   |)
 

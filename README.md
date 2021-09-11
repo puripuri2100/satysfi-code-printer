@@ -90,6 +90,7 @@ When typesetting code with syntax-highlight, write the code like this:
 - `CodeSyntax.ruby`
 - `CodeSyntax.scala`
 - `CodeSyntax.swift`
+- `CodeSyntax.tex`
 - `CodeSyntax.typescript`
 - `CodeSyntax.visualbasic`
 - `CodeSyntax.xml`
