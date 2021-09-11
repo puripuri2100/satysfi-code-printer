@@ -16,29 +16,6 @@ end = struct
   let rgb-256 r g b =
     RGB(r /. 256.0, g /. 256.0, b /. 256.0)
 
-  let basic-light =
-    CodePrinter.make-theme (|
-      backcolor = Color.gray 0.9;
-      basic = set-text-color Color.black;
-      comment = set-text-color Color.red;
-      string = set-text-color (Color.rgb 0.0 0.6 0.5);
-      keyword = set-text-color Color.orange;
-      identifier = set-text-color Color.blue;
-      others = [];
-    |)
-
-
-  let basic-dark =
-    CodePrinter.make-theme (|
-      backcolor = Color.black;
-      basic = set-text-color Color.white;
-      comment = set-text-color (Color.rgb 1.0 0.3 0.3);
-      string = set-text-color (Color.rgb 0.0 1.0 0.0);
-      keyword = set-text-color Color.orange;
-      identifier = set-text-color (Color.rgb 0.7 0.7 0.0);
-      others = [];
-    |)
-
 
   let from-hex clrcode =
     let b = clrcode mod 256 in
@@ -46,6 +23,62 @@ end = struct
     let g = res mod 256 in
     let r = res / 256 in
     RGB((float r) /. 255.0, (float g) /. 255.0, (float b) /. 255.0)
+
+
+  let ratio = 1.0
+
+
+  let font-sans-mono-dejavu = (`fonts-dejavu:DejaVuSansMono`, ratio, 0.0)
+
+  let font-sans-italic-dejavu = (`fonts-dejavu:DejaVuSansMono-Oblique`, ratio, 0.0)
+
+  let font-sans-bold-dejavu = (`fonts-dejavu:DejaVuSansMono-Bold`, ratio, 0.0)
+
+
+  let set-font-code font ctx =
+    ctx |> set-font Latin font
+        |> set-font OtherScript font
+
+
+  let set-font-andtext-color font color ctx =
+    ctx |> set-font-code font
+        |> set-text-color color
+
+
+  let basic-light =
+    CodePrinter.make-theme (|
+      backcolor = Color.gray 0.9;
+      basic = set-font-andtext-color font-sans-mono-dejavu Color.black;
+      comment = set-font-andtext-color font-sans-italic-dejavu (Color.gray 0.4);
+      string = set-font-andtext-color font-sans-bold-dejavu (Color.rgb 0.0 0.6 0.3);
+      keyword = set-font-andtext-color font-sans-mono-dejavu Color.orange;
+      identifier = set-font-andtext-color font-sans-mono-dejavu Color.blue;
+      others = [];
+    |)
+
+
+  let basic-dark =
+    CodePrinter.make-theme (|
+      backcolor = Color.black;
+      basic = set-font-andtext-color font-sans-mono-dejavu Color.white;
+      comment = set-font-andtext-color font-sans-italic-dejavu (Color.gray 0.6);
+      string = set-font-andtext-color font-sans-bold-dejavu (Color.rgb 0.0 1.0 0.3);
+      keyword = set-font-andtext-color font-sans-mono-dejavu Color.red;
+      identifier = set-font-andtext-color font-sans-mono-dejavu (Color.rgb 0.2 0.5 0.8);
+      others = [];
+    |)
+
+
+  let basic-dark =
+    CodePrinter.make-theme (|
+      backcolor = Color.black;
+      basic = set-font-andtext-color font-sans-mono-dejavu Color.white;
+      comment = set-font-andtext-color font-sans-italic-dejavu (Color.gray 0.6);
+      string = set-font-andtext-color font-sans-bold-dejavu (Color.rgb 0.0 1.0 0.3);
+      keyword = set-font-andtext-color font-sans-mono-dejavu (Color.rgb 0.8 0.5 0.5);
+      identifier = set-font-andtext-color font-sans-mono-dejavu (Color.rgb 0.2 0.5 0.8);
+      others = [];
+    |)
 
   % Gruvbox colorscheme
   % MIT License
