@@ -95,6 +95,7 @@ document (|
       (CodeSyntax.shell, `shell`, `demo/demo.sh`);
       (CodeSyntax.perl, `perl`, `demo/demo.prl`);
       (CodeSyntax.prolog, `prolog`, `demo/demo.pl`);
+      (CodeSyntax.php, `php`, `demo/demo.php`);
       (CodeSyntax.python, `python`, `demo/demo.py`);
       (CodeSyntax.r, `r`, `demo/demo.R`);
       (CodeSyntax.ruby, `ruby`, `demo/demo.rb`);

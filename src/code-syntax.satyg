@@ -26,6 +26,7 @@ module CodeSyntax :sig
   val shell : CodePrinter.syntax
   val perl : CodePrinter.syntax
   val prolog : CodePrinter.syntax
+  val php : CodePrinter.syntax
   val python : CodePrinter.syntax
   val r : CodePrinter.syntax
   val ruby : CodePrinter.syntax
@@ -297,6 +298,16 @@ end = struct
     string = CodePrinter.syntax-rule-fun (fun _ -> None);
     keywords = [];
     identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+\|[a-zA-Z_][a-zA-Z0-9_]+`;
+    others = [];
+  |)
+
+
+  let php = CodePrinter.make-syntax (|
+    line-comment = CodePrinter.syntax-rule-block `//` `$`;
+    block-comment = CodePrinter.syntax-rule-block `/\*` `\*/`;
+    string = CodePrinter.syntax-rule-inline (` "[^"]*"\|'[^']*' `);
+    keywords = [`abstract`; `and`; `as`; `break`; `callable`; `case`; `catch`; `class`; `clone`; `const`; `continue`; `declare`; `default`; `do`; `echo`; `elseif`; `else`; `empty`; `enddeclare`; `endforeach`; `endfor`; `endif`; `endswitch`; `endwhile`; `extends`; `finally`; `final`; `fn`; `foreach`; `for`; `function`; `global`; `goto`; `if`; `implements`; `include once`; `include`; `instanceof`; `interface`; `isset`; `list`; `namespace`; `new`; `or`; `print`; `private`; `protected`; `public`; `require once`; `require`; `return`; `static`; `switch`; `throw`; `trait`; `try`; `unset`; `use`; `var`; `wihle`; `xor`; `yield from`; `yield`];
+    identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
     others = [];
   |)
 
