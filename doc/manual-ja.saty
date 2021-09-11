@@ -128,6 +128,8 @@ document (|
       * フォントサイズの指定（フォントサイズを変更するテーマを使用した場合は上書きされます）
       * 行番号の出力結果の指定
       * 行ごとに色を変えるかどうかの選択と、変更先の色の指定
+      * 改行されたときに、その場所に出力するものの指定
+      * タブ文字をどの大きさで表すかの指定
       * \inline-code(`inline-code`);コマンドの出力結果の装飾
       * \inline-code(`inline-code`);コマンドの出力結果の周囲の余白
       * コードブロックの装飾
@@ -154,7 +156,9 @@ document (|
       |> CodePrinter.set-number-fun CodeDesign.number-fun-null
     )
 (```+code-printer ?:(
-  CodePrinter.make-config syntax theme
+  CodePrinter.make-config
+    CodeSyntax.satysfi
+    CodeTheme.basic-light
   |> CodePrinter.set-number-fun (fun ctx i -> (
     let ctx = set-text-color Color.black ctx in
     let number-it = i |> arabic |> embed-string in
@@ -182,8 +186,194 @@ x * 2`);
     +p{このライブラリでは「行ごとに色を変えるかどうかの選択と、変更先の色の指定」ができるようになっています。この指定は\inline-code(`set-line-background-color`);という関数で行います。「特定の行数を目立たせたい」・「偶奇で背景色を変えたい」という時に役に立ちます。}
     +p{\inline-code(`set-line-background-color`);関数の一つ目の引数には「行番号を表す整数値を受け取って\inline-code(`color option`);を返す関数」を渡します。この関数の方は\inline-code(`int -> color option`);です。色を変更したい行番号が来た時には\inline-code(`Some(Color.red)`);のように、値を返します。このとき指定した色によって自動的にその行の背景色が変更されます。また、「色を変更しない」という指定をするときには\inline-code(`None`);を返します。これを返すと背景色は変更されません。\inline-code(`set-line-background-color`);の使い方はフォント設定用の関数達と同じです。}
     +p{デフォルトでは「行番号に関わらず\inline-code(`None`);が指定され、背景色は変更されない」という状態になっています。}
+    +p{例えば、特定の関数の使用部分を強調したいときに、以下の様にコードを書くと、}
+    +code-printer ?:(
+      CodePrinter.make-config CodeSyntax.satysfi CodeTheme.basic-light
+      |> CodePrinter.set-number-fun CodeDesign.number-fun-null
+    )
+(```+code-printer ?:(
+  CodePrinter.make-config
+    CodeSyntax.rust CodeTheme.basic-light
+  |> CodePrinter.set-line-background-color (fun i -> (
+    if i == 7 then
+      Some(Color.yellow)
+    else
+      None
+  ))
+) (`fn f(i: usize) -> usize {
+  i + 5
+}
+
+fn main() {
+  let x = 5;
+  let y = f(5);
+  println!("{}", y);
+}`);```);
+    +p{以下の様に出力され、7行目の背景が黄色になり、その他の行では元から設定されている背景色のままでいることがわかります。}
+    +code-printer ?:(
+    CodePrinter.make-config
+      CodeSyntax.rust CodeTheme.basic-light
+    |> CodePrinter.set-line-background-color (fun i -> (
+      if i == 7 then
+        Some(Color.yellow)
+      else
+        None
+    ))
+    ) (`fn f(i: usize) -> usize {
+  i + 5
+}
+
+fn main() {
+  let x = 5;
+  let y = f(5);
+  println!("{}", y);
+}`);
+
+
+    +p{「改行されたときに、その場所に出力するものの指定」を行うことができます。改行箇所の直前と直後に入れるinline-boxesをそれぞれ指定できます。そのための関数は\inline-code(`set-line-break-mark`);で、型は\inline-code(`(context -> length -> (inline-boxes * inline-boxes)) -> code-printer-config -> code-printer-config`);です。一つ目の引数に与える関数は「contextと、一文字分の横幅を基に、改行前後に入れるinline-boxesをペアで生成する」というものになります。インデントは自動で入るため、その分は考えないでください。}
+    +p{デフォルトでは矢印のグラフィックを改行直前と改行直後に入れています。}
+    +p{これを、「改行直前には何も入れず、改行直後には文字の矢印を入れる」という設定にしてみます。以下の様にコードを書くと、}
+    +code-printer ?:(
+      CodePrinter.make-config CodeSyntax.satysfi CodeTheme.basic-light
+      |> CodePrinter.set-number-fun CodeDesign.number-fun-null
+    )
+(```+code-printer ?:(
+  CodePrinter.make-config
+    CodeSyntax.rust CodeTheme.basic-light
+  |> CodePrinter.set-line-break-mark (fun ctx default-width -> (
+    let before-mark =
+      let mark-ib =
+        `→`
+        |> embed-string
+        |> read-inline ctx
+      in
+      mark-ib ++ (inline-skip (default-width *' 0.5))
+    in
+    (inline-nil, before-mark)
+  ))
+) (`fn main() {
+  let x = vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+  println!("{:?}", x);
+}`);```);
+    +p{以下の様に出力され、}
+    +code-printer ?:(
+      CodePrinter.make-config
+        CodeSyntax.rust CodeTheme.basic-light
+      |> CodePrinter.set-line-break-mark (fun ctx default-width -> (
+        let before-mark =
+          let mark-ib =
+            `→`
+            |> embed-string
+            |> read-inline ctx
+          in
+          mark-ib ++ (inline-skip (default-width *' 0.5))
+        in
+        (inline-nil, before-mark)
+      ))
+    ) (`fn main() {
+  let x = vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+  println!("{:?}", x);
+}`);
+    +p{改行直前には何も入らず、改行直後が文字の矢印となっているのがわかります。また、文字の矢印の後ろに少しだけスペースが入っているのも、設定した通りとなっています。}
+
+
+    +p{「タブ文字をどの大きさで表すかの指定」は、\inline-code(`set-tab-size`);関数で行います。型は\inline-code(`float -> code-printer-config -> code-printer-config`);です。一つ目の引数で「タブ文字が一文字の横幅の何倍で出力されるか」を指定します。デフォルトでは\inline-code(`2.0`);です。}
 
     +p{「\inline-code(`inline-code`);コマンドの出力結果の装飾」は\inline-code(`set-inline-hdeco-set`);という関数で行います。これは、一つ目の引数に「背景色の\inline-code(`color`);型のデータを受け取って装飾を表すdeco-setデータを返す」関数です。「\inline-code(`inline-code`);コマンドの出力結果の周囲の余白」の設定は\inline-code(`set-inline-paddings`);関数で行います。この関数は一つ目の引数に\inline-code(`length`);4つのタプルを受け取ります。どちらも\inline-code(`inline-frame-breakable`);プリミティブに渡す値です。また、これも使い方はフォント設定用の関数達と変わりません。}
+    +p{例えば、現在はインラインコードの背景は角が丸みを帯びていますが、これを無くして完全な長方形にし、余白を無くそうと考えたら、この設定関数を使います。}
+    +p{以下の様にコードを書くと、}
+    +code-printer ?:(
+      CodePrinter.make-config CodeSyntax.satysfi CodeTheme.basic-light
+    ) (```+p{普通のインラインコード：\inline-code ?:(CodePrinter.make-config CodePrinter.default-syntax CodeTheme.basic-dark) (`code`);}
++p{背景の角を落とし、余白を無くすインラインコード：
+  \inline-code ?:(
+    CodePrinter.make-config
+      CodePrinter.default-syntax
+      CodeTheme.basic-dark
+    |> CodePrinter.set-inline-hdeco-set (fun backcolor -> (
+      let deco (x, y) w h d =
+        [
+          fill backcolor (
+            Gr.rectangle
+              (x, y +' h)
+              (x +' w, y -' d)
+          )
+        ]
+      in
+      (deco, deco, deco, deco)
+    ))
+    |> CodePrinter.set-inline-paddings (0pt,0pt,0pt,0pt)
+  ) (`code`);}```);
+    +p{以下の様に出力されます。}
+    +p{普通のインラインコード：\inline-code ?:(CodePrinter.make-config CodePrinter.default-syntax CodeTheme.basic-dark) (`code`);}
+    +p{背景の角を落とし、余白を無くすインラインコード：
+  \inline-code ?:(
+    CodePrinter.make-config
+      CodePrinter.default-syntax
+      CodeTheme.basic-dark
+    |> CodePrinter.set-inline-hdeco-set (fun backcolor -> (
+      let deco (x, y) w h d =
+        [
+          fill backcolor (
+            Gr.rectangle
+              (x, y +' h)
+              (x +' w, y -' d)
+          )
+        ]
+      in
+      (deco, deco, deco, deco)
+    ))
+    |> CodePrinter.set-inline-paddings (0pt,0pt,0pt,0pt)
+  ) (`code`);}
+  +p{しっかりと意図したとおりに出力されていることがわかります。}
 
     +p{「コードブロックの装飾」は\inline-code(`set-block-vdeco-set`);という関数で行います。これは、一つ目の引数に「背景色の\inline-code(`color`);型のデータを受け取って装飾を表すdeco-setデータを返す」関数です。「コードブロックの出力結果の周囲の余白」の設定は\inline-code(`set-block-paddings`);関数で行います。どちらも\inline-code(`block-frame-breakable`);プリミティブに渡す関数で、それ以外は\inline-code(`inline-code`);の装飾の設定用の関数と変わりません。}
+    +p{ここでも同様に「指定された色で背景色だけを塗り、余白無し」のデザインを設定してみます。以下の様にコードを書くと、}
+    +code-printer ?:(
+      CodePrinter.make-config CodeSyntax.satysfi CodeTheme.basic-light
+    ) (```+code-printer ?:(
+    CodePrinter.make-config
+      CodeSyntax.rust
+      CodeTheme.basic-dark
+    |> CodePrinter.set-block-vdeco-set (fun backcolor -> (
+      let deco (x, y) w h d =
+        [
+          fill backcolor (
+            Gr.rectangle
+              (x, y +' h)
+              (x +' w, y -' d)
+          )
+        ]
+      in
+      (deco, deco, deco, deco)
+    ))
+    |> CodePrinter.set-block-paddings (0pt,0pt,0pt,0pt)
+  ) (`fn main() {
+  let lst = vec![1, 3, 5, 7, 9];
+  println!("{:?}", lst);
+}`);```);
+
+    +p{以下のように出力されます。}
+    +code-printer ?:(
+      CodePrinter.make-config
+        CodeSyntax.rust
+        CodeTheme.basic-dark
+      |> CodePrinter.set-block-vdeco-set (fun backcolor -> (
+        let deco (x, y) w h d =
+          [
+            fill backcolor (
+              Gr.rectangle
+                (x, y +' h)
+                (x +' w, y -' d)
+            )
+          ]
+        in
+        (deco, deco, deco, deco)
+      ))
+      |> CodePrinter.set-block-paddings (0pt,0pt,0pt,0pt)
+    ) (`fn main() {
+  let lst = vec![1, 3, 5, 7, 9];
+  println!("{:?}", lst);
+}`);
+    +p{意図した通り、「背景色塗るだけで余白無し」担っていますね。}
 >
