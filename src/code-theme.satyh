@@ -90,11 +90,11 @@ end = struct
   let gruvbox-dark =
     CodePrinter.make-theme (|
       backcolor = from-hex 0x282828;
-      basic = set-text-color (from-hex 0xEBDBB2);
-      comment = set-text-color (from-hex 0x928374);
-      string = set-text-color (from-hex 0xB8BB26);
-      keyword = set-text-color (from-hex 0xFABD2F);
-      identifier = set-text-color (from-hex 0x83A598);
+      basic = set-font-and-text-color font-sans-mono-dejavu (from-hex 0xEBDBB2);
+      comment = set-font-and-text-color font-sans-italic-dejavu (from-hex 0x928374);
+      string = set-font-and-text-color font-sans-bold-dejavu (from-hex 0xB8BB26);
+      keyword = set-font-and-text-color font-sans-bold-italic-dejavu (from-hex 0xFABD2F);
+      identifier = set-font-and-text-color font-sans-mono-dejavu (from-hex 0x83A598);
       others = [];
     |)
 
@@ -105,11 +105,11 @@ end = struct
   let gruvbox-light =
     CodePrinter.make-theme (|
       backcolor = from-hex 0xFBF1C7;
-      basic = set-text-color (from-hex 0x3C3836);
-      comment = set-text-color (from-hex 0x928374);
-      string = set-text-color (from-hex 0x79740E);
-      keyword = set-text-color (from-hex 0xB57614);
-      identifier = set-text-color (from-hex 0x076678);
+      basic = set-font-and-text-color font-sans-mono-dejavu (from-hex 0x3C3836);
+      comment = set-font-and-text-color font-sans-italic-dejavu (from-hex 0x928374);
+      string = set-font-and-text-color font-sans-bold-dejavu (from-hex 0x79740E);
+      keyword = set-font-and-text-color font-sans-bold-italic-dejavu (from-hex 0xB57614);
+      identifier = set-font-and-text-color font-sans-mono-dejavu (from-hex 0x076678);
       others = [];
     |)
 
@@ -120,11 +120,11 @@ end = struct
   let dracula =
     CodePrinter.make-theme (|
       backcolor = from-hex 0x282A36;
-      basic = set-text-color (from-hex 0xF8F8F2);
-      comment = set-text-color (from-hex 0x6272A4);
-      string = set-text-color (from-hex 0x50FA7B);
-      keyword = set-text-color (from-hex 0xFFB86C);
-      identifier = set-text-color (from-hex 0x8BE9FD);
+      basic = set-font-and-text-color font-sans-mono-dejavu (from-hex 0xF8F8F2);
+      comment = set-font-and-text-color font-sans-italic-dejavu (from-hex 0x6272A4);
+      string = set-font-and-text-color font-sans-bold-dejavu (from-hex 0x50FA7B);
+      keyword = set-font-and-text-color font-sans-bold-italic-dejavu (from-hex 0xFFB86C);
+      identifier = set-font-and-text-color font-sans-mono-dejavu (from-hex 0x8BE9FD);
       others = [];
     |)
 
@@ -135,11 +135,11 @@ end = struct
   let iceberg-dark =
     CodePrinter.make-theme (|
       backcolor = from-hex 0x161821;
-      basic = set-text-color (from-hex 0xC6C8D1);
-      comment = set-text-color (from-hex 0x6B7089);
-      string = set-text-color (from-hex 0x89B8C2);
-      keyword = set-text-color (from-hex 0x84A0C6);
-      identifier = set-text-color (from-hex 0xA093C7);
+      basic = set-font-and-text-color font-sans-mono-dejavu (from-hex 0xC6C8D1);
+      comment = set-font-and-text-color font-sans-italic-dejavu (from-hex 0x6B7089);
+      string = set-font-and-text-color font-sans-bold-dejavu (from-hex 0x89B8C2);
+      keyword = set-font-and-text-color font-sans-bold-italic-dejavu (from-hex 0x84A0C6);
+      identifier = set-font-and-text-color font-sans-mono-dejavu (from-hex 0xA093C7);
       others = [];
     |)
 
@@ -150,11 +150,11 @@ end = struct
   let iceberg-light =
     CodePrinter.make-theme (|
       backcolor = from-hex 0xE8E9EC;
-      basic = set-text-color (from-hex 0x33374C);
-      comment = set-text-color (from-hex 0x8389A3);
-      string = set-text-color (from-hex 0x3F83A6);
-      keyword = set-text-color (from-hex 0x2D539E);
-      identifier = set-text-color (from-hex 0x7759B4);
+      basic = set-font-and-text-color font-sans-mono-dejavu (from-hex 0x33374C);
+      comment = set-font-and-text-color font-sans-italic-dejavu (from-hex 0x8389A3);
+      string = set-font-and-text-color font-sans-bold-dejavu (from-hex 0x3F83A6);
+      keyword = set-font-and-text-color font-sans-bold-italic-dejavu (from-hex 0x2D539E);
+      identifier = set-font-and-text-color font-sans-mono-dejavu (from-hex 0x7759B4);
       others = [];
     |)
 
