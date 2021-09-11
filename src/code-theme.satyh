@@ -11,6 +11,22 @@ module CodeTheme :sig
   val dracula : CodePrinter.theme
   val iceberg-dark : CodePrinter.theme
   val iceberg-light : CodePrinter.theme
+  val tokyo-night : CodePrinter.theme
+  val tokyo-night-strom : CodePrinter.theme
+  val tokyo-night-light : CodePrinter.theme
+  val ayu-dark : CodePrinter.theme
+  val ayu-mirage : CodePrinter.theme
+  val ayu-light : CodePrinter.theme
+  val spacegray-eighties : CodePrinter.theme
+  val spacegray-mocha : CodePrinter.theme
+  val spacegray-ocean-dark : CodePrinter.theme
+  val spacegray-ocean-light : CodePrinter.theme
+  val night-owl : CodePrinter.theme
+  val light-owl : CodePrinter.theme
+  val winteriscoming-dark-blue : CodePrinter.theme
+  val winteriscoming-dark-black : CodePrinter.theme
+  val winteriscoming-light : CodePrinter.theme
+  val one-light : CodePrinter.theme
 
 end = struct
 
@@ -48,14 +64,30 @@ end = struct
         |> set-text-color color
 
 
+  let set-basic-color color =
+    set-font-and-text-color font-sans-mono-dejavu color
+
+  let set-comment-color color =
+    set-font-and-text-color font-sans-italic-dejavu color
+
+  let set-string-color color =
+    set-font-and-text-color font-sans-bold-dejavu color
+
+  let set-keyword-color color =
+    set-font-and-text-color font-sans-bold-italic-dejavu color
+
+  let set-identifier-color color =
+    set-font-and-text-color font-sans-mono-dejavu color
+
+
   let basic-light =
     CodePrinter.make-theme (|
       backcolor = Color.gray 0.9;
-      basic = set-font-and-text-color font-sans-mono-dejavu Color.black;
-      comment = set-font-and-text-color font-sans-italic-dejavu (Color.gray 0.4);
-      string = set-font-and-text-color font-sans-bold-dejavu (Color.rgb 0.0 0.6 0.3);
-      keyword = set-font-and-text-color font-sans-bold-italic-dejavu Color.orange;
-      identifier = set-font-and-text-color font-sans-mono-dejavu Color.blue;
+      basic = set-basic-color Color.black;
+      comment = set-comment-color (Color.gray 0.4);
+      string = set-string-color (Color.rgb 0.0 0.6 0.3);
+      keyword = set-keyword-color Color.orange;
+      identifier = set-identifier-color Color.blue;
       others = [];
     |)
 
@@ -63,11 +95,11 @@ end = struct
   let basic-dark =
     CodePrinter.make-theme (|
       backcolor = Color.black;
-      basic = set-font-and-text-color font-sans-mono-dejavu Color.white;
-      comment = set-font-and-text-color font-sans-italic-dejavu (Color.gray 0.6);
-      string = set-font-and-text-color font-sans-bold-dejavu (Color.rgb 0.0 1.0 0.3);
-      keyword = set-font-and-text-color font-sans-bold-italic-dejavu (Color.rgb 0.8 0.5 0.5);
-      identifier = set-font-and-text-color font-sans-mono-dejavu (Color.rgb 0.2 0.5 0.8);
+      basic = set-basic-color Color.white;
+      comment = set-comment-color (Color.gray 0.6);
+      string = set-string-color (Color.rgb 0.0 1.0 0.3);
+      keyword = set-keyword-color (Color.rgb 0.8 0.5 0.5);
+      identifier = set-identifier-color (Color.rgb 0.2 0.5 0.8);
       others = [];
     |)
 
@@ -75,8 +107,8 @@ end = struct
   let basic-font =
     CodePrinter.make-theme (|
       backcolor = Color.gray 0.95;
-      basic = set-font-and-text-color font-sans-mono-dejavu Color.black;
-      comment = set-font-and-text-color font-sans-italic-dejavu (Color.gray 0.4);
+      basic = set-basic-color Color.black;
+      comment = set-comment-color (Color.gray 0.4);
       string = set-font-code font-sans-bold-dejavu;
       keyword = set-font-code font-sans-bold-italic-dejavu;
       identifier = set-font-code font-sans-mono-dejavu;
@@ -90,11 +122,11 @@ end = struct
   let gruvbox-dark =
     CodePrinter.make-theme (|
       backcolor = from-hex 0x282828;
-      basic = set-font-and-text-color font-sans-mono-dejavu (from-hex 0xEBDBB2);
-      comment = set-font-and-text-color font-sans-italic-dejavu (from-hex 0x928374);
-      string = set-font-and-text-color font-sans-bold-dejavu (from-hex 0xB8BB26);
-      keyword = set-font-and-text-color font-sans-bold-italic-dejavu (from-hex 0xFABD2F);
-      identifier = set-font-and-text-color font-sans-mono-dejavu (from-hex 0x83A598);
+      basic = set-basic-color (from-hex 0xEBDBB2);
+      comment = set-comment-color (from-hex 0x928374);
+      string = set-string-color (from-hex 0xB8BB26);
+      keyword = set-keyword-color (from-hex 0xFABD2F);
+      identifier = set-identifier-color (from-hex 0x83A598);
       others = [];
     |)
 
@@ -105,11 +137,11 @@ end = struct
   let gruvbox-light =
     CodePrinter.make-theme (|
       backcolor = from-hex 0xFBF1C7;
-      basic = set-font-and-text-color font-sans-mono-dejavu (from-hex 0x3C3836);
-      comment = set-font-and-text-color font-sans-italic-dejavu (from-hex 0x928374);
-      string = set-font-and-text-color font-sans-bold-dejavu (from-hex 0x79740E);
-      keyword = set-font-and-text-color font-sans-bold-italic-dejavu (from-hex 0xB57614);
-      identifier = set-font-and-text-color font-sans-mono-dejavu (from-hex 0x076678);
+      basic = set-basic-color (from-hex 0x3C3836);
+      comment = set-comment-color (from-hex 0x928374);
+      string = set-string-color (from-hex 0x79740E);
+      keyword = set-keyword-color (from-hex 0xB57614);
+      identifier = set-identifier-color (from-hex 0x076678);
       others = [];
     |)
 
@@ -120,11 +152,11 @@ end = struct
   let dracula =
     CodePrinter.make-theme (|
       backcolor = from-hex 0x282A36;
-      basic = set-font-and-text-color font-sans-mono-dejavu (from-hex 0xF8F8F2);
-      comment = set-font-and-text-color font-sans-italic-dejavu (from-hex 0x6272A4);
-      string = set-font-and-text-color font-sans-bold-dejavu (from-hex 0x50FA7B);
-      keyword = set-font-and-text-color font-sans-bold-italic-dejavu (from-hex 0xFFB86C);
-      identifier = set-font-and-text-color font-sans-mono-dejavu (from-hex 0x8BE9FD);
+      basic = set-basic-color (from-hex 0xF8F8F2);
+      comment = set-comment-color (from-hex 0x6272A4);
+      string = set-string-color (from-hex 0x50FA7B);
+      keyword = set-keyword-color (from-hex 0xFFB86C);
+      identifier = set-identifier-color (from-hex 0x8BE9FD);
       others = [];
     |)
 
@@ -135,11 +167,11 @@ end = struct
   let iceberg-dark =
     CodePrinter.make-theme (|
       backcolor = from-hex 0x161821;
-      basic = set-font-and-text-color font-sans-mono-dejavu (from-hex 0xC6C8D1);
-      comment = set-font-and-text-color font-sans-italic-dejavu (from-hex 0x6B7089);
-      string = set-font-and-text-color font-sans-bold-dejavu (from-hex 0x89B8C2);
-      keyword = set-font-and-text-color font-sans-bold-italic-dejavu (from-hex 0x84A0C6);
-      identifier = set-font-and-text-color font-sans-mono-dejavu (from-hex 0xA093C7);
+      basic = set-basic-color (from-hex 0xC6C8D1);
+      comment = set-comment-color (from-hex 0x6B7089);
+      string = set-string-color (from-hex 0x89B8C2);
+      keyword = set-keyword-color (from-hex 0x84A0C6);
+      identifier = set-identifier-color (from-hex 0xA093C7);
       others = [];
     |)
 
@@ -150,12 +182,269 @@ end = struct
   let iceberg-light =
     CodePrinter.make-theme (|
       backcolor = from-hex 0xE8E9EC;
-      basic = set-font-and-text-color font-sans-mono-dejavu (from-hex 0x33374C);
-      comment = set-font-and-text-color font-sans-italic-dejavu (from-hex 0x8389A3);
-      string = set-font-and-text-color font-sans-bold-dejavu (from-hex 0x3F83A6);
-      keyword = set-font-and-text-color font-sans-bold-italic-dejavu (from-hex 0x2D539E);
-      identifier = set-font-and-text-color font-sans-mono-dejavu (from-hex 0x7759B4);
+      basic = set-basic-color (from-hex 0x33374C);
+      comment = set-comment-color (from-hex 0x8389A3);
+      string = set-string-color (from-hex 0x3F83A6);
+      keyword = set-keyword-color (from-hex 0x2D539E);
+      identifier = set-identifier-color (from-hex 0x7759B4);
       others = [];
     |)
+
+
+  % Tokyo Night colorscheme
+  % MIT License
+  % Copyright (c) 2018-present Enkia
+  % https://github.com/enkia/tokyo-night-vscode-theme
+  let tokyo-night =
+    CodePrinter.make-theme (|
+      backcolor = from-hex 0x1A1B26;
+      basic = set-basic-color (from-hex 0xA9B1D6);
+      comment = set-comment-color (from-hex 0x565F89);
+      string = set-string-color (from-hex 0x9ECE6A);
+      keyword = set-keyword-color (from-hex 0xF7768E);
+      identifier = set-identifier-color (from-hex 0x7AA2FA);
+      others = [];
+    |)
+
+
+  % Tokyo Night Storm colorscheme
+  % MIT License
+  % Copyright (c) 2018-present Enkia
+  % https://github.com/enkia/tokyo-night-vscode-theme
+  let tokyo-night-strom =
+    CodePrinter.make-theme (|
+      backcolor = from-hex 0x24283B;
+      basic = set-basic-color (from-hex 0xA9B1D6);
+      comment = set-comment-color (from-hex 0x565F89);
+      string = set-string-color (from-hex 0x9ECE6A);
+      keyword = set-keyword-color (from-hex 0xF7768E);
+      identifier = set-identifier-color (from-hex 0x7AA2FA);
+      others = [];
+    |)
+
+
+  % Tokyo Night Light colorscheme
+  % MIT License
+  % Copyright (c) 2018-present Enkia
+  % https://github.com/enkia/tokyo-night-vscode-theme
+  let tokyo-night-light =
+    CodePrinter.make-theme (|
+      backcolor = from-hex 0xD5D6DB;
+      basic = set-basic-color (from-hex 0x343B58);
+      comment = set-comment-color (from-hex 0x9699A3);
+      string = set-string-color (from-hex 0x485E30);
+      keyword = set-keyword-color (from-hex 0x8C4351);
+      identifier = set-identifier-color (from-hex 0x34548A);
+      others = [];
+    |)
+
+
+  % Ayu Dark colorscheme
+  % MIT License
+  % Copyright (c) 2016 Ike Ku
+  % https://github.com/dempfi/ayu
+  let ayu-dark =
+    CodePrinter.make-theme (|
+      backcolor = from-hex 0xA0E14;
+      basic = set-basic-color (from-hex 0xB3B1AD);
+      comment = set-comment-color (from-hex 0x626A73);
+      string = set-string-color (from-hex 0xC2D94C);
+      keyword = set-keyword-color (from-hex 0xFF8F40);
+      identifier = set-identifier-color (from-hex 0xFFEE99);
+      others = [];
+    |)
+
+
+  % Ayu Mirage colorscheme
+  % MIT License
+  % Copyright (c) 2016 Ike Ku
+  % https://github.com/dempfi/ayu
+  let ayu-mirage =
+    CodePrinter.make-theme (|
+      backcolor = from-hex 0x1F2430;
+      basic = set-basic-color (from-hex 0xCBCCC6);
+      comment = set-comment-color (from-hex 0x5C5773);
+      string = set-string-color (from-hex 0xBAE67E);
+      keyword = set-keyword-color (from-hex 0xFFA759);
+      identifier = set-identifier-color (from-hex 0xD4BFFF);
+      others = [];
+    |)
+
+
+  % Ayu Light colorscheme
+  % MIT License
+  % Copyright (c) 2016 Ike Ku
+  % https://github.com/dempfi/ayu
+  let ayu-light =
+    CodePrinter.make-theme (|
+      backcolor = from-hex 0xFAFAFA;
+      basic = set-basic-color (from-hex 0x575F66);
+      comment = set-comment-color (from-hex 0xABB0B6);
+      string = set-string-color (from-hex 0x86B300);
+      keyword = set-keyword-color (from-hex 0xFA8D3E);
+      identifier = set-identifier-color (from-hex 0xA37ACC);
+      others = [];
+    |)
+
+
+  % Spacegray Eighties colorscheme
+  % MIT License
+  % Copyright (c) 2016 Mihai Ionut Vilcu
+  % https://github.com/ionutvmi/spacegray-vscode
+  let spacegray-eighties =
+    CodePrinter.make-theme (|
+      backcolor = from-hex 0x2D2D2D;
+      basic = set-basic-color (from-hex 0xD3D0C8);
+      comment = set-comment-color (from-hex 0x747369);
+      string = set-string-color (from-hex 0x99CC99);
+      keyword = set-keyword-color (from-hex 0xCC99CC);
+      identifier = set-identifier-color (from-hex 0xF99157);
+      others = [];
+    |)
+
+
+  % Spacegray Mocha colorscheme
+  % MIT License
+  % Copyright (c) 2016 Mihai Ionut Vilcu
+  % https://github.com/ionutvmi/spacegray-vscode
+  let spacegray-mocha =
+    CodePrinter.make-theme (|
+      backcolor = from-hex 0x3B3228;
+      basic = set-basic-color (from-hex 0xD0C8C6);
+      comment = set-comment-color (from-hex 0x7E705A);
+      string = set-string-color (from-hex 0xBEB55B);
+      keyword = set-keyword-color (from-hex 0xA89BB9);
+      identifier = set-identifier-color (from-hex 0xD28B71);
+      others = [];
+    |)
+
+
+  % Spacegray Ocean Dark colorscheme
+  % MIT License
+  % Copyright (c) 2016 Mihai Ionut Vilcu
+  % https://github.com/ionutvmi/spacegray-vscode
+  let spacegray-ocean-dark =
+    CodePrinter.make-theme (|
+      backcolor = from-hex 0x2B303B;
+      basic = set-basic-color (from-hex 0xC0C5CE);
+      comment = set-comment-color (from-hex 0x65737E);
+      string = set-string-color (from-hex 0xA3BE8C);
+      keyword = set-keyword-color (from-hex 0xB48EAD);
+      identifier = set-identifier-color (from-hex 0xD08770);
+      others = [];
+    |)
+
+
+  % Spacegray Ocean Light colorscheme
+  % MIT License
+  % Copyright (c) 2016 Mihai Ionut Vilcu
+  % https://github.com/ionutvmi/spacegray-vscode
+  let spacegray-ocean-light =
+    CodePrinter.make-theme (|
+      backcolor = from-hex 0xEFF1F5;
+      basic = set-basic-color (from-hex 0x4F5B66);
+      comment = set-comment-color (from-hex 0xA7ADBA);
+      string = set-string-color (from-hex 0xA3BE8C);
+      keyword = set-keyword-color (from-hex 0xB48EAD);
+      identifier = set-identifier-color (from-hex 0xD08770);
+      others = [];
+    |)
+
+
+  % Night Owl colorscheme
+  % MIT License
+  % Copyright (c) 2018 Sarah Drasner
+  % https://github.com/sdras/night-owl-vscode-theme
+  let night-owl =
+    CodePrinter.make-theme (|
+      backcolor = from-hex 0x011627;
+      basic = set-basic-color (from-hex 0xD6DEEB);
+      comment = set-comment-color (from-hex 0x637777);
+      string = set-string-color (from-hex 0xECC48D);
+      keyword = set-keyword-color (from-hex 0xC792EA);
+      identifier = set-identifier-color (from-hex 0x82AAFF);
+      others = [];
+    |)
+
+
+  % Light Owl colorscheme
+  % MIT License
+  % Copyright (c) 2018 Sarah Drasner
+  % https://github.com/sdras/night-owl-vscode-theme
+  let light-owl =
+    CodePrinter.make-theme (|
+      backcolor = from-hex 0xFBFBFB;
+      basic = set-basic-color (from-hex 0x403F53);
+      comment = set-comment-color (from-hex 0x989FB1);
+      string = set-string-color (from-hex 0x4876D6);
+      keyword = set-keyword-color (from-hex 0x994CC3);
+      identifier = set-identifier-color (from-hex 0x4876D6);
+      others = [];
+    |)
+
+
+  % Winter is Comming Dark Blue colorscheme
+  % MIT License
+  % Copyright (c) 2015-2017 JohnPapa.net, LLC
+  % https://github.com/johnpapa/vscode-winteriscoming
+  let winteriscoming-dark-blue =
+    CodePrinter.make-theme (|
+      backcolor = from-hex 0x011627;
+      basic = set-basic-color (from-hex 0xA7DBF7);
+      comment = set-comment-color (from-hex 0x999999);
+      string = set-string-color (from-hex 0xBCF0C0);
+      keyword = set-keyword-color (from-hex 0x00BFF9);
+      identifier = set-identifier-color (from-hex 0xA170C6);
+      others = [];
+    |)
+
+
+  % Winter is Comming Dark Black colorscheme
+  % MIT License
+  % Copyright (c) 2015-2017 JohnPapa.net, LLC
+  % https://github.com/johnpapa/vscode-winteriscoming
+  let winteriscoming-dark-black =
+    CodePrinter.make-theme (|
+      backcolor = from-hex 0x282822;
+      basic = set-basic-color (from-hex 0xA7DBF7);
+      comment = set-comment-color (from-hex 0x999999);
+      string = set-string-color (from-hex 0xBCF0C0);
+      keyword = set-keyword-color (from-hex 0x00BFF9);
+      identifier = set-identifier-color (from-hex 0xA170C6);
+      others = [];
+    |)
+
+
+  % Winter is Comming Light colorscheme
+  % MIT License
+  % Copyright (c) 2015-2017 JohnPapa.net, LLC
+  % https://github.com/johnpapa/vscode-winteriscoming
+  let winteriscoming-light =
+    CodePrinter.make-theme (|
+      backcolor = from-hex 0xFFFFFF;
+      basic = set-basic-color (from-hex 0x236EBF);
+      comment = set-comment-color (from-hex 0x357B42);
+      string = set-string-color (from-hex 0xA44185);
+      keyword = set-keyword-color (from-hex 0x7B30D0);
+      identifier = set-identifier-color (from-hex 0x174781);
+      others = [];
+    |)
+
+
+  % One Light colorscheme
+  % MIT License
+  % Copyright (c) 2015 Mahmoud Ali
+  % https://github.com/akamud/vscode-theme-onelight
+  let one-light =
+    CodePrinter.make-theme (|
+      backcolor = from-hex 0xFAFAFA;
+      basic = set-basic-color (from-hex 0x383A42);
+      comment = set-comment-color (from-hex 0xA0A1A7);
+      string = set-string-color (from-hex 0x50A14F);
+      keyword = set-keyword-color (from-hex 0xA626A4);
+      identifier = set-identifier-color (from-hex 0x986801);
+      others = [];
+    |)
+
 
 end
