@@ -84,6 +84,7 @@ document (|
       (CodeSyntax.fortran, `fortran`, `demo/demo.f90`);
       (CodeSyntax.go, `go`, `demo/demo.go`);
       (CodeSyntax.haskell, `haskell`, `demo/demo.hs`);
+      (CodeSyntax.html, `html`, `demo/demo.html`);
       (CodeSyntax.java, `java`, `demo/demo.java`);
       (CodeSyntax.javascript, `javascript`, `demo/demo.js`);
       (CodeSyntax.julia, `julia`, `demo/demo.jl`);
@@ -100,6 +101,7 @@ document (|
       (CodeSyntax.swift, `swift`, `demo/demo.swift`);
       (CodeSyntax.typescript, `typescript`, `demo/demo.ts`);
       (CodeSyntax.visualbasic, `visualbasic`, `demo/demo.vb`);
+      (CodeSyntax.xml, `xml`, `demo/demo.xml`);
     ];
     +p{現在提供している解析用の設定値は以上になります。}
     +p{次はテーマ用の設定値の紹介です。}

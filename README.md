@@ -75,6 +75,7 @@ When typesetting code with syntax-highlight, write the code like this:
 - `CodeSyntax.fortran`
 - `CodeSyntax.go`
 - `CodeSyntax.haskell`
+- `CodeSyntax.html`
 - `CodeSyntax.java`
 - `CodeSyntax.javascript`
 - `CodeSyntax.julia`
@@ -91,6 +92,7 @@ When typesetting code with syntax-highlight, write the code like this:
 - `CodeSyntax.swift`
 - `CodeSyntax.typescript`
 - `CodeSyntax.visualbasic`
+- `CodeSyntax.xml`
 </details>
 
 <details>

@@ -15,6 +15,7 @@ module CodeSyntax :sig
   val fortran : CodePrinter.syntax
   val go : CodePrinter.syntax
   val haskell : CodePrinter.syntax
+  val html : CodePrinter.syntax
   val java : CodePrinter.syntax
   val javascript : CodePrinter.syntax
   val julia : CodePrinter.syntax
@@ -31,6 +32,7 @@ module CodeSyntax :sig
   val swift : CodePrinter.syntax
   val typescript : CodePrinter.syntax
   val visualbasic : CodePrinter.syntax
+  val xml : CodePrinter.syntax
 
 end = struct
 
@@ -177,6 +179,16 @@ end = struct
     string = CodePrinter.syntax-rule-inline (` "[^"]*"\|'[^']*' `);
     keywords = [`as`; `case`; `of`; `class`; `data`; `family`; `instance`; `default`; `deriving`; `do`; `forall`; `foreign`; `hiding`; `if`; `then`; `else`; `import`; `infixl`; `infixr`; `infix`; `let`; `in`; `mdo`; `module`; `newtype`; `proc`; `qualified`; `rec`; `type`; `where`];
     identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
+    others = [];
+  |)
+
+
+  let html = CodePrinter.make-syntax (|
+    line-comment = CodePrinter.syntax-rule-block `<!--` `-->`;
+    block-comment = CodePrinter.syntax-rule-block `<!--` `-->`;
+    string = CodePrinter.syntax-rule-inline (` "[^"]*" `);
+    keywords = [];
+    identifier = CodePrinter.syntax-rule-inline `<[a-zA-Z0-9]+/>\|<!?[a-zA-Z0-9]+\|</[a-zA-Z0-9]+\|>`;
     others = [];
   |)
 
@@ -357,6 +369,16 @@ end = struct
     others = [];
   |)
 
+
+
+  let xml = CodePrinter.make-syntax (|
+    line-comment = CodePrinter.syntax-rule-block `<!--` `-->`;
+    block-comment = CodePrinter.syntax-rule-block `<!--` `-->`;
+    string = CodePrinter.syntax-rule-inline (` "[^"]*" `);
+    keywords = [];
+    identifier = CodePrinter.syntax-rule-inline `<\??[a-zA-Z0-9]+\|</[a-zA-Z0-9]+\|\??>`;
+    others = [];
+  |)
 
 end
 
