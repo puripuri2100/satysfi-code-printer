@@ -121,6 +121,9 @@ document (|
       (CodeTheme.tokyo-night, `tokyo-night`);
       (CodeTheme.tokyo-night-strom, `tokyo-night-strom`);
       (CodeTheme.tokyo-night-light, `tokyo-night-light`);
+      (CodeTheme.ayu-dark, `ayu-dark`);
+      (CodeTheme.ayu-mirage, `ayu-mirage`);
+      (CodeTheme.ayu-light, `ayu-light`);
     ];
     +p{現在提供しているテーマ用の設定値は以上になります。}
   >

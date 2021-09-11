@@ -14,6 +14,9 @@ module CodeTheme :sig
   val tokyo-night : CodePrinter.theme
   val tokyo-night-strom : CodePrinter.theme
   val tokyo-night-light : CodePrinter.theme
+  val ayu-dark : CodePrinter.theme
+  val ayu-mirage : CodePrinter.theme
+  val ayu-light : CodePrinter.theme
 
 end = struct
 
@@ -222,6 +225,54 @@ end = struct
       string = set-string-color (from-hex 0x485E30);
       keyword = set-keyword-color (from-hex 0x8C4351);
       identifier = set-identifier-color (from-hex 0x34548A);
+      others = [];
+    |)
+
+
+  % Ayu Dark colorscheme
+  % MIT License
+  % Copyright (c) 2016 Ike Ku
+  % https://github.com/dempfi/ayu
+  let ayu-dark =
+    CodePrinter.make-theme (|
+      backcolor = from-hex 0xA0E14;
+      basic = set-basic-color (from-hex 0xB3B1AD);
+      comment = set-comment-color (from-hex 0x626A73);
+      string = set-string-color (from-hex 0xC2D94C);
+      keyword = set-keyword-color (from-hex 0xFF8F40);
+      identifier = set-identifier-color (from-hex 0xFFEE99);
+      others = [];
+    |)
+
+
+  % Ayu Mirage colorscheme
+  % MIT License
+  % Copyright (c) 2016 Ike Ku
+  % https://github.com/dempfi/ayu
+  let ayu-mirage =
+    CodePrinter.make-theme (|
+      backcolor = from-hex 0x1F2430;
+      basic = set-basic-color (from-hex 0xCBCCC6);
+      comment = set-comment-color (from-hex 0x5C5773);
+      string = set-string-color (from-hex 0xBAE67E);
+      keyword = set-keyword-color (from-hex 0xFFA759);
+      identifier = set-identifier-color (from-hex 0xD4BFFF);
+      others = [];
+    |)
+
+
+  % Ayu Light colorscheme
+  % MIT License
+  % Copyright (c) 2016 Ike Ku
+  % https://github.com/dempfi/ayu
+  let ayu-light =
+    CodePrinter.make-theme (|
+      backcolor = from-hex 0xFAFAFA;
+      basic = set-basic-color (from-hex 0x575F66);
+      comment = set-comment-color (from-hex 0xABB0B6);
+      string = set-string-color (from-hex 0x86B300);
+      keyword = set-keyword-color (from-hex 0xFA8D3E);
+      identifier = set-identifier-color (from-hex 0xA37ACC);
       others = [];
     |)
 
