@@ -93,7 +93,8 @@ document (|
       (CodeSyntax.lisp, `lisp`, `demo/demo.lisp`);
       (CodeSyntax.nim, `nim`, `demo/demo.nim`);
       (CodeSyntax.shell, `shell`, `demo/demo.sh`);
-      (CodeSyntax.perl, `perl`, `demo/demo.pl`);
+      (CodeSyntax.perl, `perl`, `demo/demo.prl`);
+      (CodeSyntax.prolog, `prolog`, `demo/demo.pl`);
       (CodeSyntax.python, `python`, `demo/demo.py`);
       (CodeSyntax.r, `r`, `demo/demo.R`);
       (CodeSyntax.ruby, `ruby`, `demo/demo.rb`);

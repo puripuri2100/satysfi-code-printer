@@ -1,2 +1,1 @@
-# comment
-print "Hello World!";
+desc(X, Y) :- child(X, Y).
