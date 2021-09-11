@@ -74,13 +74,17 @@ document (|
       (CodeSyntax.satysfi, `satysfi`, `demo/demo.satyh`);
       (CodeSyntax.ocaml, `ocaml`, `demo/demo.ml`);
       (CodeSyntax.rust, `rust`, `demo/demo.rs`);
+      (CodeSyntax.cobol, `cobol`, `demo/demo.cbl`);
       (CodeSyntax.c, `c`, `demo/demo.c`);
       (CodeSyntax.cpp, `cpp`, `demo/demo.cpp`);
       (CodeSyntax.csharp, `csharp`, `demo/demo.cs`);
+      (CodeSyntax.d, `d`, `demo/demo.d`);
+      (CodeSyntax.erlang, `erlang`, `demo/demo.erl`);
       (CodeSyntax.fsharp, `fsharp`, `demo/demo.fs`);
       (CodeSyntax.fortran, `fortran`, `demo/demo.f90`);
       (CodeSyntax.go, `go`, `demo/demo.go`);
       (CodeSyntax.haskell, `haskell`, `demo/demo.hs`);
+      (CodeSyntax.html, `html`, `demo/demo.html`);
       (CodeSyntax.java, `java`, `demo/demo.java`);
       (CodeSyntax.javascript, `javascript`, `demo/demo.js`);
       (CodeSyntax.julia, `julia`, `demo/demo.jl`);
@@ -88,14 +92,20 @@ document (|
       (CodeSyntax.lua, `lua`, `demo/demo.lua`);
       (CodeSyntax.lisp, `lisp`, `demo/demo.lisp`);
       (CodeSyntax.nim, `nim`, `demo/demo.nim`);
-      (CodeSyntax.perl, `perl`, `demo/demo.pl`);
+      (CodeSyntax.makefile, `makefile`, `demo/demo.make`);
+      (CodeSyntax.shell, `shell`, `demo/demo.sh`);
+      (CodeSyntax.perl, `perl`, `demo/demo.prl`);
+      (CodeSyntax.prolog, `prolog`, `demo/demo.pl`);
+      (CodeSyntax.php, `php`, `demo/demo.php`);
       (CodeSyntax.python, `python`, `demo/demo.py`);
       (CodeSyntax.r, `r`, `demo/demo.R`);
       (CodeSyntax.ruby, `ruby`, `demo/demo.rb`);
       (CodeSyntax.scala, `scala`, `demo/demo.scala`);
       (CodeSyntax.swift, `swift`, `demo/demo.swift`);
+      (CodeSyntax.tex, `tex`, `demo/demo.tex`);
       (CodeSyntax.typescript, `typescript`, `demo/demo.ts`);
       (CodeSyntax.visualbasic, `visualbasic`, `demo/demo.vb`);
+      (CodeSyntax.xml, `xml`, `demo/demo.xml`);
     ];
     +p{現在提供している解析用の設定値は以上になります。}
     +p{次はテーマ用の設定値の紹介です。}
