@@ -6,7 +6,7 @@
   ;; Library name
   (name "code-printer")
   ;; Library version
-  (version "0.1.0")
+  (version "1.0.0")
   ;; Files
   (sources
     ((packageDir "src")))
@@ -24,7 +24,7 @@
   ;; Library doc name
   (name "code-printer-doc")
   ;; Library version
-  (version "0.1.0")
+  (version "1.0.0")
   ;; Working directory to build docs
   (workingDirectory "doc")
   ;; Build commands
