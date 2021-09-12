@@ -2,4 +2,4 @@ key = "key"
 int = 4
 
 [table]
-  array = [1, 2, 3]
+  array = [-1.5, +99.5]
