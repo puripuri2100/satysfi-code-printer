@@ -34,6 +34,7 @@ module CodeSyntax :sig
   val scala : CodePrinter.syntax
   val swift : CodePrinter.syntax
   val tex : CodePrinter.syntax
+  val toml : CodePrinter.syntax
   val typescript : CodePrinter.syntax
   val visualbasic : CodePrinter.syntax
   val xml : CodePrinter.syntax
@@ -391,6 +392,16 @@ end = struct
     string = CodePrinter.syntax-rule-fun (fun _ -> None);
     keywords = [`\documentclass`; `\usepackage`; `\begin`; `\end`];
     identifier = CodePrinter.syntax-rule-line `\\[a-zA-Z]+`;
+    others = [];
+  |)
+
+
+  let toml = CodePrinter.make-syntax (|
+    line-comment = CodePrinter.syntax-rule-block `#` `$`;
+    block-comment = null-syntax-rule;
+    string = CodePrinter.syntax-rule-line (` "[^"]*"\|'[^']*' `);
+    keywords = [`=`; `true`; `false`];
+    identifier = CodePrinter.syntax-rule-line `[a-zA-Z0-9_-]+`;
     others = [];
   |)
 

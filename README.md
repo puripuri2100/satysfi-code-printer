@@ -94,6 +94,7 @@ When typesetting code with syntax-highlight, write the code like this:
 - `CodeSyntax.scala`
 - `CodeSyntax.swift`
 - `CodeSyntax.tex`
+- `CodeSyntax.toml`
 - `CodeSyntax.typescript`
 - `CodeSyntax.visualbasic`
 - `CodeSyntax.xml`

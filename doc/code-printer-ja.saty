@@ -105,6 +105,7 @@ document (|
       (CodeSyntax.scala, `scala`, `demo/demo.scala`);
       (CodeSyntax.swift, `swift`, `demo/demo.swift`);
       (CodeSyntax.tex, `tex`, `demo/demo.tex`);
+      (CodeSyntax.toml, `toml`, `demo/demo.toml`);
       (CodeSyntax.typescript, `typescript`, `demo/demo.ts`);
       (CodeSyntax.visualbasic, `visualbasic`, `demo/demo.vb`);
       (CodeSyntax.xml, `xml`, `demo/demo.xml`);
