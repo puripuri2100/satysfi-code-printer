@@ -30,10 +30,10 @@
   ;; Build commands
   (build
     ;; Run SATySFi
-    ((satysfi "manual-ja.saty" "-o" "manual-ja.pdf")))
+    ((satysfi "code-printer-ja.saty" "-o" "code-printer-ja.pdf")))
   ;; Files
   (sources
-    ((doc "manual-ja.pdf" "doc/manual-ja.pdf")))
+    ((doc "code-printer-ja.pdf" "doc/code-printer-ja.pdf")))
   ;; OPAM package file
   (opam "satysfi-code-printer-doc.opam")
   ;; Dependency

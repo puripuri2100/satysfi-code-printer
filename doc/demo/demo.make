@@ -1,2 +1,2 @@
 all:
-	satysfi doc/manual-ja.saty
+	satysfi doc/code-printer-ja.saty
