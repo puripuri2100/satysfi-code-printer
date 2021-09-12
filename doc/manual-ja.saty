@@ -67,6 +67,7 @@ document (|
 ```);
     +p{のようにすることで、\inline-code(`syntax`);で設定された通りにコードが解析され、その結果が\inline-code(`theme`);で設定された通りに描画される、ということです。}
     +p{ここでの\inline-code(`syntax`);と\inline-code(`theme`);に相当する設定値はユーザー自身が作成することもできますが、code-printerライブラリの提供する機能の一つとして既にいくつかのパターンを用意しています。ここではこのライブラリで提供している設定値を紹介します。}
+    +p{デフォルトの\inline-code(`syntax`);と\inline-code(`theme`);の設定値はそれぞれ\inline-code(`CodePrinter.default-syntax`);と\inline-code(`CodePrinter.default-theme`);として公開されています。}
     +p{プログラミング言語ごとに纏められた解析用の設定は、code-syntax.satygファイルによって提供されています。\inline-code(`@require: code-printer/code-syntax`);によって読み込んでください。モジュール名は\inline-code(`CodeSyntax`);です。}
     +p{テーマ用の設定値はcode-theme.satyhファイルによって提供されています。ファイルの先頭に\inline-code(`@require: code-printer/code-theme`);と書いて読み込んでください。モジュール名は\inline-code(`CodeTheme`);です。}
     +p{まずは解析用の設定値の紹介です。その設定値を使って解析した結果のシンタックスハイライトと一緒に載せています。}
@@ -388,6 +389,115 @@ fn main() {
   let lst = vec![1, 3, 5, 7, 9];
   println!("{:?}", lst);
 }`);
-    +p{意図した通り、「背景色塗るだけで余白無し」担っていますね。}
+    +p{意図した通り、「背景色塗るだけで余白無し」になっていますね。}
+  >
+
+  +section {SyntaxとThemeの作り方} <
+    +p{\inline-code(`CodePrinter.make-config`);で使用するSyntaxとThemeは、ユーザーが作成することもできます。ここではその作り方を説明します。}
+    +subsection {Syntaxの作り方} <
+      +p{Syntaxは\inline-code(`CodePrinter.syntax`);型によって表現されます。この型の実装は公開されていません。この型を生成するためには\inline-code(`CodePrinter.make-syntax`);関数を使う必要があります。この関数は
+      \code-printer ?:(
+        CodePrinter.make-config CodeSyntax.satysfi CodeTheme.basic-light
+      )(`(|
+  line-comment : syntax-rule;
+  block-comment : syntax-rule;
+  string : syntax-rule;
+  keywords : string list;
+  identifier : syntax-rule;
+  others : (string * syntax-rule) list;
+|)`);
+      というレコードを引数に取ることで\inline-code(`CodePrinter.syntax`);型のデータを生成します。レコードのそれぞれのラベルの意味はそれぞれ、
+      \listing{
+        * \inline-code(`line-comment`);：一行で終了するコメント
+        * \inline-code(`block-comment`);：開始文字列と終了文字列で挟まれたコメント
+        * \inline-code(`string`);：文字列
+        * \inline-code(`keywords`);：特別扱いとなる単語
+        * \inline-code(`identifier`);：その他関数名や変数名、数字など
+        * \inline-code(`others`);：markdownなどの、上記の区分けに分類できないものを表すためのもの
+      }です。}
+      +p{\inline-code(`keywords`);に与えるものは、そのキーワードそのものを表す文字列のリストを与えます。リストの先頭から評価されるため、先にある文字列が部分文字列となっている文字列があると、その文字列は上手く評価されません。例えば、
+      \inline-code(```[`do`; `double`]```);というリストを与えた時、\inline-code(`do`);が先に判定に使われるため、\inline-code(`double`);が上手く評価されなくなります。この場合は順番を入れ替えて\inline-code(```[`double`; `do`]```);とすると上手く評価されます。}
+      +p{その他のラベルに与える\inline-code(`syntax-rule`);というデータは、syntaxを表すデータです。定義は公開されていません。このデータは
+      \listing {
+        * \inline-code(`CodePrinter.syntax-rule-line`);
+        * \inline-code(`CodePrinter.syntax-rule-block`);
+        * \inline-code(`CodePrinter.syntax-rule-fun`);
+      }の3つの関数でそれぞれ作成することができます。}
+      +p{\inline-code(`syntax-rule-line`);関数の型は\inline-code(`string -> syntax-rule`);です。その構文のルールを表す正規表現文字列を与えることで、\inline-code(`syntax-rule`);を生成します。この正規表現文字列は\SATySFi;の\inline-code(`regexp-of-string`);プリミティブによって\SATySFi;内部の正規表現型に変換され、\SATySFi;の\inline-code(`string-scan`);プリミティブに渡されます。}
+      +p{\inline-code(`regexp-of-string`);は内部でOCamlのStrライブラリで提供されている\inline-code(`regexp`);という関数を使用しています。そのため、この\inline-code(`syntax-rule-line`);に渡すことができる正規表現文字列は以下の構文を持ちます。
+      \listing{
+        * \inline-code(`.`);：改行を除くすべての文字にマッチします。
+        * \inline-code(`*`);：後置で使います。先行する正規表現の0回以上の繰り返しにマッチします。
+        * \inline-code(`+`);：後置で使います。先行する正規表現の1回以上の繰り返しにマッチします。
+        * \inline-code(`?`);：後置で使います。先行する正規表現の0回もしくは1回の出現にマッチします。
+        * \inline-code(`^`);：マッチさせる文字の先頭、もしくは改行文字の直後にマッチします。
+        * \inline-code(`$`);：マッチさせる文字の末尾、もしくは改行文字の直前にマッチします。
+        * \inline-code(`\|`);：中置で使います。二つの正規表現のどちらかにマッチさせたいときに使用します。
+        * \inline-code(`[ .. ]`);：文字集合を表します。\inline-code(`[a-zA-Z]`);のようにして使い、\inline-code(`-`);で範囲を表します。\inline-code(`-`);そのものを表したいときは、\inline-code(`-`);を集合の先頭か末尾に書きます。\inline-code(`[^0-9]`);のように、集合の先頭に\inline-code(`^`);を書くと、補集合を表します。
+        * \inline-code(`\( .. \)`);：正規表現をグループ化します。
+        * \inline-code(`\`);：特殊文字をエスケープします。次の文字が特殊文字です。\inline-code(`^`);・\inline-code(`$`);・\inline-code(`.`);・\inline-code(`*`);・\inline-code(`+`);・\inline-code(`?`);・\inline-code(`\`);・\inline-code(`[`);・\inline-code(`]`);
+      }
+      \inline-code(`string-scan`);というプリミティブは内部でOCamlのStrライブラリで提供されている\inline-code(`string-match`);という関数を使用しています。\inline-code(`string-scan`);とうプリミティブは、与えられた文字列と正規表現について、その文字列の先頭から始まる部分文字列でその正規表現にマッチするものがあった場合はその部分文字列を返し、マッチする部分文字列が無かった場合は\inline-code(`None`);を返す。という挙動をします。}
+      +p{例えば、「整数を\inline-code(`identifier`);に分類したい」という場合は、
+      \code-printer ?:(
+        CodePrinter.make-config CodeSyntax.satysfi CodeTheme.basic-light
+        |> CodePrinter.set-number-fun CodeDesign.number-fun-null
+      )(``` identifier = syntax-rule-line `0\|-?[1-9][0-9]*`; ```);という風に書きます。}
+      +p{\inline-code(`syntax-rule-block`);は\inline-code(`string -> string -> syntax-rule`);という型を持っていて、一つ目の引数に「開始部分の文字列にマッチする正規表現を表す文字列」を与え、二つ目の引数には終了部分のそれを与えます。正規表現を表す文字列のルールについては\inline-code(`syntax-rule-line`);と同じです。終了部分の文字列については、もっとも近い場所にあるものが採用されます。終了部分の文字列がマッチしたときにはじめて、開始部分の文字列の先頭から終了部分の文字列の末尾までの全ての文字が登録されます。}
+      +p{例えば、「\inline-code(`%`);からはじまり、改行文字で終わる文字列をコメントに分類したい」という場合は
+      \code-printer ?:(
+        CodePrinter.make-config CodeSyntax.satysfi CodeTheme.basic-light
+        |> CodePrinter.set-number-fun CodeDesign.number-fun-null
+      )(``` line-comment = syntax-rule-block `%` `$`; ```);という風に書きます。}
+
+      +p{\inline-code(`syntax-rule-fun`);は正規表現では表すことのできない複雑なルールに対応する際に使用します。型は\inline-code(` (string -> (string * string) option)-> syntax-rule`);です。「文字列を受け取り、それを読み進めていき、もしルールにマッチする1文字目から始まる部分文字列があった場合は、その部分文字列と残りの文字列のペアを返し、マッチしなかった場合は\inline-code(`None`);」を返す、という挙動をする関数を与えてください（\inline-code(`string-scan`);の挙動を手動で行うイメージです）。}
+      +p{「何もマッチさせたくない」というときはこの\inline-code(`syntax-rule-fun`);を用い、
+      \code-printer ?:(
+        CodePrinter.make-config CodeSyntax.satysfi CodeTheme.basic-light
+        |> CodePrinter.set-number-fun CodeDesign.number-fun-null
+      )(``` block-comment = syntax-rule-fun (fun _ -> None); ```);という風に書きます。}
+
+      +p{\inline-code(`others`);ラベルに与えるものは、\inline-code(`syntax-rule`);とそのルールに付ける名前のペアのリストです。\inline-code(`line-comment`);や\inline-code(`string`);といったラベルを独自に作ることができるイメージです。リストの先頭から評価されます。もし、このルールにマッチした文字列があり、さらにそのルールに付けたラベルに対応する装飾がthemeの方にも定義されていた場合、そのThemeに従って装飾されます。そのラベルに対応する装飾がThemeの方に定義されていなかった場合はその他の文字と同じ扱いになります。}
+    >
+
+    +subsection{Themeの作り方} <
+      +p{Themeは\inline-code(`CodePrinter.theme`);型によって表現されます。この型の実装は公開されていません。この型を生成するためには\inline-code(`CodePrinter.make-theme`);関数を使う必要があります。この関数は
+      \code-printer ?:(
+        CodePrinter.make-config CodeSyntax.satysfi CodeTheme.basic-light
+      )(`(|
+  backcolor : color;
+  basic : context -> context;
+  comment : context -> context;
+  string : context -> context;
+  keyword : context -> context;
+  identifier : context -> context;
+  others : (string * (context -> context)) list;
+|)`);
+      というレコードを引数に採ることで\inline-code(`theme`);データを生成します。}
+      +p{\inline-code(`backcolor`);ラベルには、そのコードの背景色を\inline-code(`color`);型で与えます。}
+      +p{\inline-code(`basic`);ラベルには\inline-code(`context -> context`);の関数を与えます。この関数に外部から与えられた文脈型が適用されたものが文字を組む際に使用されます。
+      ここでフォントの変更や文字色の変更を行います。
+      \footnote{厳密には、コマンド外部の文脈型に対して
+      \listing{
+        * \inline-code(`set-font`);
+        * \inline-code(`set-leading`);
+        * \inline-code(`set-paragraph-margin`);
+        * \inline-code(`set-min-gap-of-lines`);
+      }で調節した後に\inline-code(`set-basic-font-size`);が適用された文脈型がこの関数に与えられ、それによって生成された新しい文脈型に対して
+      \listing{
+        * \inline-code(`set-hyphen-penalty`);
+        * \inline-code(`set-space-ratio`);
+        * \inline-code(`set-space-ratio-between-scripts`);
+      }でさらに調節を加えた後に文字を組む際に使用されます。}
+      これによって生成された文脈型を便宜的に「basic文脈」と呼びます。このbasic文脈はSyntaxで\inline-code(`line-comment`);・\inline-code(`block-comment`);・\inline-code(`string`);・\inline-code(`keywords`);・\inline-code(`identifier`);・\inline-code(`others`);のいずれにも分類されなかった文字に適用されます。また、\inline-code(`others`);に分類されても対応する装飾が無かった文字列もこのbasic文脈が適用されます。}
+
+      +p{\listing{
+          * \inline-code(`comment`);
+          * \inline-code(`string`);
+          * \inline-code(`keyword`);
+          * \inline-code(`identifier`);
+        }に渡す関数は\inline-code(`basic`);に渡す関数と同じく、フォントや文字色などを変える関数です。ただし、その関数に与えられる文脈型はbasic文脈です。}
+      +p{\inline-code(`others`);に渡すものは、\inline-code(`make-syntax`);関数に渡すレコードの\inline-code(`others`);に渡されたルールに対応するラベルと、それに対応する文脈型を変更する関数のリストです。}
+    >
   >
 >
