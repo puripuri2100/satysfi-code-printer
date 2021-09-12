@@ -1,5 +1,6 @@
 @require: stdjabook
 @require: itemize
+@require: annot
 
 @import: ../src/code-printer
 @import: ../src/code-syntax
@@ -499,5 +500,22 @@ fn main() {
         }に渡す関数は\inline-code(`basic`);に渡す関数と同じく、フォントや文字色などを変える関数です。ただし、その関数に与えられる文脈型はbasic文脈です。}
       +p{\inline-code(`others`);に渡すものは、\inline-code(`make-syntax`);関数に渡すレコードの\inline-code(`others`);に渡されたルールに対応するラベルと、それに対応する文脈型を変更する関数のリストです。}
     >
+  >
+
+  +section {必要なバージョンや依存など} <
+    +p{このライブラリは\inline-code(`read-file`);プリミティブを使用しています。
+    そのため、\SATySFi;のバージョン0.0.6より後、特に\href (`https://github.com/gfngfn/SATySFi/commit/56895a1b843da427e970a4dd84c433e78dca4a56`) {\inline-code(`56895a1`);}コミット以降のものを使用してください。}
+    +p{また、このライブラリは\SATySFi;の標準ライブラリと、\href(`https://github.com/nyuichi/satysfi-base`){satysfi-base}と\href(`https://github.com/zeptometer/SATySFi-fonts-dejavu`){satysfi-fonts-dejavu}の2つの外部ライブラリに依存しています。それぞれのインストールはsatyrographosを使用することを想定しています。}
+  >
+  +section {バグ報告・修正や機能追加の提案}<
+    +p{このパッケージはバグが存在するかもしれません。バグを発見した場合は以下のURLに報告してください。}
+    +p{\href(`https://github.com/puripuri2100/satysfi-code-printer/issues`){\inline-code(`https://github.com/puripuri2100/satysfi-code-printer/issues`);}}
+    +p{このパッケージに対してコードの修正や機能追加の提案をしたい場合は、GitHubの機能を用いて以下のURLにプルリクエストを送ってください。}
+    +p{\href(`https://github.com/puripuri2100/satysfi-code-printer/pulls`){\inline-code(`https://github.com/puripuri2100/satysfi-code-printer/pulls`);}}
+    +p{バグ報告・修正提案・機能追加提案をお待ちしております。}
+  >
+  +section{ライセンスとコピーライト}<
+    +p{このパッケージとドキュメントはMITライセンスのもとで配布されます。}
+    +p{Copyright (c) 2021 Naoki Kaneko (a.k.a. "puripuri2100")}
   >
 >
