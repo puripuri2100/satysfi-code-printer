@@ -89,6 +89,8 @@ document (|
       (CodeSyntax.html, `html`, `demo/demo.html`);
       (CodeSyntax.java, `java`, `demo/demo.java`);
       (CodeSyntax.javascript, `javascript`, `demo/demo.js`);
+      (CodeSyntax.json, `json`, `demo/demo.json`);
+      (CodeSyntax.json5, `json5`, `demo/demo.json5`);
       (CodeSyntax.julia, `julia`, `demo/demo.jl`);
       (CodeSyntax.kotlin, `kotlin`, `demo/demo.kt`);
       (CodeSyntax.lua, `lua`, `demo/demo.lua`);

@@ -18,6 +18,8 @@ module CodeSyntax :sig
   val html : CodePrinter.syntax
   val java : CodePrinter.syntax
   val javascript : CodePrinter.syntax
+  val json : CodePrinter.syntax
+  val json5 : CodePrinter.syntax
   val julia : CodePrinter.syntax
   val kotlin : CodePrinter.syntax
   val lua : CodePrinter.syntax
@@ -216,6 +218,26 @@ end = struct
     string = CodePrinter.syntax-rule-line (` "[^"]*"\|'[^']*' `);
     keywords = [`break`; `case`; `catch`; `class`; `const`; `continue`; `debugger`; `default`; `delete`; `do`; `else`; `export`; `extends`; `finally`; `for`; `function`; `if`; `import`; `instanceof`; `in`; `new`; `return`; `super`; `switch`; `this`; `throw`; `try`; `typeof`; `var`; `let`; `const`; `void`; `while`; `with`; `yield`;];
     identifier = CodePrinter.syntax-rule-line `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
+    others = [];
+  |)
+
+
+  let json = CodePrinter.make-syntax (|
+    line-comment = null-syntax-rule;
+    block-comment = null-syntax-rule;
+    string = CodePrinter.syntax-rule-line (` "[^"]*" `);
+    keywords = [`true`; `false`];
+    identifier = CodePrinter.syntax-rule-line `-?[0-9]+\(\.[0-9]+\)?`;
+    others = [];
+  |)
+
+
+  let json5 = CodePrinter.make-syntax (|
+    line-comment = CodePrinter.syntax-rule-block `//` `$`;
+    block-comment = CodePrinter.syntax-rule-block `/\*` `\*/`;
+    string = CodePrinter.syntax-rule-line (` "[^"]*"\|'[^']*' `);
+    keywords = [`true`; `false`; `Infinity`; `NaN`];
+    identifier = CodePrinter.syntax-rule-line `[a-zA-Z0-9_-]+\|\(-\|+\)?[0-9]+\.?[0-9]+?`;
     others = [];
   |)
 

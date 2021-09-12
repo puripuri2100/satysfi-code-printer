@@ -78,6 +78,8 @@ When typesetting code with syntax-highlight, write the code like this:
 - `CodeSyntax.html`
 - `CodeSyntax.java`
 - `CodeSyntax.javascript`
+- `CodeSyntax.json`
+- `CodeSyntax.json5`
 - `CodeSyntax.julia`
 - `CodeSyntax.kotlin`
 - `CodeSyntax.lua`
