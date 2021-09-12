@@ -11,7 +11,7 @@ module CodePrinter : sig
 
   type syntax-rule
   val syntax-rule-block : string -> string -> syntax-rule
-  val syntax-rule-inline : string -> syntax-rule
+  val syntax-rule-line : string -> syntax-rule
   val syntax-rule-fun : (string -> (string * string) option)-> syntax-rule
 
   type syntax
@@ -76,7 +76,7 @@ end = struct
     | SyntaxRuleBlock of string * string
     %%% 一行で済むコードを表す
     %%% 正規表現で与える
-    | SyntaxRuleInline of string
+    | SyntaxRuleLine of string
     %%% 正規表現では表せないsyntaxを解析するための関数
     %%% stringを受け取って、ルールに一致する文字列とそれ以外の文字列を返す関数である
     %%% ルールに一致しなかった場合はNoneを返すようにする
@@ -84,7 +84,7 @@ end = struct
 
 
   let syntax-rule-block begin-re end-re = SyntaxRuleBlock (begin-re, end-re)
-  let syntax-rule-inline re = SyntaxRuleInline(re)
+  let syntax-rule-line re = SyntaxRuleLine(re)
   let syntax-rule-fun f = SyntaxRuleFunction(f)
 
 
@@ -575,7 +575,7 @@ end = struct
     strlst
       |> List.map escape
       |> List.fold-lefti join null-string
-      |> syntax-rule-inline
+      |> syntax-rule-line
 
   %%% 終了タグの正規表現がマッチするまで文字を探索し続ける関数
   %%% 終了タグにマッチする前に文字が無くなったらNoneを返す
@@ -609,7 +609,7 @@ end = struct
           | Some(tail-code, other-code) -> Some(begin-code^tail-code, other-code)
       )
     ))
-    | SyntaxRuleInline(re-s) -> (fun code -> (
+    | SyntaxRuleLine(re-s) -> (fun code -> (
       let re = regexp-of-string re-s in
       string-scan re code
     ))

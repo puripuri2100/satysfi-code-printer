@@ -44,9 +44,9 @@ end = struct
   let satysfi = CodePrinter.make-syntax (|
     line-comment = CodePrinter.syntax-rule-block `%` `$`;
     block-comment = CodePrinter.syntax-rule-block `%` `$`;
-    string = CodePrinter.syntax-rule-inline (`` `[^`]*` ``);
+    string = CodePrinter.syntax-rule-line (`` `[^`]*` ``);
     keywords = [`if`; `then`; `else`; `@require`; `@import`; `@stage`; `let-rec`; `let-inline`; `let-block`; `let-math`; `let-mutable`; `let`; `in`; `=`; `end`; `struct`; `module`; `sig`; `type`; `val`; `direct`; `->`; `::`; `|>`; `match`; `with`; `when`; `for`; `while`; `of`; `as`; `do`; `fun`; `open`;];
-    identifier = CodePrinter.syntax-rule-inline `\(\\\|\+\)?[a-zA-Z][a-zA-Z0-9-]*\|[0-9]+\|0x[0-9a-fA-F]+`;
+    identifier = CodePrinter.syntax-rule-line `\(\\\|\+\)?[a-zA-Z][a-zA-Z0-9-]*\|[0-9]+\|0x[0-9a-fA-F]+`;
     others = [];
   |)
 
@@ -54,18 +54,18 @@ end = struct
   let rust = CodePrinter.make-syntax (|
     line-comment = CodePrinter.syntax-rule-block `//` `$`;
     block-comment = CodePrinter.syntax-rule-block `/\*` `\*/`;
-    string = CodePrinter.syntax-rule-inline (` "[^"]*" `);
+    string = CodePrinter.syntax-rule-line (` "[^"]*" `);
     keywords = [`as`; `break`; `const`; `continue`; `crate`; `else`; `enum`; `extern`; `false`; `fn`; `for`; `if`; `impl`; `in`; `let`; `loop`; `match`; `mod`; `move`; `mut`; `pub`; `ref`; `return`; `self`; `Self`; `static`; `struct`; `super`; `trait`; `true`; `type`; `unsafe`; `use`; `where`; `while`; `async`; `await`; `dyn`;];
-    identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9_]*!?`;
+    identifier = CodePrinter.syntax-rule-line `[a-zA-Z][a-zA-Z0-9_]*!?`;
     others = [];
   |)
 
   let ocaml = CodePrinter.make-syntax (|
     line-comment = CodePrinter.syntax-rule-block `(\*` `\*)`;
     block-comment = CodePrinter.syntax-rule-block `(\*` `\*)`;
-    string = CodePrinter.syntax-rule-inline (` "[^"]*" `);
+    string = CodePrinter.syntax-rule-line (` "[^"]*" `);
     keywords = [`and`; `as`; `assert`; `asr`; `begin`; `class`; `closed`; `constraint`; `done`; `do`; `downto`; `else`; `end`; `exception`; `external`; `false`; `for`; `fun`; `function`; `functor`; `if`; `include`; `inherit`; `in`; `land`; `lazy`; `let`; `lor`; `lsl`; `lsr`; `lxor`; `match`; `method`; `mod`; `module`; `mutable`; `new`; `of`; `open`; `or`; `parser`; `private`; `rec`; `sig`; `struct`; `then`; `to`; `true`; `try`; `type`; `val`; `virtual`; `when`; `while`;];
-    identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
+    identifier = CodePrinter.syntax-rule-line `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
     others = [];
   |)
 
@@ -74,9 +74,9 @@ end = struct
   let cobol = CodePrinter.make-syntax (|
     line-comment = CodePrinter.syntax-rule-block `\*>` `$`;
     block-comment = CodePrinter.syntax-rule-block `\*>` `$`;
-    string = CodePrinter.syntax-rule-inline (` "[^"]*" `);
+    string = CodePrinter.syntax-rule-line (` "[^"]*" `);
     keywords = [`ACCEPT`; `ACCESS`; `ADDRESS`; `ADD`; `ADVANCING`; `AFTER`; `ALL`; `ALPHABETIC-LOWER`; `ALPHABETIC-UPPER`; `ALPHABETIC`; `ALPHABET`; `ALPHANUMERIC-EDITED`; `ALPHANUMERIC`; `ALSO`; `ALTERNATE`; `ALTER`; `AND`; `ANY`; `APPLY`; `AREAS`; `AREA`; `ARE`; `ASCENDING`; `ASSIGN`; `AT`; `AUTHOR`; `BASIS`; `BEFORE`; `BEGINNING`; `BINARY`; `BLANK`; `BLOCK`; `BOTTOM`; `BY`; `CALL`; `CANCEL`; `CBL`; `CD`; `CF`; `CHARACTERS`; `CHARACTER`; `CH`; `CLASS-ID`; `CLASS`; `CLOCK-UNITS`; `CLOSE`; `COBOL`; `CODE-SET`; `CODE`; `COLLATING`; `COLUMN`; `COM-REG`; `COMMA`; `COMMON`; `COMMUNICATION`; `COMP-1`; `COMP-2`; `COMP-3`; `COMP-4`; `COMP-5`; `COMP`; `COMPUTATIONAL-1`; `COMPUTATIONAL-2`; `COMPUTATIONAL-3`; `COMPUTATIONAL-4`; `COMPUTATIONAL-5`; `COMPUTATIONAL`; `COMPUTE`; `CONFIGURATION`; `CONTAINS`; `CONTENT`; `CONTINUE`; `CONTROLS`; `CONTROL`; `CONVERTING`; `COPY`; `CORRESPONDING`; `CORR`; `COUNT`; `CURRENCY`; `DATE-COMPILED`; `DATE-WRITTEN`; `DATA`; `DAY-OF-WEEK`; `DAY`; `DBCS`; `DEBUG-CONTENTS`; `DEBUG-ITEM`; `DEBUG-LINE`; `DEBUG-NAME`; `DEBUG-SUB-1`; `DEBUG-SUB-2`; `DEBUG-SUB-3`; `DEBUGGING`; `DECIMAL-POINT`; `DECLARATIVES`; `DELETE`; `DELIMITED`; `DELIMITER`; `DEPENDING`; `DESCENDING`; `DESTINATION`; `DETAIL`; `DE`; `DISPLAY-1`; `DISPLAY`; `DIVIDE`; `DIVISION`; `DOWN`; `DUPLICATES`; `DYNAMIC`; `EGCS`; `EGI`; `EJECT`; `ELSE`; `EMI`; `ENABLE`; `END-ADD`; `END-CALL`; `END-COMPUTE`; `END-DELETE`; `END-DIVIDE`; `END-EVALUATE`; `END-IF`; `END-INVOKE`; `END-MULTIPLY`; `END-OF-PAGE`; `END-PERFORM`; `END-READ`; `END-RECEIVE`; `END-RETURN`; `END-REWRITE`; `END-SEARCH`; `END-START`; `END-STRING`; `END-SUBTRACT`; `END-UNSTRING`; `END-WRITE`; `ENDING`; `END`; `ENTER`; `ENTRY`; `ENVIRONMENT`; `EOP`; `EQUAL`; `ERROR`; `ESI`; `EVALUATE`; `EVERY`; `EXCEPTION`; `EXIT`; `EXTEND`; `EXTERNAL`; `FALSE`; `FD`; `FILE-CONTROL`; `FILE`; `FILLER`; `FINAL`; `FIRST`; `FOOTING`; `FOR`; `FROM`; `FUNCTION`; `GENERATE`; `GIVING`; `GLOBAL`; `GOBACK`; `GO`; `GREATER`; `GROUP`; `HEADING`; `HIGH-VALUE`; `HIGH-VALUES`; `I-O-CONTROL`; `I-O`; `IDENTIFICATION`; `ID`; `IF`; `INDEXED`; `INDEX`; `INDICATE`; `INHERITS`; `INITIALIZE`; `INITIAL`; `INITIATE`; `INPUT-OUTPUT`; `INPUT`; `INSERT`; `INSPECT`; `INSTALLATION`; `INTO`; `INVALID`; `INVOKE`; `IN`; `IS`; `JUST`; `JUSTIFIED`; `KANJI`; `KEY`; `LABEL`; `LAST`; `LEADING`; `LEFT`; `LENGTH`; `LESS`; `LIMITS`; `LIMIT`; `LINAGE-COUNTER`; `LINAGE`; `LINE-COUNTER`; `LINES`; `LINE`; `LINKAGE`; `LOCAL-STORAGE`; `LOCK`; `LOW-VALUE`; `LOW-VALUES`; `MEMORY`; `MERGE`; `MESSAGE`; `METACLASS`; `METHOD-ID`; `METHOD`; `MODE`; `MODULES`; `MORE-LABELS`; `MOVE`; `MULTIPLE`; `MULTIPLY`; `NATIVE_BINARY`; `NATIVE`; `NEGATIVE`; `NEXT`; `NOT`; `NO`; `NULLS`; `NULL`; `NUMBER`; `NUMERIC-EDITED`; `NUMERIC`; `OBJECT-COMPUTER`; `OBJECT`; `OCCURS`; `OFF`; `OF`; `OMITTED`; `ON`; `OPEN`; `OPTIONAL`; `ORDER`; `ORGANIZATION`; `OR`; `OTHER`; `OUTPUT`; `OVERFLOW`; `OVERRIDE`; `PACKED-DECIMAL`; `PADDING`; `PAGE-COUNTER`; `PAGE`; `PASSWORD`; `PERFORM`; `PF`; `PH`; `PICTURE`; `PIC`; `PLUS`; `POINTER`; `POSITION`; `POSITIVE`; `PRINTING`; `PROCEDURE-POINTER`; `PROCEDURE`; `PROCEDURES`; `PROCEED`; `PROCESSING`; `PROGRAM-ID`; `PROGRAM`; `PURGE`; `QUEUE`; `QUOTE`; `QUOTES`; `RANDOM`; `RD`; `READ`; `READY`; `RECEIVE`; `RECORDING`; `RECORDS`; `RECORD`; `RECURSIVE`; `REDEFINES`; `REEL`; `REFERENCE`; `REFERENCES`; `RELATIVE`; `RELEASE`; `RELOAD`; `REMAINDER`; `REMOVAL`; `RENAMES`; `REPLACE`; `REPLACING`; `REPORTING`; `REPORTS`; `REPORT`; `REPOSITORY`; `RERUN`; `RESERVE`; `RESET`; `RETURN-CODE`; `RETURNING`; `RETURN`; `REVERSED`; `REWIND`; `REWRITE`; `RF`; `RH`; `RIGHT`; `ROUNDED`; `RUN`; `SAME`; `SD`; `SEARCH`; `SECTION`; `SECURITY`; `SEGMENT-LIMIT`; `SEGMENT`; `SELECT`; `SELF`; `SEND`; `SENTENCE`; `SEPARATE`; `SEQUENCE`; `SEQUENTIAL`; `SERVICE`; `SET`; `SHIFT-IN`; `SHIFT-OUT`; `SIGN`; `SIZE`; `SKIP1`; `SKIP2`; `SKIP3`; `SORT-CONTROL`; `SORT-CORE-SIZE`; `SORT-FILE-SIZE`; `SORT-MERGE`; `SORT-MESSAGE`; `SORT-MODE-SIZE`; `SORT-RETURN`; `SORT`; `SOURCE-COMPUTER`; `SOURCE`; `SPACES`; `SPACE`; `SPECIAL-NAMES`; `STANDARD-1`; `STANDARD-2`; `STANDARD`; `STATUS`; `START`; `STOP`; `STRING`; `SUB-QUEUE-1`; `SUB-QUEUE-2`; `SUB-QUEUE-3`; `SUBTRACT`; `SUM`; `SUPER`; `SUPPRESS`; `SYMBOLIC`; `SYNC`; `SYNCHRONIZED`; `TABLE`; `TALLYING`; `TALLY`; `TAPE`; `TERMINAL`; `TERMINATE`; `TEST`; `TEXT`; `THAN`; `THEN`; `THROUGH`; `THRU`; `TIME`; `TIMES`; `TITLE`; `TOP`; `TO`; `TRACE`; `TRAILING`; `TRUE`; `TYPE`; `UNIT`; `UNSTRING`; `UNTIL`; `UPON`; `UP`; `USAGE`; `USE`; `USING`; `VALUES`; `VALUE`; `VARYING`; `WHEN-COMPILED`; `WHEN`; `WITH`; `WORDS`; `WORKING-STORAGE`; `WRITE-ONLY`; `WRITE`; `ZEROES`; `ZEROS`; `ZERO`];
-    identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9-]*\|[0-9]+`;
+    identifier = CodePrinter.syntax-rule-line `[a-zA-Z][a-zA-Z0-9-]*\|[0-9]+`;
     others = [];
   |)
 
@@ -85,9 +85,9 @@ end = struct
   let c = CodePrinter.make-syntax (|
     line-comment = CodePrinter.syntax-rule-block `/\*` `\*/`;
     block-comment = CodePrinter.syntax-rule-block `/\*` `\*/`;
-    string = CodePrinter.syntax-rule-inline (` "[^"]*" `);
+    string = CodePrinter.syntax-rule-line (` "[^"]*" `);
     keywords = [`auto`; `break`; `case`; `char`; `const`; `continue`; `define`; `default`; `dobule`; `do`; `else`; `elif`; `endif`; `enum`; `extern`; `error`; `float`; `for`; `goto`; `ifndef`; `fidef`; `if`; `inline`; `int`; `include`; `long`; `line`; `regiseter`; `restrict`; `return`; `short`; `signed`; `sizeof`; `static`; `struct`; `switch`; `typedef`; `union`; `unsigned`; `undef`; `void`; `volatile`; `while`; `pragma`; `_Alignas`; `_Alignof`; `_Atomic`; `_Bool`; `_Comples`; `_Decimal128`; `_Decimal64`; `_Decimal32`; `_Generic`; `_Imaginary`; `_Noreturn`; `_Static_assert`; `_Thread_local`;];
-    identifier = CodePrinter.syntax-rule-inline `[a-zA-Z_][a-zA-Z0-9_]*\|[0-9]+`;
+    identifier = CodePrinter.syntax-rule-line `[a-zA-Z_][a-zA-Z0-9_]*\|[0-9]+`;
     others = [];
   |)
 
@@ -96,9 +96,9 @@ end = struct
   let cpp = CodePrinter.make-syntax (|
     line-comment = CodePrinter.syntax-rule-block `//` `$`;
     block-comment = CodePrinter.syntax-rule-block `/\*` `\*/`;
-    string = CodePrinter.syntax-rule-inline (` "[^"]*" `);
+    string = CodePrinter.syntax-rule-line (` "[^"]*" `);
     keywords = [`alignas`; `alignof`; `and_eq`; `and`; `asm`; `atomic_cancel`; `atomic_commit`; `atomic_noexcept`; `auto`; `bitand`; `bitor`; `bool`; `break`; `case`; `catch`; `char`; `char8_t`; `char16_t`; `char32_t`; `class`; `compl`; `concept`; `constexpr`; `consteval`; `constinit`; `const_cast`; `const`; `continue`; `co_await`; `co_return`; `co_yield`; `decltype`; `default`; `delete`; `double`; `do`; `dynamic_cast`; `else`; `enum`; `explicit`; `export`; `extern`; `false`; `float`; `for`; `friend`; `goto`; `if`; `inline`; `int`; `include`; `long`; `mutable`; `namespace`; `new`; `noexcept`; `not_eq`; `not`; `nullptr`; `operator`; `or_eq`; `or`; `private`; `protected`; `public`; `reflexpr`; `register`; `reinterpret_cast`; `requires`; `return`; `short`; `signed`; `sizeof`; `static_assert`; `static_cast`; `static`; `struct`; `switch`; `synchronized`; `template`; `this`; `thread_local`; `throw`; `true`; `try`; `typedef`; `typeid`; `typename`; `union`; `unsigned`; `using`; `virtual`; `void`; `volatile`; `wchar_t`; `while`; `xor_eq`; `xor`];
-    identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
+    identifier = CodePrinter.syntax-rule-line `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
     others = [];
   |)
 
@@ -107,9 +107,9 @@ end = struct
   let csharp = CodePrinter.make-syntax (|
     line-comment = CodePrinter.syntax-rule-block `//` `$`;
     block-comment = CodePrinter.syntax-rule-block `/\*` `\*/`;
-    string = CodePrinter.syntax-rule-inline (` "[^"]*" `);
+    string = CodePrinter.syntax-rule-line (` "[^"]*" `);
     keywords = [`abstract`; `as`; `base`; `bool`; `break`; `byte`; `case`; `catch`; `char`; `checked`; `class`; `const`; `continue`; `decimal`; `default`; `delegate`; `double`; `do`; `else`; `enum`; `event`; `explicit`; `extern`; `false`; `finally`; `fixed`; `float`; `foreach`; `for`; `goto`; `if`; `implicit`; `interface`; `internal`; `int`; `in`; `is`; `lock`; `long`; `namespace`; `new`; `null`; `object`; `operator`; `out`; `override`; `params`; `private`; `protected`; `public`; `readonly`; `ref`; `return`; `sbyte`; `sealed`; `short`; `sizeof`; `stackalloc`; `static`; `string`; `struct`; `switch`; `this`; `throw`; `true`; `try`; `typeof`; `uint`; `ulong`; `unchecked`; `unsafe`; `ushort`; `using`; `virtual`; `void`; `volatile`; `while`;];
-    identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
+    identifier = CodePrinter.syntax-rule-line `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
     others = [];
   |)
 
@@ -118,9 +118,9 @@ end = struct
   let d = CodePrinter.make-syntax (|
     line-comment = CodePrinter.syntax-rule-block `//` `$`;
     block-comment = CodePrinter.syntax-rule-block `/\*` `\*/`;
-    string = CodePrinter.syntax-rule-inline (` "[^"]*" `);
+    string = CodePrinter.syntax-rule-line (` "[^"]*" `);
     keywords = [`abstract`; `alias`; `align`; `asm`; `assert`; `auto`; `body`; `bool`; `break`; `byte`; `case`; `cast`; `catch`; `cdouble`; `cent`; `cfloat`; `char`; `class`; `const`; `continue`; `creal`; `dchar`; `debug`; `default`; `delegate`; `delete`; `deprecated`; `double`; `do`; `else`; `enum`; `export`; `extern`; `false`; `final`; `finally`; `float`; `foreach_reverse`; `foreach`; `for`; `function`; `goto`; `idouble`; `ifloat`; `if`; `immutable`; `import`; `inout`; `int`; `interface`; `invariant`; `in`; `ireal`; `is`; `lazy`; `long`; `macro`; `mixin`; `module`; `new`; `nothrow`; `null`; `out`; `override`; `package`; `pragma`; `private`; `protected`; `public`; `pure`; `real`; `ref`; `return`; `scope`; `shared`; `short`; `static`; `struct`; `super`; `switch`; `synchronized`; `template`; `this`; `throw`; `true`; `try`; `typeid`; `typeof`; `ubyte`; `ucent`; `uint`; `ulong`; `union`; `unittest`; `ushort`; `version`; `void`; `wchar`; `while`; `with`; `__FILE_FULL_PATH__`; `__FILE__`; `__MODULE__`; `__LINE__`; `__FUNCTION__`; `__PRETTY_FUNCTION__`; `__gshared`; `__traits`; `__vector`; `__parameters`];
-    identifier = CodePrinter.syntax-rule-inline `[_a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
+    identifier = CodePrinter.syntax-rule-line `[_a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
     others = [];
   |)
 
@@ -129,9 +129,9 @@ end = struct
   let erlang = CodePrinter.make-syntax (|
     line-comment = CodePrinter.syntax-rule-block `%` `$`;
     block-comment = CodePrinter.syntax-rule-block `%` `$`;
-    string = CodePrinter.syntax-rule-inline (` "[^"]*" `);
+    string = CodePrinter.syntax-rule-line (` "[^"]*" `);
     keywords = [`after`; `andalso`; `and`; `band`; `begin`; `bnot`; `bor`; `bsl`; `bsr`; `bxor`; `case`; `catch`; `cond`; `div`; `end`; `fun`; `if`; `let`; `not`; `of`; `orelse`; `or`; `receive`; `rem`; `try`; `when`; `xor`];
-    identifier = CodePrinter.syntax-rule-inline `[_a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
+    identifier = CodePrinter.syntax-rule-line `[_a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
     others = [];
   |)
 
@@ -140,9 +140,9 @@ end = struct
   let fsharp = CodePrinter.make-syntax (|
     line-comment = CodePrinter.syntax-rule-block `//` `$`;
     block-comment = CodePrinter.syntax-rule-block `(\*` `\*)`;
-    string = CodePrinter.syntax-rule-inline (` "[^"]*" `);
+    string = CodePrinter.syntax-rule-line (` "[^"]*" `);
     keywords = [`abstract`; `and`; `as`; `assert`; `base`; `begin`; `class`; `default`; `delegate`; `done`; `downcast`; `downto`; `do`; `elif`; `else`; `end`; `exception`; `extern`; `false`; `finally`; `fixed`; `for`; `fun`; `function`; `global`; `if`; `inherit`; `inline`; `interface`; `in`; `lazy`; `let!`; `let`; `match!`; `match`; `member`; `module`; `mutable`; `namespace`; `new`; `not`; `null`; `of`; `open`; `or`; `override`; `private`; `public`; `rec`; `return!`; `return`; `select`; `static`; `struct`; `then`; `to`; `true`; `try`; `type`; `upcast`; `use!`; `use`; `val`; `void`; `when`; `while`; `with`; `yield!`; `yield`; `const`; `asr`; `land`; `lor`; `lsl`; `lsr`; `lxor`; `mod`; `sig`];
-    identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
+    identifier = CodePrinter.syntax-rule-line `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
     others = [];
   |)
 
@@ -152,13 +152,13 @@ end = struct
   let fortran = CodePrinter.make-syntax (|
     line-comment = CodePrinter.syntax-rule-block `^!` `$`;
     block-comment = CodePrinter.syntax-rule-block `^!` `$`;
-    string = CodePrinter.syntax-rule-inline (` "[^"]*"\|'[^']*' `);
+    string = CodePrinter.syntax-rule-line (` "[^"]*"\|'[^']*' `);
     keywords = [`assign`; `backspace`; `block data`; `call`; `close`; `common`; `continue`; `data`; `dimension`; `do`; `else`; `else if`; `end`; `endfile`; `endif`; `entry`; `equivalence`; `external`; `format`; `function`; `goto`; `if`; `implicit`; `inquire`; `intrinsic`; `open`; `parameter`; `pause`; `print`; `program`; `read`; `return`; `rewind`; `rewrite`; `save`; `stop`; `subroutine`; `then`; `write`;
     `allocatable`; `allocate`; `case`; `contains`; `cycle`; `deallocate`; `elsewhere`; `exit?`; `include`; `interface`; `intent`; `module`; `namelist`; `nullify`; `only`; `operator`; `optional`; `pointer`; `private`; `procedure`; `public`; `recursive`; `result`; `select`; `sequence`; `target`; `use`; `while`; `where`;
     `elemental`; `forall`; `pure`;
     `abstract`; `associate`; `asynchronous`; `bind`; `class`; `deferred`; `enum`; `enumerator`; `extends`; `final`; `flush`; `generic`; `import`; `non_overridable`; `nopass`; `pass`; `protected`; `value`; `volatile`; `wait`;
     `block`; `codimension`; `do concurrent`; `contiguous`; `critical`; `error stop`; `submodule`; `sync all`; `sync images`; `sync memory`; `lock`; `unlock`;];
-    identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9]*\|[0-9]+`;
+    identifier = CodePrinter.syntax-rule-line `[a-zA-Z][a-zA-Z0-9]*\|[0-9]+`;
     others = [];
   |)
 
@@ -168,9 +168,9 @@ end = struct
   let go = CodePrinter.make-syntax (|
     line-comment = CodePrinter.syntax-rule-block `//` `$`;
     block-comment = CodePrinter.syntax-rule-block `/\*` `\*/`;
-    string = CodePrinter.syntax-rule-inline (` "[^"]*" `);
+    string = CodePrinter.syntax-rule-line (` "[^"]*" `);
     keywords = [`break`; `case`; `chan`; `const`; `continue`; `default`; `defer`; `else`; `fallthrough`; `for`; `func`; `goto`; `go`; `if`; `import`; `interface`; `map`; `package`; `range`; `return`; `select`; `struct`; `switch`; `type`; `var`];
-    identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9]*\|[0-9]+`;
+    identifier = CodePrinter.syntax-rule-line `[a-zA-Z][a-zA-Z0-9]*\|[0-9]+`;
     others = [];
   |)
 
@@ -180,9 +180,9 @@ end = struct
   let haskell = CodePrinter.make-syntax (|
     line-comment = CodePrinter.syntax-rule-block `--` `$`;
     block-comment = CodePrinter.syntax-rule-block `{-` `-}`;
-    string = CodePrinter.syntax-rule-inline (` "[^"]*"\|'[^']*' `);
+    string = CodePrinter.syntax-rule-line (` "[^"]*"\|'[^']*' `);
     keywords = [`as`; `case`; `of`; `class`; `data`; `family`; `instance`; `default`; `deriving`; `do`; `forall`; `foreign`; `hiding`; `if`; `then`; `else`; `import`; `infixl`; `infixr`; `infix`; `let`; `in`; `mdo`; `module`; `newtype`; `proc`; `qualified`; `rec`; `type`; `where`];
-    identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
+    identifier = CodePrinter.syntax-rule-line `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
     others = [];
   |)
 
@@ -190,9 +190,9 @@ end = struct
   let html = CodePrinter.make-syntax (|
     line-comment = CodePrinter.syntax-rule-block `<!--` `-->`;
     block-comment = CodePrinter.syntax-rule-block `<!--` `-->`;
-    string = CodePrinter.syntax-rule-inline (` "[^"]*" `);
+    string = CodePrinter.syntax-rule-line (` "[^"]*" `);
     keywords = [];
-    identifier = CodePrinter.syntax-rule-inline `<[a-zA-Z0-9]+/>\|<!?[a-zA-Z0-9]+\|</[a-zA-Z0-9]+\|>`;
+    identifier = CodePrinter.syntax-rule-line `<[a-zA-Z0-9]+/>\|<!?[a-zA-Z0-9]+\|</[a-zA-Z0-9]+\|>`;
     others = [];
   |)
 
@@ -201,9 +201,9 @@ end = struct
   let java = CodePrinter.make-syntax (|
     line-comment = CodePrinter.syntax-rule-block `//` `$`;
     block-comment = CodePrinter.syntax-rule-block `/\*` `\*/`;
-    string = CodePrinter.syntax-rule-inline (` "[^"]*"\|'[^']*' `);
+    string = CodePrinter.syntax-rule-line (` "[^"]*"\|'[^']*' `);
     keywords = [`abstract`; `continue`; `for`; `new`; `switch`; `assert`; `default`; `goto*`; `package`; `synchronized`; `boolean`; `do`; `if`; `private`; `this`; `break`; `double`; `implements`; `protected`; `throw`; `byte`; `else`; `import`; `public`; `throws`; `case`; `enum`; `instanceof`; `return`; `transient`; `catch`; `extends`; `int`; `short`; `try`; `char`; `final`; `interface`; `static`; `void`; `class`; `finally`; `long`; `strictfp`; `volatile`; `float`; `native`; `super`; `while`;];
-    identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
+    identifier = CodePrinter.syntax-rule-line `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
     others = [];
   |)
 
@@ -211,9 +211,9 @@ end = struct
   let javascript = CodePrinter.make-syntax (|
     line-comment = CodePrinter.syntax-rule-block `//` `$`;
     block-comment = CodePrinter.syntax-rule-block `/\*` `\*/`;
-    string = CodePrinter.syntax-rule-inline (` "[^"]*"\|'[^']*' `);
+    string = CodePrinter.syntax-rule-line (` "[^"]*"\|'[^']*' `);
     keywords = [`break`; `case`; `catch`; `class`; `const`; `continue`; `debugger`; `default`; `delete`; `do`; `else`; `export`; `extends`; `finally`; `for`; `function`; `if`; `import`; `instanceof`; `in`; `new`; `return`; `super`; `switch`; `this`; `throw`; `try`; `typeof`; `var`; `let`; `const`; `void`; `while`; `with`; `yield`;];
-    identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
+    identifier = CodePrinter.syntax-rule-line `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
     others = [];
   |)
 
@@ -222,9 +222,9 @@ end = struct
   let julia = CodePrinter.make-syntax (|
     line-comment = CodePrinter.syntax-rule-block `#` `$`;
     block-comment = CodePrinter.syntax-rule-block `#=` `=#`;
-    string = CodePrinter.syntax-rule-inline (` "[^"]*" `);
+    string = CodePrinter.syntax-rule-line (` "[^"]*" `);
     keywords = [`baremodule`; `begin`; `break`; `catch`; `const`; `continue`; `do`; `else`; `elseif`; `end`; `export`; `false`; `finally`; `for`; `function`; `global`; `if`; `import`; `let`; `local`; `macro`; `module`; `quote`; `return`; `struct`; `true`; `try`; `using`; `while`;];
-    identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
+    identifier = CodePrinter.syntax-rule-line `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
     others = [];
   |)
 
@@ -233,9 +233,9 @@ end = struct
   let kotlin = CodePrinter.make-syntax (|
     line-comment = CodePrinter.syntax-rule-block `//` `$`;
     block-comment = CodePrinter.syntax-rule-block `/\*` `\*/`;
-    string = CodePrinter.syntax-rule-inline (` "[^"]*" `);
+    string = CodePrinter.syntax-rule-line (` "[^"]*" `);
     keywords = [`as?`; `as`; `break`; `class`; `continue`; `do`; `else`; `false`; `for`; `fun`; `if`; `init`; `inner`; `internal`; `in`; `!in`; `interface`; `is`; `!is`; `null`; `object`; `package`; `return`; `super`; `this`; `throw`; `true`; `try`; `typealias`; `typeof`; `value`; `val`; `var`; `when`; `while`; `by`; `catch`; `constructor`; `delegate`; `dynamic`; `field`; `file`; `finally`; `get`; `import`; `param`; `property`; `receiver`; `setparam`; `set`; `where`; `actual`; `abstract`; `annotation`; `companion`; `const`; `crossinline`; `data`; `enum`; `expect`; `external`; `final`; `lateinit`; `noinline`; `open`; `operator`; `out`; `override`; `private`; `protected`; `public`; `reified`; `sealed`; `suspend`; `tailrec`; `vararg`; `it`];
-    identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
+    identifier = CodePrinter.syntax-rule-line `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
     others = [];
   |)
 
@@ -244,9 +244,9 @@ end = struct
   let lua = CodePrinter.make-syntax (|
     line-comment = CodePrinter.syntax-rule-block `--` `$`;
     block-comment = CodePrinter.syntax-rule-block `--\[\[` `\]\]`;
-    string = CodePrinter.syntax-rule-inline (` "[^"]*" `);
+    string = CodePrinter.syntax-rule-line (` "[^"]*" `);
     keywords = [`and`; `break`; `do`; `else`; `elseif`; `end`; `false`; `for`; `function`; `if`; `in`; `local`; `nil`; `not`; `or`; `repeat`; `return`; `then`; `true`; `until`; `while`];
-    identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
+    identifier = CodePrinter.syntax-rule-line `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
     others = [];
   |)
 
@@ -254,9 +254,9 @@ end = struct
   let lisp = CodePrinter.make-syntax (|
     line-comment = CodePrinter.syntax-rule-block `;` `$`;
     block-comment = CodePrinter.syntax-rule-block `#|` `|#`;
-    string = CodePrinter.syntax-rule-inline (` "[^"]*" `);
+    string = CodePrinter.syntax-rule-line (` "[^"]*" `);
     keywords = [];
-    identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
+    identifier = CodePrinter.syntax-rule-line `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
     others = [];
   |)
 
@@ -265,9 +265,9 @@ end = struct
   let nim = CodePrinter.make-syntax (|
     line-comment = CodePrinter.syntax-rule-block `#` `$`;
     block-comment = CodePrinter.syntax-rule-block `#\[` `\]#`;
-    string = CodePrinter.syntax-rule-inline (` "[^"]*" `);
+    string = CodePrinter.syntax-rule-line (` "[^"]*" `);
     keywords = [`addr`; `and`; `as`; `asm`; `bind`; `block`; `break`; `case`; `cast`; `concept`; `const`; `continue`; `converter`; `defer`; `discard`; `distinct`; `div`; `do`; `elif`; `else`; `end`; `enum`; `except`; `export`; `finally`; `for`; `from`; `func`; `if`; `import`; `include`; `interface`; `in`; `isnot`; `is`; `iterator`; `let`; `macro`; `method`; `mixin`; `mod`; `nil`; `not`; `notin`; `object`; `of`; `or`; `out`; `proc`; `ptr`; `raise`; `ref`; `return`; `shl`; `shr`; `static`; `template`; `try`; `tuple`; `type`; `using`; `var`; `when`; `while`; `xor`; `yield`;];
-    identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
+    identifier = CodePrinter.syntax-rule-line `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
     others = [];
   |)
 
@@ -276,9 +276,9 @@ end = struct
   let makefile = CodePrinter.make-syntax (|
     line-comment = CodePrinter.syntax-rule-block `#` `$`;
     block-comment = CodePrinter.syntax-rule-fun (fun _ -> None);
-    string = CodePrinter.syntax-rule-inline (` "[^"]*" `);
+    string = CodePrinter.syntax-rule-line (` "[^"]*" `);
     keywords = [`all`; `$`; `@`];
-    identifier = CodePrinter.syntax-rule-inline `[a-z][a-zA-Z0-9-]*\|[0-9]+`;
+    identifier = CodePrinter.syntax-rule-line `[a-z][a-zA-Z0-9-]*\|[0-9]+`;
     others = [];
   |)
 
@@ -286,9 +286,9 @@ end = struct
   let shell = CodePrinter.make-syntax (|
     line-comment = CodePrinter.syntax-rule-block `#` `$`;
     block-comment = CodePrinter.syntax-rule-block `#\[` `\]#`;
-    string = CodePrinter.syntax-rule-inline (` "[^"]*"\|'[^']*' `);
+    string = CodePrinter.syntax-rule-line (` "[^"]*"\|'[^']*' `);
     keywords = [`case`; `for`; `function`; `if`; `select`; `time`; `until`; `while`];
-    identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
+    identifier = CodePrinter.syntax-rule-line `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
     others = [];
   |)
 
@@ -297,9 +297,9 @@ end = struct
   let perl = CodePrinter.make-syntax (|
     line-comment = CodePrinter.syntax-rule-block `#` `$`;
     block-comment = CodePrinter.syntax-rule-block `#` `$`;
-    string = CodePrinter.syntax-rule-inline (` "[^"]*"\|'[^']*' `);
+    string = CodePrinter.syntax-rule-line (` "[^"]*"\|'[^']*' `);
     keywords = [`_DATA_`; `_END_`; `_FILE_`; `_LINE_`; `_PACKAGE_`; `and`; `cmp`; `continue`; `CORE`; `do`; `else`; `elsif`; `eq`; `exp`; `for`; `foreach`; `ge`; `gt`; `if`; `le`; `lock`; `lt`; `m`; `ne`; `no`; `or`; `package`; `qq`; `qr`; `qw`; `qx`; `q`; `sub`; `s`; `tr`; `unless`; `until`; `while`; `xor`; `y`];
-    identifier = CodePrinter.syntax-rule-inline `\$[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+\|[a-zA-Z_][a-zA-Z0-9_]+`;
+    identifier = CodePrinter.syntax-rule-line `\$[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+\|[a-zA-Z_][a-zA-Z0-9_]+`;
     others = [];
   |)
 
@@ -309,7 +309,7 @@ end = struct
     block-comment = CodePrinter.syntax-rule-block `/\*` `\*/`;
     string = CodePrinter.syntax-rule-fun (fun _ -> None);
     keywords = [];
-    identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+\|[a-zA-Z_][a-zA-Z0-9_]+`;
+    identifier = CodePrinter.syntax-rule-line `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+\|[a-zA-Z_][a-zA-Z0-9_]+`;
     others = [];
   |)
 
@@ -317,9 +317,9 @@ end = struct
   let php = CodePrinter.make-syntax (|
     line-comment = CodePrinter.syntax-rule-block `//` `$`;
     block-comment = CodePrinter.syntax-rule-block `/\*` `\*/`;
-    string = CodePrinter.syntax-rule-inline (` "[^"]*"\|'[^']*' `);
+    string = CodePrinter.syntax-rule-line (` "[^"]*"\|'[^']*' `);
     keywords = [`abstract`; `and`; `as`; `break`; `callable`; `case`; `catch`; `class`; `clone`; `const`; `continue`; `declare`; `default`; `do`; `echo`; `elseif`; `else`; `empty`; `enddeclare`; `endforeach`; `endfor`; `endif`; `endswitch`; `endwhile`; `extends`; `finally`; `final`; `fn`; `foreach`; `for`; `function`; `global`; `goto`; `if`; `implements`; `include once`; `include`; `instanceof`; `interface`; `isset`; `list`; `namespace`; `new`; `or`; `print`; `private`; `protected`; `public`; `require once`; `require`; `return`; `static`; `switch`; `throw`; `trait`; `try`; `unset`; `use`; `var`; `wihle`; `xor`; `yield from`; `yield`];
-    identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
+    identifier = CodePrinter.syntax-rule-line `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
     others = [];
   |)
 
@@ -329,9 +329,9 @@ end = struct
   let python = CodePrinter.make-syntax (|
     line-comment = CodePrinter.syntax-rule-block `#` `$`;
     block-comment = CodePrinter.syntax-rule-block `#` `$`;
-    string = CodePrinter.syntax-rule-inline (` "[^"]*"\|'[^']*' `);
+    string = CodePrinter.syntax-rule-line (` "[^"]*"\|'[^']*' `);
     keywords = [`False`; `None`; `True`; `and`; `assert`; `async`; `as`; `await`; `break`; `class`; `continue`; `def`; `del`; `elif`; `else`; `except`; `finally`; `for`; `from`; `global`; `if`; `import`; `in`; `is`; `lambda`; `nonlocal`; `not`; `or`; `pass`; `raise`; `return`; `try`; `while`; `with`; `yield`;];
-    identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+\|[a-zA-Z_][a-zA-Z0-9_]+`;
+    identifier = CodePrinter.syntax-rule-line `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+\|[a-zA-Z_][a-zA-Z0-9_]+`;
     others = [];
   |)
 
@@ -340,9 +340,9 @@ end = struct
   let r = CodePrinter.make-syntax (|
     line-comment = CodePrinter.syntax-rule-block `#` `$`;
     block-comment = CodePrinter.syntax-rule-block `#` `$`;
-    string = CodePrinter.syntax-rule-inline (` "[^"]*" `);
+    string = CodePrinter.syntax-rule-line (` "[^"]*" `);
     keywords = [`if`; `else`; `repeat`; `while`; `function`; `for`; `in`; `next`; `break`; `TRUE`; `FALSE`; `NULL`; `Inf`; `NaN`; `NA_integer_`; `NA_real_`; `NA_complex_`; `NA_character_`; `NA`;];
-    identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
+    identifier = CodePrinter.syntax-rule-line `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
     others = [];
   |)
 
@@ -351,9 +351,9 @@ end = struct
   let ruby = CodePrinter.make-syntax (|
     line-comment = CodePrinter.syntax-rule-block `#` `$`;
     block-comment = CodePrinter.syntax-rule-block `=begin` `=end`;
-    string = CodePrinter.syntax-rule-inline (` "[^"]*"\|'[^']*' `);
+    string = CodePrinter.syntax-rule-line (` "[^"]*"\|'[^']*' `);
     keywords = [`_ENCODING_`; `_LINE_`; `_FILE_`; `BEGIN`; `END`; `alias`; `and`; `begin`; `break`; `case`; `class`; `defined?`; `def`; `do`; `else`; `elsif`; `end`; `ensure`; `false`; `for`; `if`; `in`; `module`; `next`; `nil`; `not`; `or`; `redo`; `rescue`; `retry`; `return`; `self`; `super`; `then`; `true`; `undef`; `unless`; `until`; `when`; `while`; `yield`];
-    identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+\|[a-zA-Z_][a-zA-Z0-9_]+`;
+    identifier = CodePrinter.syntax-rule-line `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+\|[a-zA-Z_][a-zA-Z0-9_]+`;
     others = [];
   |)
 
@@ -362,9 +362,9 @@ end = struct
   let scala = CodePrinter.make-syntax (|
     line-comment = CodePrinter.syntax-rule-block `//` `$`;
     block-comment = CodePrinter.syntax-rule-block `/\*` `\*/`;
-    string = CodePrinter.syntax-rule-inline (` "[^"]*" `);
+    string = CodePrinter.syntax-rule-line (` "[^"]*" `);
     keywords = [`abstract`; `case`; `catch`; `class`; `def`; `do`; `else`; `extends`; `false`; `finally`; `final`; `forSome`; `for`; `if`; `implicit`; `import`; `lazy`; `macro`; `match`; `new`; `null`; `object`; `override`; `package`; `private`; `protected`; `return`; `sealed`; `super`; `this`; `throw`; `trait`; `try`; `true`; `type`; `val`; `var`; `while`; `with`; `yield`];
-    identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
+    identifier = CodePrinter.syntax-rule-line `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
     others = [];
   |)
 
@@ -373,14 +373,14 @@ end = struct
   let swift = CodePrinter.make-syntax (|
     line-comment = CodePrinter.syntax-rule-block `//` `$`;
     block-comment = CodePrinter.syntax-rule-block `/\*` `\*/`;
-    string = CodePrinter.syntax-rule-inline (` "[^"]*" `);
+    string = CodePrinter.syntax-rule-line (` "[^"]*" `);
     keywords = [`associatedtype`; `class`; `deinit`; `enum`; `extension`; `fileprivate`; `func`; `import`; `init`; `inout`; `internal`; `let`; `open`; `operator`; `private`; `protocol`; `public`; `rethrows`; `static`; `struct`; `subscript`; `typealias`; `var`;
     `associativity`; `convenience`; `dynamic`; `didSet`; `final`; `get`; `infix`; `indirect`; `lazy`; `left`; `mutating`; `none`; `nonmutating`; `optional`; `override`; `postfix`; `precedence`; `prefix`; `Protocol`; `required`; `right`; `set`; `Type`; `unowned`; `weak`; `willSet`;
     `as`; `Any`; `catch`; `false`; `is`; `nil`; `super`; `self`; `Self`; `throw`; `throws`; `true`; `try`;
     `break`; `case`; `continue`; `default`; `defer`; `do`; `else`; `fallthrough`; `for`; `guard`; `if`; `in`; `repeat`; `return`; `switch`; `where`; `while`;
     `#available`; `#colorLiteral`; `#column`; `#else`; `#elseif`; `#endif`; `#error`; `#file`; `#fileID`; `#fileLiteral`; `#filePath`; `#function`; `#if`; `#imageLiteral`; `#line`; `#selector`; `#sourceLocation`; `#warning`;
     `_`;];
-    identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
+    identifier = CodePrinter.syntax-rule-line `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
     others = [];
   |)
 
@@ -390,7 +390,7 @@ end = struct
     block-comment = CodePrinter.syntax-rule-block `%` `$`;
     string = CodePrinter.syntax-rule-fun (fun _ -> None);
     keywords = [`\documentclass`; `\usepackage`; `\begin`; `\end`];
-    identifier = CodePrinter.syntax-rule-inline `\\[a-zA-Z]+`;
+    identifier = CodePrinter.syntax-rule-line `\\[a-zA-Z]+`;
     others = [];
   |)
 
@@ -398,9 +398,9 @@ end = struct
   let typescript = CodePrinter.make-syntax (|
     line-comment = CodePrinter.syntax-rule-block `//` `$`;
     block-comment = CodePrinter.syntax-rule-block `/\*` `\*/`;
-    string = CodePrinter.syntax-rule-inline (` "[^"]*" `);
+    string = CodePrinter.syntax-rule-line (` "[^"]*" `);
     keywords = [`break`; `case`; `class`; `clone`; `continue`; `const`; `default`; `delegate`; `delete`; `else`; `enum`; `extends`; `foreach`; `for`; `function`; `if`; `in`; `local`; `throw`; `try`; `typeof`; `while`; `parent`; `yield`; `constructor`; `vargc`; `vargv`; `instanceof`; `true`; `false`; `static`];
-    identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
+    identifier = CodePrinter.syntax-rule-line `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
     others = [];
   |)
 
@@ -409,9 +409,9 @@ end = struct
   let visualbasic = CodePrinter.make-syntax (|
     line-comment = CodePrinter.syntax-rule-block `'` `$`;
     block-comment = CodePrinter.syntax-rule-block `'` `$`;
-    string = CodePrinter.syntax-rule-inline (` "[^"]*" `);
+    string = CodePrinter.syntax-rule-line (` "[^"]*" `);
     keywords = [`AddHandler`; `AddressOf`; `Alias`; `AndAlso`; `And`; `As`; `Boolean`; `ByRef`; `Byte`; `ByVal`; `Call`; `Case`; `Catch`; `CBool`; `CByte`; `CChar`; `CDate`; `CDbl`; `CDec`; `Char`; `CInt`; `Class Constraint`; `Class Statement`; `CLng`; `CObj`; `Const`; `Continue`; `CSByte`; `CShort`; `CSng`; `CStr`; `CType`; `CUInt`; `CULng`; `CUShort`; `Date`; `Decimal`; `Declare`; `Default`; `Delegate`; `Dim`; `DirectCast`; `Do`; `Double`; `Each`; `Else`; `ElseIf`; `End Statement`; `EndIf`; `Enum`; `Erase`; `Error`; `Event`; `Exit`; `End`; `False`; `Finally`; `For`; `Friend`; `Function`; `GetType`; `GetXMLNamespace`; `Get`; `Global`; `GoSub`; `GoTo`; `Handles`; `If`; `Implements`; ` Statement`; `Imports`; `Inherits`; `Integer`; `Interface`; `In`; `IsNot`; `Is`; `Let`; `Lib`; `Like`; `Long`; `Loop`; `Me`; `Module`; `Mod`; `MustInherit`; `MustOverride`; `MyBase`; `MyClass`; `NameOf`; `Namespace`; `Narrowing`; `New Constraint`; `New Operator`; `Next`; `Nothing`; `NotInheritable`; `NotOverridable`; `Not`; `Object`; `Of`; `On`; `Operator`; `Optional`; `Option`; `OrElse`; `Or`; `Out`; `Overloads`; `Overridable`; `Overrides`; `ParamArray`; `Partial`; `Private`; `Property`; `Protected`; `Public`; `RaiseEvent`; `ReadOnly`; `ReDim`; `REM`; `RemoveHandler`; `Resume`; `Return`; `SByte`; `Select`; `Set`; `Shadows`; `Shared`; `Short`; `Single`; `Static`; `Step`; `Stop`; `String`; `Structure`; `Sub`; `SyncLock`; `Then`; `Throw`; `To`; `True`; `TryCast`; `Try`; `TypeOf`; `UInteger`; `ULong`; `UShort`; `Using`; `Variant`; `Wend`; `When`; `While`; `Widening`; `WithEvents`; `With`; `WriteOnly`; `Xor`; `#Const`; `#Else`; `#ElseIf`; `#End`; `#If`;];
-    identifier = CodePrinter.syntax-rule-inline `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
+    identifier = CodePrinter.syntax-rule-line `[a-zA-Z][a-zA-Z0-9_]*\|[0-9]+`;
     others = [];
   |)
 
@@ -420,9 +420,9 @@ end = struct
   let xml = CodePrinter.make-syntax (|
     line-comment = CodePrinter.syntax-rule-block `<!--` `-->`;
     block-comment = CodePrinter.syntax-rule-block `<!--` `-->`;
-    string = CodePrinter.syntax-rule-inline (` "[^"]*" `);
+    string = CodePrinter.syntax-rule-line (` "[^"]*" `);
     keywords = [];
-    identifier = CodePrinter.syntax-rule-inline `<\??[a-zA-Z0-9]+\|</[a-zA-Z0-9]+\|\??>`;
+    identifier = CodePrinter.syntax-rule-line `<\??[a-zA-Z0-9]+\|</[a-zA-Z0-9]+\|\??>`;
     others = [];
   |)
 
