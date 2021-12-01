@@ -1,0 +1,29 @@
+name: github pages
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    container:
+      image: amutake/satysfi:0.0.6-53-g2867e4d9
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          export HOME=/root # workaround
+          eval $(opam env)
+          opam update
+          opam install satysfi-code-printer
+          satyrographos install
+          satysfi $(pwd)/doc/code-printer-ja.saty -o $(pwd)/doc/code-printer-ja.pdf
+      - run: |
+          mkdir -p pages
+          cp -f doc/code-printer-ja.pdf pages
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./pages
