@@ -313,155 +313,75 @@ end = struct
 
   %%% designの個別設定用の関数
   let set-line-background-color f config =
-    let new-design =
-      make-design (|
-        line-background-color = f;
-        inline-hdeco-set = config#design#inline-hdeco-set;
-        block-vdeco-set = config#design#block-vdeco-set;
-        block-paddings = config#design#block-paddings;
-        inline-paddings = config#design#inline-paddings;
-        number-fun = config#design#number-fun;
-        line-break-mark = config#design#line-break-mark;
-        tab-size = config#design#tab-size;
-      |)
-    in
     (|
-      syntax = config#syntax;
-      theme = config#theme;
-      design = new-design;
+      config with
+      design = (|
+        config#design with
+        line-background-color = f;
+      |)
     |)
 
   let set-inline-hdeco-set deco-set config =
-    let new-design =
-      make-design (|
-        line-background-color = config#design#line-background-color;
-        inline-hdeco-set = deco-set;
-        block-vdeco-set = config#design#block-vdeco-set;
-        block-paddings = config#design#block-paddings;
-        inline-paddings = config#design#inline-paddings;
-        number-fun = config#design#number-fun;
-        line-break-mark = config#design#line-break-mark;
-        tab-size = config#design#tab-size;
-      |)
-    in
     (|
-      syntax = config#syntax;
-      theme = config#theme;
-      design = new-design;
+      config with
+      design = (|
+        config#design with
+        inline-hdeco-set = deco-set;
+      |)
     |)
 
   let set-block-vdeco-set f config =
-    let new-design =
-      make-design (|
-        line-background-color = config#design#line-background-color;
-        inline-hdeco-set = config#design#inline-hdeco-set;
-        block-vdeco-set = f;
-        block-paddings = config#design#block-paddings;
-        inline-paddings = config#design#inline-paddings;
-        number-fun = config#design#number-fun;
-        line-break-mark = config#design#line-break-mark;
-        tab-size = config#design#tab-size;
-      |)
-    in
     (|
-      syntax = config#syntax;
-      theme = config#theme;
-      design = new-design;
+      config with
+      design = (|
+        config#design with
+        block-vdeco-set = f;
+      |)
     |)
 
   let set-block-paddings pads config =
-    let new-design =
-      make-design (|
-        line-background-color = config#design#line-background-color;
-        inline-hdeco-set = config#design#inline-hdeco-set;
-        block-vdeco-set = config#design#block-vdeco-set;
-        block-paddings = pads;
-        inline-paddings = config#design#inline-paddings;
-        number-fun = config#design#number-fun;
-        line-break-mark = config#design#line-break-mark;
-        tab-size = config#design#tab-size;
-      |)
-    in
     (|
-      syntax = config#syntax;
-      theme = config#theme;
-      design = new-design;
+      config with
+      design = (|
+        config#design with
+        block-paddings = pads;
+      |)
     |)
 
   let set-inline-paddings pads config =
-    let new-design =
-      make-design (|
-        line-background-color = config#design#line-background-color;
-        inline-hdeco-set = config#design#inline-hdeco-set;
-        block-vdeco-set = config#design#block-vdeco-set;
-        block-paddings = config#design#block-paddings;
-        inline-paddings = pads;
-        number-fun = config#design#number-fun;
-        line-break-mark = config#design#line-break-mark;
-        tab-size = config#design#tab-size;
-      |)
-    in
     (|
-      syntax = config#syntax;
-      theme = config#theme;
-      design = new-design;
+      config with
+      design = (|
+        config#design with
+        inline-paddings = pads;
+      |)
     |)
 
   let set-number-fun f config =
-    let new-design =
-      make-design (|
-        line-background-color = config#design#line-background-color;
-        inline-hdeco-set = config#design#inline-hdeco-set;
-        block-vdeco-set = config#design#block-vdeco-set;
-        block-paddings = config#design#block-paddings;
-        inline-paddings = config#design#inline-paddings;
-        number-fun = f;
-        line-break-mark = config#design#line-break-mark;
-        tab-size = config#design#tab-size;
-      |)
-    in
     (|
-      syntax = config#syntax;
-      theme = config#theme;
-      design = new-design;
+      config with
+      design = (|
+        config#design with
+        number-fun = f;
+      |)
     |)
 
   let set-line-break-mark f config =
-    let new-design =
-      make-design (|
-        line-background-color = config#design#line-background-color;
-        inline-hdeco-set = config#design#inline-hdeco-set;
-        block-vdeco-set = config#design#block-vdeco-set;
-        block-paddings = config#design#block-paddings;
-        inline-paddings = config#design#inline-paddings;
-        number-fun = config#design#number-fun;
-        line-break-mark = f;
-        tab-size = config#design#tab-size;
-      |)
-    in
     (|
-      syntax = config#syntax;
-      theme = config#theme;
-      design = new-design;
+      config with
+      design = (|
+        config#design with
+        line-break-mark = f;
+      |)
     |)
 
   let set-tab-size fl config =
-    let new-design =
-      make-design (|
-        line-background-color = config#design#line-background-color;
-        inline-hdeco-set = config#design#inline-hdeco-set;
-        block-vdeco-set = config#design#block-vdeco-set;
-        block-paddings = config#design#block-paddings;
-        inline-paddings = config#design#inline-paddings;
-        number-fun = config#design#number-fun;
-        line-break-mark = config#design#line-break-mark;
+    (|
+      config with
+      design = (|
+        config#design with
         tab-size = fl;
       |)
-    in
-    (|
-      syntax = config#syntax;
-      theme = config#theme;
-      design = new-design;
     |)
 
 
@@ -470,21 +390,12 @@ end = struct
       ctx |> set-font-size size
           |> config#theme#basic
     in
-    let new-theme =
-      make-theme (|
-        backcolor = config#theme#backcolor;
-        basic = f;
-        comment = config#theme#comment;
-        string = config#theme#string;
-        keyword = config#theme#keyword;
-        identifier = config#theme#identifier;
-        others = config#theme#others;
-      |)
-    in
     (|
-      syntax = config#syntax;
-      theme = new-theme;
-      design = config#design;
+      config with
+      theme = (|
+        config#theme with
+        basic = f;
+      |)
     |)
 
 
