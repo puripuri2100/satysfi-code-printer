@@ -1,5 +1,15 @@
 @require: list
-@import: ../src/code-printer
+
+%@import: ../src/code-printer
+%@import: ../src/code-theme
+%@import: ../src/code-syntax
+%@import: ../src/code-design
+
+@require: code-printer/code-printer
+@require: code-printer/code-theme
+@require: code-printer/code-syntax
+@require: code-printer/code-design
+
 
 let-block ctx +row ?:space-opt lst =
   let join i ib1 ib2 =
