@@ -2,10 +2,14 @@
 @require: itemize
 @require: annot
 
-@import: ../src/code-printer
-@import: ../src/code-syntax
-@import: ../src/code-theme
-@import: ../src/code-design
+%@import: ../src/code-printer
+%@import: ../src/code-syntax
+%@import: ../src/code-theme
+%@import: ../src/code-design
+@require: code-printer/code-printer
+@require: code-printer/code-design
+@require: code-printer/code-syntax
+@require: code-printer/code-theme
 
 @import: local
 
@@ -69,6 +73,18 @@ document (|
     +p{のようにすることで、\inline-code(`syntax`);で設定された通りにコードが解析され、その結果が\inline-code(`theme`);で設定された通りに描画される、ということです。}
     +p{ここでの\inline-code(`syntax`);と\inline-code(`theme`);に相当する設定値はユーザー自身が作成することもできますが、code-printerライブラリの提供する機能の一つとして既にいくつかのパターンを用意しています。ここではこのライブラリで提供している設定値を紹介します。}
     +p{デフォルトの\inline-code(`syntax`);と\inline-code(`theme`);の設定値はそれぞれ\inline-code(`CodePrinter.default-syntax`);と\inline-code(`CodePrinter.default-theme`);として公開されています。}
+    +p{毎回\inline-code(`syntax`);と\inline-code(`theme`);を設定することが面倒な場合のために、\inline-code(`CodePrinter.make-config syntax theme`);と同じ効果を持つ\inline-code(`CodePrinter.default`);関数があります。また、\inline-code(`syntax`);と\inline-code(`theme`);のそれぞれを独自に変更するための関数である\inline-code(`set-syntax`);と\inline-code(`set-theme`);が提供されています。}
+    +p{そのため、以下のように書くこともできます。}
+    +code-printer ?:(
+          CodePrinter.make-config CodeSyntax.satysfi CodeTheme.basic-light
+        )
+(```+code-printer ?:(
+    CodePrinter.default
+    |> CodePrinter.set-syntax syntax
+    |> CodePrinter.set-theme theme
+)(`code`);
+```);
+
     +p{プログラミング言語ごとに纏められた解析用の設定は、code-syntax.satygファイルによって提供されています。\inline-code(`@require: code-printer/code-syntax`);によって読み込んでください。モジュール名は\inline-code(`CodeSyntax`);です。}
     +p{テーマ用の設定値はcode-theme.satyhファイルによって提供されています。ファイルの先頭に\inline-code(`@require: code-printer/code-theme`);と書いて読み込んでください。モジュール名は\inline-code(`CodeTheme`);です。}
     +p{まずは解析用の設定値の紹介です。その設定値を使って解析した結果のシンタックスハイライトと一緒に載せています。}

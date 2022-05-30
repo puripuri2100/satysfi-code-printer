@@ -46,6 +46,10 @@ module CodePrinter : sig
   type code-printer-config
   val make-config : syntax -> theme -> code-printer-config
 
+  val default : code-printer-config
+  val set-syntax : syntax -> code-printer-config -> code-printer-config
+  val set-theme : theme -> code-printer-config -> code-printer-config
+
   % design関連の設定をする関数
   % themeやsyntaxとは違い、個別に設定できるようにする
   val set-line-background-color : (int -> color option) -> code-printer-config -> code-printer-config
@@ -398,6 +402,18 @@ end = struct
       |)
     |)
 
+
+  let default = make-config default-syntax default-theme
+  let set-syntax syntax config =
+    (|
+      config with
+      syntax = syntax;
+    |)
+  let set-theme theme config =
+    (|
+      config with
+      theme = theme;
+    |)
 
   type token =
     | Basic of string
