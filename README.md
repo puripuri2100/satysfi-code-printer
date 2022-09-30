@@ -27,9 +27,9 @@ satyrographos install
 After installation, you can import this package by writing the code in preamble.
 
 ```
-@require code-printer/code-printer
-@require code-printer/code-syntax
-@require code-printer/code-theme
+@require: code-printer/code-printer
+@require: code-printer/code-syntax
+@require: code-printer/code-theme
 ```
 
 # Usage
