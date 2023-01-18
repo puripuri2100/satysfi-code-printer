@@ -38,7 +38,7 @@ Write the code like this:
 
 ```
 +p{\inline-code (`inline_code`);}
-+code (```let-rec factorial n =
++code-printer (```let-rec factorial n =
   match n with
   | 0 -> 1
   | _ -> n * (factorial (n - 1))```);
@@ -49,7 +49,7 @@ When typesetting code with syntax-highlight, write the code like this:
 
 ```
 +p{\inline-code ?:(CodePrinter.make-config CodeSyntax.rust CodeTheme.basic-light) (`inline_code`);}
-+code ?:(
++code-printer ?:(
   CodePrinter.make-config CodeSyntax.satysfi CodeTheme.basic-dark
 )(```let-rec factorial n =
   match n with
