@@ -711,17 +711,20 @@ end = struct
         else
           List.reverse-append xs token-lst
       )
-      | x::y::zs when (is-LF x && is-CR y) -> organize (CRLF::token-lst) false null-string zs
       | x::ys -> (
           match x with
           | Basic(s) -> organize token-lst true (s^basic-str) ys
           | _ -> (
-            %%% トークンを分割
-            let xs = split-token-of-line x in
-            if is-basic then
-              organize (List.reverse-append xs ((Basic(basic-str))::token-lst)) false null-string ys
-            else
-              organize (List.reverse-append xs token-lst) false null-string ys
+            let token-lst2 =
+              if is-basic then ((Basic(basic-str))::token-lst) else token-lst
+            in
+            match ys with
+            | y::zs when (is-LF x && is-CR y) -> (organize (CRLF::token-lst2) false null-string zs)
+            | _ -> (
+              %%% トークンを分割
+              let xs = split-token-of-line x in
+              organize (List.reverse-append xs token-lst2) false null-string ys
+            )
           )
       )
     in
